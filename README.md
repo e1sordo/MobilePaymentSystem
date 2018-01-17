@@ -1,1 +1,1 @@
-This is an internal exam educational project for students from lab-january.
+This is an internal epam educational project for students from lab-january.
