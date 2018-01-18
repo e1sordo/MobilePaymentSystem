@@ -7,33 +7,27 @@ import javax.persistence.*;
 public class Bill extends AbstractEntity {
 
     @Column(name = "user_id")
-    private long userId;
+    private String userId;
 
     @Column(name = "service_id")
-    private long serviceId;
+    private String serviceId;
 
     @Column(name = "is_paid")
     private boolean isPaidFor;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "total")
-    private int total;
-
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public long getServiceId() {
+    public String getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(long serviceId) {
+    public void setServiceId(String serviceId) {
         this.serviceId = serviceId;
     }
 
@@ -43,21 +37,5 @@ public class Bill extends AbstractEntity {
 
     public void setPaidFor(boolean paidFor) {
         isPaidFor = paidFor;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
     }
 }
