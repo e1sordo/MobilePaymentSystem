@@ -6,29 +6,29 @@ import javax.persistence.*;
 @Table(name = "bills")
 public class Bill extends AbstractEntity {
 
-    @Column(name = "user_id")
-    private String userId;
+    @Column(name = "user")
+    private String user;
 
-    @Column(name = "service_id")
-    private String serviceId;
+    @Column(name = "service")
+    private String service;
 
     @Column(name = "is_paid")
     private boolean isPaidFor;
 
-    public String getUserId() {
-        return userId;
+    public String getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    public String getServiceId() {
-        return serviceId;
+    public String getService() {
+        return service;
     }
 
-    public void setServiceId(String serviceId) {
-        this.serviceId = serviceId;
+    public void setService(String service) {
+        this.service = service;
     }
 
     public boolean isPaidFor() {
