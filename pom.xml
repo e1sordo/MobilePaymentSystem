@@ -19,11 +19,11 @@
 	</parent>
 
 	<properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <thymeleaf.version>3.0.3.RELEASE</thymeleaf.version>
-        <thymeleaf-layout-dialect.version>2.2.1</thymeleaf-layout-dialect.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<thymeleaf.version>3.0.3.RELEASE</thymeleaf.version>
+		<thymeleaf-layout-dialect.version>2.2.1</thymeleaf-layout-dialect.version>
 	</properties>
 
 	<dependencies>
@@ -39,14 +39,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-                <version>1.5.9.RELEASE</version>
+			<version>1.5.9.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-                <version>1.5.9.RELEASE</version>
+			<version>1.5.9.RELEASE</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -79,7 +78,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.5.9.RELEASE</version>
+				<version>1.5.9.RELEASE</version>
 			</plugin>
 		</plugins>
 	</build>
