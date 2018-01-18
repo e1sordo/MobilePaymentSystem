@@ -15,9 +15,11 @@ public class User extends AbstractEntity {
     @Column (name = "personal_account")
     private int personalAccount;
 
-    public String login;
+    @Column (name = "login")
+    private String login;
 
-    public String password;
+    @Column (name = "password")
+    private String password;
 
     public boolean isAdmin() {
         return isAdmin;
@@ -41,5 +43,21 @@ public class User extends AbstractEntity {
 
     public void setPersonalAccount(int personalAccount) {
         this.personalAccount = personalAccount;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
