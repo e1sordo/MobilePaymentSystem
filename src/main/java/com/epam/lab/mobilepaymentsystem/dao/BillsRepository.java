@@ -1,4 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.dao;
 
-public interface BillsRepository {
+import com.epam.lab.mobilepaymentsystem.model.Bill;
+import org.springframework.data.repository.CrudRepository;
+
+public interface BillsRepository extends CrudRepository<Bill, Long> {
 }
