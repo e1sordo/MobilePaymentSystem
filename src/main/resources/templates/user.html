@@ -3,9 +3,40 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>User adding</title>
+    <title>User list</title>
 </head>
 <body>
+
+    <h2>User List</h2>
+
+    <br>
+    <hr>
+    <br>
+
+    <p><a href="/user/add" target="_blank">Add new user</a></p>
+
+    <br>
+    <hr>
+    <br>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Login</th>
+            <th>Password</th>
+            <th>personalAccount</th>
+            <!--<th>isAdmin</th>-->
+            <!--<th>isLocked</th>-->
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:utext="${user.id}"></td>
+            <td th:utext="${user.login}"></td>
+            <td th:utext="${user.password}"></td>
+            <td th:utext="${user.personalAccount}"></td>
+            <!--<td th:utext="${user.isAdmin}"></td>-->
+            <!--<td th:utext="${user.isLocked}"></td>-->
+        </tr>
+    </table>
 
 </body>
 </html>
