@@ -16,11 +16,6 @@ public class BillService {
     }
 
     public void save(Bill bill) {
-        Bill savingBill = new Bill();
-
-        savingBill.setPaidFor(bill.getPaidFor());
-        savingBill.setService(bill.getService());
-        savingBill.setUser(bill.getUser());
-        billsRepository.save(savingBill);
+        billsRepository.save(bill);
     }
 }

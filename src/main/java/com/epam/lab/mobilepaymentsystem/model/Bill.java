@@ -13,7 +13,7 @@ public class Bill extends AbstractEntity {
     private String service;
 
     @Column(name = "is_paid")
-    private Boolean isPaidFor;
+    private boolean isPaidFor;
 
     public String getUser() {
         return user;
@@ -31,11 +31,11 @@ public class Bill extends AbstractEntity {
         this.service = service;
     }
 
-    public Boolean getPaidFor() {
+    public boolean getPaidFor() {
         return isPaidFor;
     }
 
-    public void setPaidFor(Boolean paidFor) {
+    public void setPaidFor(boolean paidFor) {
         isPaidFor = paidFor;
     }
 }
