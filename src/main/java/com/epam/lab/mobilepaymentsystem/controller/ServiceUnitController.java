@@ -4,13 +4,13 @@ import com.epam.lab.mobilepaymentsystem.dao.ServiceUnitsRepository;
 import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+import java.util.List;
+
+@Controller
 public class ServiceUnitController {
 
     private final ServiceUnitService serviceUnitService;
@@ -20,27 +20,25 @@ public class ServiceUnitController {
         this.serviceUnitService = serviceUnitService;
     }
 
-    @RequestMapping(value="/service/add", method = RequestMethod.GET)
+    @ModelAttribute("serviceList")
+    public List<ServiceUnit> serviceUnitList() {
+        return (List<ServiceUnit>) serviceUnitService.getServiceUnitsRepository().findAll();
+    }
+
+    @GetMapping(value="/service/add")
     public String serviceForm(Model model) {
         model.addAttribute("serviceForm", new ServiceUnit());
-        return "addService";
+        return "serviceunit";
     }
 
-    @RequestMapping(value="/service", method = RequestMethod.GET)
-    public String servicesList(Model model) {
-        model.addAttribute("services", serviceUnitService.getServiceUnitsRepository().findAll());
-        return "service";
-    }
-
-    @RequestMapping(value = "/service/add", method = RequestMethod.POST)
+    @PostMapping(value = "/service/add")
     public String serviceAdding(@ModelAttribute("serviceForm") ServiceUnit serviceUnit) {
-        long id = serviceUnit.getId();
         String name = serviceUnit.getName();
         int cost = serviceUnit.getCost();
 
         ServiceUnit tempUnit = new ServiceUnit(name, cost);
         serviceUnitService.save(tempUnit);
-        return "redirect:/service";
+        return "redirect:/service/add";
     }
 
 }

@@ -11,8 +11,8 @@
 
     <!--/*@thymesVar id="service" type="com.epam.lab.mobilepaymentsystem.model.ServiceUnit"*/-->
     <form action="#" th:action="@{/service/add}" th:object="${service}" method="post">
-        Service name <input type="text" th:field="*{name}" title="Enter the service name">
-        Service cost <input type="text" th:field="*{cost}" title="Enter the service cost">
+        <p>Service name<input type="text" th:field="*{name}" title="Enter the service name"></p>
+        <p>Service cost<input type="text" th:field="*{cost}" title="Enter the service cost"></p>
         <p><input type="submit" value="Submit"></p>
     </form>
 
@@ -23,11 +23,11 @@
             <th>Cost</th>
         </tr>
 
-        <tr th:each="service : ${services}">
+        <tr th:each="service : ${serviceList}">
             <td th:utext="${service.id}"></td>
             <td th:utext="${service.name}"></td>
             <td th:utext="${service.cost}"></td>
-
+        </tr>
     </table>
 
 </body>
