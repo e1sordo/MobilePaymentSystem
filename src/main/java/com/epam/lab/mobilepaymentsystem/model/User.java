@@ -21,7 +21,7 @@ public class User extends AbstractEntity {
     @Column (name = "password")
     private String password;
 
-    public boolean isAdmin() {
+    public boolean getAdmin() {
         return isAdmin;
     }
 
@@ -29,7 +29,7 @@ public class User extends AbstractEntity {
         isAdmin = admin;
     }
 
-    public boolean isLocked() {
+    public boolean getLocked() {
         return isLocked;
     }
 
