@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
     <title>Bill adding</title>
 </head>
 <body>
-
+<p>Bill data</p>
+<!--/*@thymesVar id="bill" type="com.epam.lab.mobilepaymentsystem.model.Bill"*/-->
+<form action="#" th:action="@{/bill/add}" th:object="${bill}" method="post">
+    User name:&nbsp; &nbsp; &nbsp;&nbsp;<input type="text" th:field="*{user}" title="Enter the user name"/>
+    <p>Service name:&nbsp;&nbsp;<input type="text" th:field="*{service}" title="Enter the service name"/></p>
+    <p>Is bill paid for?&nbsp;<input type="checkbox" th:field="*{paidFor}" title="Bill state"/></p>
+    <p><input type="submit" value="Accept"/></p>
+</form>
 </body>
 </html>
