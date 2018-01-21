@@ -9,12 +9,12 @@
     <h3>Services List</h3>
 
 
-    <!--/*@thymesVar id="service" type="com.epam.lab.mobilepaymentsystem.model.ServiceUnit"*/-->
-    <form action="#" th:action="@{/service/add}" th:object="${service}" method="post">
-        <p>Service name<input type="text" th:field="*{name}" title="Enter the service name"></p>
-        <p>Service cost<input type="text" th:field="*{cost}" title="Enter the service cost"></p>
-        <p><input type="submit" value="Submit"></p>
+     <form action="#" th:action="@{/service/add}" th:object="${service}" method="post">
+         <p>Service name:<input type="text" th:field="*{name}" title="Enter the service name"/></p>
+         <p>Service cost:<input type="text" th:field="*{cost}" title="Enter the service cost"/></p>
+         <p><input type="submit" value="Accept"/></p>
     </form>
+
 
     <table border="1">
         <tr>

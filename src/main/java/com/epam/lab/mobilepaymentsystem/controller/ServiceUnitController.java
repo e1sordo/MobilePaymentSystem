@@ -27,12 +27,12 @@ public class ServiceUnitController {
 
     @GetMapping(value="/service/add")
     public String serviceForm(Model model) {
-        model.addAttribute("serviceForm", new ServiceUnit());
+        model.addAttribute("service", new ServiceUnit());
         return "serviceunit";
     }
 
     @PostMapping(value = "/service/add")
-    public String serviceAdding(@ModelAttribute("serviceForm") ServiceUnit serviceUnit) {
+    public String serviceAdding(@ModelAttribute("service") ServiceUnit serviceUnit) {
         String name = serviceUnit.getName();
         int cost = serviceUnit.getCost();
 

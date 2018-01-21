@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ServiceUnitService {
+
     private final ServiceUnitsRepository serviceUnitsRepository;
 
     @Autowired

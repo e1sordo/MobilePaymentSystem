@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class ServiceUnit extends AbstractEntity {
 
     @Column (name = "name")
-    private String name;
+    public String name;
 
     @Column (name = "cost")
     private int cost;
