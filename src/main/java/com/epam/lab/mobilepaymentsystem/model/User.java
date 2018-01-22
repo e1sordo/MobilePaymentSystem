@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,6 +32,20 @@ public class User extends AbstractEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_services",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
+    private List<ServiceUnit> serviceUnits;
+
+    public List<ServiceUnit> getServiceUnits() {
+        return serviceUnits;
+    }
+
+    public void setServiceUnits(List<ServiceUnit> serviceUnits) {
+        this.serviceUnits = serviceUnits;
+    }
 
     public User() {
     }
