@@ -6,10 +6,10 @@ import javax.persistence.*;
 @Table(name = "bills")
 public class Bill extends AbstractEntity {
 
-    @OneToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User user;
 
-    @OneToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ServiceUnit serviceUnit;
 
     @Column(name = "is_paid")
