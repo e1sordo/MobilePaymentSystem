@@ -31,7 +31,7 @@ public class Bill extends AbstractEntity {
         this.service = service;
     }
 
-    public boolean isPaidFor() {
+    public boolean getPaidFor() {
         return isPaidFor;
     }
 
