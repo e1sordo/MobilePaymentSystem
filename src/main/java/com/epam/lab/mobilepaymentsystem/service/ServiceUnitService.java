@@ -5,6 +5,8 @@ import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ServiceUnitService {
 
@@ -19,7 +21,16 @@ public class ServiceUnitService {
         serviceUnitsRepository.save(serviceUnit);
     }
 
-    public ServiceUnitsRepository getServiceUnitsRepository() {
-        return serviceUnitsRepository;
+    public List<ServiceUnit> getAll() {
+        return (List<ServiceUnit>) serviceUnitsRepository.findAll();
     }
+
+    public ServiceUnit getByServiceName(String name) {
+        return serviceUnitsRepository.findByName(name);
+    }
+
+    public ServiceUnit getServiceById(Long id) {
+        return serviceUnitsRepository.findOne(id);
+    }
+
 }

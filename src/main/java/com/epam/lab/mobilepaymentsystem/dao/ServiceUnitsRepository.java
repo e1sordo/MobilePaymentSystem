@@ -4,4 +4,5 @@ import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ServiceUnitsRepository extends CrudRepository<ServiceUnit, Long> {
+    ServiceUnit findByName(String name);
 }

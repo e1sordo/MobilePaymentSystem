@@ -1,7 +1,6 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table (name = "services")

@@ -22,7 +22,7 @@ public class ServiceUnitController {
 
     @ModelAttribute("serviceList")
     public List<ServiceUnit> serviceUnitList() {
-        return (List<ServiceUnit>) serviceUnitService.getServiceUnitsRepository().findAll();
+        return serviceUnitService.getAll();
     }
 
     @GetMapping(value="/service/add")
@@ -33,11 +33,7 @@ public class ServiceUnitController {
 
     @PostMapping(value = "/service/add")
     public String serviceAdding(@ModelAttribute("service") ServiceUnit serviceUnit) {
-        String name = serviceUnit.getName();
-        int cost = serviceUnit.getCost();
-
-        ServiceUnit tempUnit = new ServiceUnit(name, cost);
-        serviceUnitService.save(tempUnit);
+        serviceUnitService.save(serviceUnit);
         return "redirect:/service/add";
     }
 
