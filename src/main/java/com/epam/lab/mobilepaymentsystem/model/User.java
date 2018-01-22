@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table (name = "users")
@@ -21,7 +22,23 @@ public class User extends AbstractEntity {
     @Column (name = "password")
     private String password;
 
-    public boolean isAdmin() {
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_serivces",
+            joinColumns = {@JoinColumn (name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn (name = "service_id", referencedColumnName = "id")}
+    )
+    private List<ServiceUnit> serviceUnits;
+
+    public List<ServiceUnit> getServiceUnits() {
+        return serviceUnits;
+    }
+
+    public void setServiceUnits(List<ServiceUnit> serviceUnits) {
+        this.serviceUnits = serviceUnits;
+    }
+
+    public boolean getAdmin() {
         return isAdmin;
     }
 
@@ -29,7 +46,7 @@ public class User extends AbstractEntity {
         isAdmin = admin;
     }
 
-    public boolean isLocked() {
+    public boolean getLocked() {
         return isLocked;
     }
 
