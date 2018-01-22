@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="create_from">
+
+<body>
+
+    <form th:action="@{/users}"
+          th:object="${user}" method="post" action="#">
+        <!--<input type="hidden" th:field="*{id}" />-->
+        Login:
+        <label>
+            <input type="text" th:field="*{login}"/>
+        </label>
+        <br/>
+        Password:
+        <label>
+            <input type="text" th:field="*{password}"/>
+        </label>
+        <br/>
+        Money:
+        <label>
+            <input type="number" th:field="*{personalAccount}"/>
+        </label>
+        <br/>
+        Admin:
+        <label>
+            <input type="checkbox" th:checked="${admin}"/>
+        </label>
+        <br/>
+        Locked:
+        <label>
+            <input type="checkbox" th:checked="${locked}"/>
+        </label>
+        <br/>
+        <input type="submit" value="Create" />
+    </form>
+
+
+</body>
+</html>

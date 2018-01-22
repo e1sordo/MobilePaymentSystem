@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="container">
+
+    <form action="" th:action="@{/registration}" th:object="${userForm}" method="POST" enctype="utf8" role="form">
+
+            Login:
+            <label>
+                <input type="text" th:field="*{username}"/>
+            </label>
+            <br/>
+            Password:
+            <label>
+                <input type="password" th:field="*{password}"/>
+            </label>
+            <br/>
+            Confirm Password:
+            <label>
+                <input type="password" th:field="*{confirmPassword}"/>
+            </label>
+            <br/>
+            Money:
+            <label>
+                <input type="number" th:field="*{bankBook}"/>
+            </label>
+            <br/>
+            <input type="submit" value="Create" />
+        </form>
+
+
+    </form>
+</div>
+</div>
+
+</div>
+<!-- /container -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+</body>
+</html>
