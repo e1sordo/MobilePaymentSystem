@@ -2,6 +2,8 @@ package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.BillsRepository;
 import com.epam.lab.mobilepaymentsystem.model.Bill;
+import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
+import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +19,17 @@ public class BillService {
 
     public void save(Bill bill) {
         billsRepository.save(bill);
+    }
+
+    public void createAndSaveBill(User user, ServiceUnit serviceUnit) {
+        Bill bill = new Bill();
+        bill.setUser(user);
+        bill.setServiceUnit(serviceUnit);
+        bill.setPaidFor(false);
+        billsRepository.save(bill);
+    }
+
+    public Iterable<Bill> listAllBills() {
+        return billsRepository.findAll();
     }
 }

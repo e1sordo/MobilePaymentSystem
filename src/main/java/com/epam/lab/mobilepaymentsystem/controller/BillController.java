@@ -30,4 +30,10 @@ public class BillController {
         billService.save(bill);
         return "redirect:/bill/add";
     }
+
+    @GetMapping("/bills/management")
+    public String listAllBills(Model model) {
+        model.addAttribute("bills", billService.listAllBills());
+        return "billsmanagement";
+    }
 }

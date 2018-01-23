@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Service management</title>
+</head>
+<body>
+<p>Bill data</p>
+<!--/*@thymesVar id="bill" type="com.epam.lab.mobilepaymentsystem.model.Bill"*/-->
+<form action="#" th:action="@{/bills/management}" th:object="${bill}" method="post">
+    <div th:if="${not #lists.isEmpty(bills)}">
+        <h2>Bills list for USER 1</h2>
+        <table>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Cost</th>
+                <th>Is paid</th>
+            </tr>
+            <tr th:each="bill : ${bills}">
+                <td th:text="${bill.user.id}"></td>
+                <td th:text="${bill.serviceUnit.name}"></td>
+                <td th:text="${bill.serviceUnit.cost}"></td>
+                <td th:text="${bill.paidFor}"></td>
+            </tr>
+        </table>
+        <p><input type="submit" value="Accept"/></p>
+    </div>
+</form>
+</body>
+</html>

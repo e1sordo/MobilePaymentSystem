@@ -6,6 +6,9 @@ import javax.persistence.*;
 @Table (name = "services")
 public class ServiceUnit extends AbstractEntity {
 
+    public ServiceUnit() {
+    }
+
     @Column (name = "name")
     private String name;
 
