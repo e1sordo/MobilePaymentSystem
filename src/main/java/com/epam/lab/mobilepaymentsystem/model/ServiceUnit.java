@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class ServiceUnit extends AbstractEntity {
 
     @Column (name = "name")
-    public String name;
+    private String name;
 
     @Column (name = "cost")
     private int cost;
