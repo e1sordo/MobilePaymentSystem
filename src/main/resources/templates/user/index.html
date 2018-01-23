@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User list</title>
+</head>
+<body>
+
+    <h2>User List</h2>
+
+    <br>
+    <hr>
+    <br>
+
+
+    <!--<form th:action="@{/users}"-->
+          <!--th:object="${newUser}" method="post" action="#">-->
+        <!--&lt;!&ndash;<input type="hidden" th:field="*{id}" />&ndash;&gt;-->
+        <!--Login:-->
+        <!--<label>-->
+            <!--<input type="text" th:field="*{login}"/>-->
+        <!--</label>-->
+        <!--<br/>-->
+        <!--Password:-->
+        <!--<label>-->
+            <!--<input type="text" th:field="*{password}"/>-->
+        <!--</label>-->
+        <!--<br/>-->
+        <!--Money:-->
+        <!--<label>-->
+            <!--<input type="number" th:field="*{personalAccount}"/>-->
+        <!--</label>-->
+        <!--<br/>-->
+        <!--Admin:-->
+        <!--<label>-->
+            <!--<input type="checkbox" th:checked="${admin}"/>-->
+        <!--</label>-->
+        <!--<br/>-->
+        <!--Locked:-->
+        <!--<label>-->
+            <!--<input type="checkbox" th:checked="${locked}"/>-->
+        <!--</label>-->
+        <!--<br/>-->
+        <!--<input type="submit" value="Create" />-->
+    <!--</form>-->
+
+    <br>
+    <hr>
+    <br>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Login</th>
+            <th>Password</th>
+            <!--<th>personalAccount</th>-->
+            <!--<th>isAdmin</th>-->
+            <!--<th>isLocked</th>-->
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:utext="${user.id}"></td>
+            <td th:utext="${user.username}"></td>
+            <td th:utext="${user.password}"></td>
+            <!--<td th:utext="${user.personalAccount}"></td>-->
+            <!--<td th:text="${user.admin} ? 'Yes' : 'No'"></td>-->
+            <!--<td th:text="${user.locked} ? 'Yes' : 'No'"></td>-->
+        </tr>
+    </table>
+
+</body>
+</html>

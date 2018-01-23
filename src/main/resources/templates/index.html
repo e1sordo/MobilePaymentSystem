@@ -6,9 +6,18 @@
 </head>
 <body>
 
-    <h1>Hello!</h1>
+    <h1 th:inline="text">Hello! [[${#httpServletRequest.remoteUser}]]!</h1>
+
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign out" />
+    </form>
 
     <p>Welcome to <span th:text="${appName}">Our App</span></p>
+
+    <p><a href="/users" target="_blank">Add user</a></p>
+    <p><a href="/service" target="_blank">Add service</a></p>
+    <p><a href="/bill" target="_blank">Add bill</a></p>
+    <p><a href="/h2" target="_blank">To BD</a></p>
 
 </body>
 </html>

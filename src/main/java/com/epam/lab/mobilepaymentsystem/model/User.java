@@ -2,32 +2,41 @@ package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
+
+/**
+ * Simple JavaBean domain object that represents a User.
+ *
+ * @author Vladimir Kostin
+ * @version 2.0
+ */
 
 @Entity
-@Table (name = "users")
+@Table(name = "users")
 public class User extends AbstractEntity {
 
-    @Column (name = "is_admin")
-    private boolean isAdmin;
+    @Column(name = "bankbook")
+    private Integer bankBook;
 
-    @Column (name = "is_locked")
-    private boolean isLocked;
+    @Column(name = "username")
+    private String username;
 
-    @Column (name = "personal_account")
-    private int personalAccount;
-
-    @Column (name = "login")
-    private String login;
-
-    @Column (name = "password")
+    @Column(name = "password")
     private String password;
 
+    @Transient
+    private String confirmPassword;
+
+    @ManyToMany
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "user_serivces",
-            joinColumns = {@JoinColumn (name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn (name = "service_id", referencedColumnName = "id")}
-    )
+    @JoinTable(name = "user_services",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
     private List<ServiceUnit> serviceUnits;
 
     public List<ServiceUnit> getServiceUnits() {
@@ -38,36 +47,23 @@ public class User extends AbstractEntity {
         this.serviceUnits = serviceUnits;
     }
 
-    public boolean getAdmin() {
-        return isAdmin;
+    public User() {
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public int getBankBook() {
+        return bankBook;
     }
 
-    public boolean getLocked() {
-        return isLocked;
+    public void setBankBook(int bankBook) {
+        this.bankBook = bankBook;
     }
 
-    public void setLocked(boolean locked) {
-        isLocked = locked;
+    public String getUsername() {
+        return username;
     }
 
-    public int getPersonalAccount() {
-        return personalAccount;
-    }
-
-    public void setPersonalAccount(int personalAccount) {
-        this.personalAccount = personalAccount;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -76,5 +72,21 @@ public class User extends AbstractEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
