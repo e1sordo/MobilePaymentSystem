@@ -19,9 +19,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/registration",
                         "/h2/**",
                         "/test/**",
-                        "/css/**",
+                        "/data/**",
+                        "/dist/**",
                         "/js/**",
-                        "/img/**").permitAll()
+                        "/vendor/**").permitAll()
                 .antMatchers(
                         "/h2/**",
                         "/admin/**").access("hasRole('ADMIN')")
