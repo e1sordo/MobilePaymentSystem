@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My services</title>
+</head>
+<body>
+    <div>
+        <h2>My service list</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Cost</th>
+                <th></th>
+            </tr>
+            <tr th:each="service : ${activeServices}">
+                <form action="#" th:action="@{/service/my}" th:object="${selectedService}" method="post">
+                <td th:text="${service.name}"></td>
+                <td th:text="${service.cost}"></td>
+                <td>
+                    <input type="hidden" th:field="*{id}"/>
+                    <input type="submit" value="Unsub" title="Unsubscribe">
+                </td>
+                </form>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

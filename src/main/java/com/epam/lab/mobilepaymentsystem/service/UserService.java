@@ -2,11 +2,14 @@ package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.UserRepository;
 import com.epam.lab.mobilepaymentsystem.model.Role;
+import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -44,5 +47,10 @@ public class UserService {
 
     public void straightSave(User user) {
         userRepository.save(user);
+    }
+
+    public List<ServiceUnit> getActiveServicesByUserId(long id) {
+        User user = userRepository.findUserById(id);
+        return new ArrayList<>(user.getServiceUnits());
     }
 }

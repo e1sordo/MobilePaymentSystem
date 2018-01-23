@@ -37,21 +37,44 @@ public class ServiceUnitController {
 
     @GetMapping("service/new")
     public String listInactiveServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        User user = userService.getUserById(1L);
+        User user = userService.getUserById(1L); // TODO: where should operation "add service to user" be?
 
         user.addService(serviceUnitService.getServiceById(1L));
         userService.straightSave(user);
-        List<ServiceUnit> services = serviceUnitService.getAllServicesWithoutSubscribe(1); // TODO: get user!
-        model.addAttribute("inactiveServices", services);
+        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(1); // TODO: get user!
+        model.addAttribute("inactiveServices", inactiveServices);
         return "service/new";
     }
 
     // TODO: user can select value with id == -1 !
     @PostMapping("service/new")
-    public String subscribeToService( @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
+    public String subscribeToService(@ModelAttribute("selectedService") ServiceUnit serviceUnit) {
         User user = userService.getUserById(1L);
+
         user.addService(serviceUnitService.getServiceById(serviceUnit.getId()));
         userService.straightSave(user);
         return "redirect:/service/new";
+    }
+
+
+    // TODO: doesnt return actual data after pressing a button
+    @GetMapping("service/my")
+    public String listActiveServices(@ModelAttribute("selectedService") ServiceUnit serviceUnit, Model model) {
+        User user = userService.getUserById(1L);
+
+        List<ServiceUnit> activeServices = userService.getActiveServicesByUserId(user.getId());
+        model.addAttribute("activeServices", activeServices);
+        return "service/my";
+    }
+
+    @PostMapping("service/my")
+    public String unsubscribeFromService(@ModelAttribute("selectedService") ServiceUnit serviceUnit) {
+        User user = userService.getUserById(1L);
+
+        ServiceUnit dummy = serviceUnit;
+
+        user.removeService(serviceUnitService.getServiceById(serviceUnit.getId()));
+        userService.straightSave(user);
+        return "redirect:/service/my";
     }
 }
