@@ -22,7 +22,7 @@ public class ServiceUnitService {
     }
 
     public List<ServiceUnit> getAll() {
-        return (List<ServiceUnit>) serviceUnitsRepository.findAll();
+        return serviceUnitsRepository.findAll();
     }
 
     public ServiceUnit getByServiceName(String name) {

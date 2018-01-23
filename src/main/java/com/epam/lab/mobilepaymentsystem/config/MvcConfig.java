@@ -15,7 +15,7 @@ import java.util.Locale;
 @Configuration
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
-    private String requestParameter = "lang";
+    private static final String requestParameter = "lang";
 
     @Bean
     public LocaleResolver localeResolver() {
