@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Service management</title>
+</head>
+<body>
+<form action="#" th:action="@{/service/new}" th:object="${selectedService}" method="post">
+    <div>
+        <select th:field="*{id}" id="subscribeToService" title="Select service to subscribe">
+            <option value="-1">Select new service to subscribe</option>
+            <option th:each="serviceUnit : ${inactiveServices}"
+                    th:value="${serviceUnit.id}"
+                    th:text="${serviceUnit.name}+' - '+${serviceUnit.cost}"
+            ></option>
+        </select>
+        <input type="submit" name="Subscribe" title="Subscribe">
+    </div>
+    <!--<tr th:each="instance : ${analysis.instanceMap}">-->
+        <!--<td th:text="${instance.key}">keyvalue</td>-->
+        <!--<td th:text="${instance.value.numOfData}">num</td>-->
+</form>
+</body>
+</html>

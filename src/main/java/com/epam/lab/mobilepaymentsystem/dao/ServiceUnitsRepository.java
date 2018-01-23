@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ServiceUnitsRepository extends CrudRepository<ServiceUnit, Long> {
+
+    ServiceUnit findServiceUnitById(long id);
 }

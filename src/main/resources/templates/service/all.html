@@ -7,7 +7,7 @@
 </head>
 <body>
 <!--/*@thymesVar id="serviceunit" type="com.epam.lab.mobilepaymentsystem.model.ServiceUnit"*/-->
-<form action="#" th:action="@{/services/management}" th:object="${services}" method="post">
+<form action="#" th:action="@{/service/all}" th:object="${services}" method="get">
     <div>
         <h2>Service list</h2>
         <table>
@@ -17,16 +17,12 @@
                 <!--<th>Is connected?</th>-->
             </tr>
             <tr th:each="service : ${services}">
-                <td th:text="${service.cost}" th:field="${service.name}"></td>
-                <td th:text="${service.cost}" th:field="${service.cost}"></td>
+                <td th:text="${service.name}"></td>
+                <td th:text="${service.cost}"></td>
                 <!--<td><input type="checkbox" th:checked="${service.getValue()}"/></td>-->
             </tr>
         </table>
-        <p><input type="submit" value="Accept"/></p>
     </div>
-    <!--<tr th:each="instance : ${analysis.instanceMap}">-->
-        <!--<td th:text="${instance.key}">keyvalue</td>-->
-        <!--<td th:text="${instance.value.numOfData}">num</td>-->
 </form>
 </body>
 </html>

@@ -1,7 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -37,14 +37,22 @@ public class User extends AbstractEntity {
     @JoinTable(name = "user_services",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
-    private List<ServiceUnit> serviceUnits;
+    private Set<ServiceUnit> serviceUnits = new HashSet<>();
 
-    public List<ServiceUnit> getServiceUnits() {
+    public Set<ServiceUnit> getServiceUnits() {
         return serviceUnits;
     }
 
-    public void setServiceUnits(List<ServiceUnit> serviceUnits) {
+    public void setServiceUnits(Set<ServiceUnit> serviceUnits) {
         this.serviceUnits = serviceUnits;
+    }
+
+    public boolean addService(ServiceUnit serviceUnit) {
+        return serviceUnits.add(serviceUnit);
+    }
+
+    public boolean removeService(ServiceUnit serviceUnit) {
+       return serviceUnits.remove(serviceUnit);
     }
 
     public User() {

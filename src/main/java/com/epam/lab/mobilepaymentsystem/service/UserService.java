@@ -41,4 +41,8 @@ public class UserService {
     public Iterable<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public void straightSave(User user) {
+        userRepository.save(user);
+    }
 }
