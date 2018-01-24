@@ -2,7 +2,6 @@ package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Simple JavaBean domain object that represents a User.
@@ -21,17 +20,17 @@ public class User extends AbstractEntity {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "fullname")
+    private String fullname;
+
     @Column(name = "password")
     private String password;
 
     @Transient
     private String confirmPassword;
 
-    @ManyToMany
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @Column(name = "role")
+    private String role;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_services",
@@ -50,7 +49,7 @@ public class User extends AbstractEntity {
     public User() {
     }
 
-    public int getBankBook() {
+    public Integer getBankBook() {
         return bankBook;
     }
 
@@ -64,6 +63,14 @@ public class User extends AbstractEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getPassword() {
@@ -82,11 +89,11 @@ public class User extends AbstractEntity {
         this.confirmPassword = confirmPassword;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

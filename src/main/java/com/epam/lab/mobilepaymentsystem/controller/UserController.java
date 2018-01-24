@@ -34,7 +34,7 @@ public class UserController {
         userService.save(userForm);
         securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
 
-        return "redirect:/index";
+        return "redirect:/";
     }
 
     @GetMapping("/login")
@@ -50,14 +50,20 @@ public class UserController {
         return "user/login";
     }
 
-    @GetMapping("/admin")
-    public String adminPage(Model model) {
-        return "user/admin";
-    }
-
     @GetMapping("/users")
     public String getUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        return "user/index";
+        return "user/user_list";
+    }
+
+    @GetMapping("/users/{slug}")
+    public String showUser(@PathVariable String slug) {
+        return "bill/bill_item";
+    }
+
+    @DeleteMapping("users/{id}/delete")
+    public String deleteUser(@PathVariable long id) {
+        // todo
+        return "redirect:/users";
     }
 }

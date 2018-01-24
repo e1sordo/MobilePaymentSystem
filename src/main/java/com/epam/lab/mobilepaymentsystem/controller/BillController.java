@@ -19,13 +19,20 @@ public class BillController {
         this.billService = billService;
     }
 
-    @GetMapping("/bill/add")
+    @GetMapping("/bills")
+    public String getBills(Model model) {
+        model.addAttribute("allBills", null);
+        model.addAttribute("unpaidBills", null);
+        return "bill/bill_list";
+    }
+
+    @GetMapping("/bills/add")
     public String billForm(Model model) {
         model.addAttribute("bill", new Bill());
         return "bill";
     }
 
-    @PostMapping("/bill/add")
+    @PostMapping("/bills/add")
     public String billSubmit(@ModelAttribute("bill") Bill bill) {
         billService.save(bill);
         return "redirect:/bill/add";

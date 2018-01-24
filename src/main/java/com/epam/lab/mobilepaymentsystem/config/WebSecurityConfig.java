@@ -1,9 +1,12 @@
 package com.epam.lab.mobilepaymentsystem.config;
 
+import com.epam.lab.mobilepaymentsystem.service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -11,21 +14,34 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final UserDetailService userService;
+
+    @Value("${spring.queries.users-query}")
+    private String usersQuery;
+
+    @Value("${spring.queries.roles-query}")
+    private String rolesQuery;
+
+    @Autowired
+    public WebSecurityConfig(UserDetailService userService) {
+        this.userService = userService;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
                 .antMatchers(
                         "/registration",
+                        "/bills/**",
+                        "/services/**",
                         "/h2/**",
                         "/test/**",
-                        "/data/**",
-                        "/dist/**",
-                        "/js/**",
-                        "/vendor/**").permitAll()
+                        "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**",
+                        "/data/**", "/dist/**", "/js/**", "/vendor/**").permitAll()
                 .antMatchers(
                         "/h2/**",
-                        "/admin/**").access("hasRole('ADMIN')")
+                        "/users/**").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -45,6 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
+//        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
+        auth.userDetailsService(userService);
     }
 }
