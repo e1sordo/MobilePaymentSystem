@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Controller
 public class UserController {
 
@@ -56,14 +58,34 @@ public class UserController {
         return "user/user_list";
     }
 
-    @GetMapping("/users/{slug}")
-    public String showUser(@PathVariable String slug) {
-        return "bill/bill_item";
+    @GetMapping("/profile")
+    public String showMyProfile(Principal principal) {
+        Long id = userService.getByUsername(principal.getName()).getId();
+        return "redirect:/users/" + id;
+    }
+
+    @GetMapping("/profile/services")
+    public String showMyServices(Principal principal) {
+        Long id = userService.getByUsername(principal.getName()).getId();
+        return "redirect:/users/" + id + "/services";
+    }
+
+    @GetMapping("/users/{id}")
+    public String showUserProfile(@PathVariable long id, Model model) {
+        model.addAttribute("user", userService.getUserById(id));
+        return "user/user_item";
+    }
+
+    @GetMapping("/users/{id}/services")
+    public String showUserServices(@PathVariable long id, Model model) {
+        // todo ДОДЕЛАТЬ ВЫВОД УСЛУГ
+        model.addAttribute("userServices", null);
+        return "service/service_list";
     }
 
     @DeleteMapping("users/{id}/delete")
     public String deleteUser(@PathVariable long id) {
-        // todo
+        // todo ПЕРЕНОС В ГРУППУ АРХИВ
         return "redirect:/users";
     }
 }
