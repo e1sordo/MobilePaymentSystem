@@ -49,8 +49,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<ServiceUnit> getActiveServicesByUserId(long id) {
-        User user = userRepository.findUserById(id);
+    public List<ServiceUnit> getActiveServicesByUserId(long userId) {
+        User user = userRepository.findUserById(userId);
         return new ArrayList<>(user.getServiceUnits());
     }
 }

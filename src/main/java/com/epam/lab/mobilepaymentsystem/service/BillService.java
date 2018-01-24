@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class BillService {
 
+    private static final boolean PAID = true;
+    private static final boolean UNPAID = false;
+
     private final BillsRepository billsRepository;
 
     @Autowired
@@ -22,6 +25,8 @@ public class BillService {
     }
 
     public void createAndSaveBill(User user, ServiceUnit serviceUnit) {
+//        Bill bill = billsRepository.findBillByUser_IdAndServiceUnit_id(user.getId(), serviceUnit.getId());
+//        if (bill == null)
         Bill bill = new Bill();
         bill.setUser(user);
         bill.setServiceUnit(serviceUnit);
@@ -29,7 +34,26 @@ public class BillService {
         billsRepository.save(bill);
     }
 
-    public Iterable<Bill> listAllBills() {
-        return billsRepository.findAll();
+    public void deleteUnpaidBill(long userId, long serviceId) {
+        billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
+    }
+
+    public Iterable<Bill> listAllPaidBillsOfUser(long userId) {
+        return billsRepository.findAllByUser_IdAndPaidFor(userId, PAID);
+    }
+
+
+    public Iterable<Bill> listAllUnpaidBillsOfUser(long userId) {
+        return billsRepository.findAllByUser_IdAndPaidFor(userId, UNPAID);
+    }
+
+    public int countTotalSum(Iterable<Bill> bills) {
+        int total = 0;
+
+        // todo: maybe it is possible and better to do by stream
+        for (Bill bill: bills) {
+            total += bill.getServiceUnit().getCost();
+        }
+        return total;
     }
 }
