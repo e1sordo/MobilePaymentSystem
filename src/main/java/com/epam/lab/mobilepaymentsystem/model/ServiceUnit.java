@@ -12,6 +12,14 @@ public class ServiceUnit extends AbstractEntity {
     @Column (name = "cost")
     private int cost;
 
+    public ServiceUnit() {
+    }
+
+    public ServiceUnit(String name, int cost) {
+        this.name = name;
+        this.cost = cost;
+    }
+
     public String getName() {
         return name;
     }
