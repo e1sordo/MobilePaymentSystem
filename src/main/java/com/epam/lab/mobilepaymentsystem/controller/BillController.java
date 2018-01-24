@@ -19,22 +19,9 @@ public class BillController {
         this.billService = billService;
     }
 
-//    Manual bill creating for tests purposes
-//    @GetMapping("/bill/add")
-//    public String billForm(Model model) {
-//        model.addAttribute("bill", new Bill());
-//        return "bill";
-//    }
-//
-//    @PostMapping("/bill/add")
-//    public String billSubmit(@ModelAttribute("bill") Bill bill) {
-//        billService.save(bill);
-//        return "redirect:/bill/add";
-//    }
-
     @GetMapping("/bills/payment")
     public String listAllUnpaidBills(Model model) {
-        Iterable<Bill> unpaidBills = billService.listAllUnpaidBillsOfUser(USER_DEFAULT_ID); // TODO: get user id
+        Iterable<Bill> unpaidBills = billService.listAllUnpaidBillsOfUser(USER_DEFAULT_ID);
         int total = billService.countTotalSum(unpaidBills);
         model.addAttribute("unpaidBills", unpaidBills);
         model.addAttribute("total", total);

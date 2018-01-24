@@ -50,7 +50,6 @@ public class BillService {
     public int countTotalSum(Iterable<Bill> bills) {
         int total = 0;
 
-        // todo: maybe it is possible and better to do by stream
         for (Bill bill: bills) {
             total += bill.getServiceUnit().getCost();
         }

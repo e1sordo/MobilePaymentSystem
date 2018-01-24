@@ -39,18 +39,17 @@ public class ServiceUnitController {
     @GetMapping("service/new")
     public String listInactiveServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
       //  serviceUnitService.subscribeUserToService(1L, 1L);
-        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(USER_DEFAULT_ID); // TODO: get user!
+        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(USER_DEFAULT_ID);
         model.addAttribute("inactiveServices", inactiveServices);
         return "service/new";
     }
 
-    // TODO: user can select value with id == -1 !
     @PostMapping("service/new")
     public String subscribeToService(@ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        serviceUnitService.subscribeUserToService(USER_DEFAULT_ID, serviceUnit.getId());
+        if (serviceUnit.getId() != -1)
+            serviceUnitService.subscribeUserToService(USER_DEFAULT_ID, serviceUnit.getId());
         return "redirect:/service/new";
     }
-
 
     // TODO: doesnt return actual data after pressing a button
     @GetMapping("service/my")

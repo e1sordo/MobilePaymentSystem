@@ -19,7 +19,7 @@
                 <td th:text="${service.name}"></td>
                 <td th:text="${service.cost}"></td>
                 <td>
-                    <input type="hidden" th:field="*{id}"/>
+                    <input type="hidden" th:field="*{{id}}" th:value="${service.id}"/>
                     <input type="submit" value="Unsub" title="Unsubscribe">
                 </td>
                 </form>

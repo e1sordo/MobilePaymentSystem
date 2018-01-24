@@ -23,7 +23,6 @@ public class ServiceUnitService {
         this.billService = billService;
     }
 
-    // TODO: return type?
     public Iterable<ServiceUnit> listAllServices() {
         return serviceUnitsRepository.findAll();
     }
@@ -48,7 +47,7 @@ public class ServiceUnitService {
     }
 
     public void subscribeUserToService(long userId, long serviceId) {
-        User user = userService.getUserById(userId); // TODO: where should operation "add service to user" be?
+        User user = userService.getUserById(userId);
         ServiceUnit service = getServiceById(serviceId);
 
         // we create bill only if the service is new
