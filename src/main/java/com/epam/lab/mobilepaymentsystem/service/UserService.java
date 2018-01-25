@@ -55,13 +55,19 @@ public class UserService {
         return user.getId();
     }
 
-    public void straightSave(User user) {
-        // todo change name "update"
+    public User getCurrentUser() {
+        org.springframework.security.core.userdetails.User userSecurity =
+                (org.springframework.security.core.userdetails.User) SecurityContextHolder
+                        .getContext().getAuthentication().getPrincipal();
+        return userRepository.findByUsername(userSecurity.getUsername());
+    }
+
+    public void updateUser(User user) {
         userRepository.save(user);
     }
 
-    public List<ServiceUnit> getActiveServicesByUserId(long userId) {
-        User user = userRepository.findUserById(userId);
+    public List<ServiceUnit> getActiveServicesByUserId() {
+        User user = getCurrentUser();
         return new ArrayList<>(user.getServiceUnits());
     }
 }

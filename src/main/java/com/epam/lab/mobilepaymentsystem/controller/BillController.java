@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class BillController {
 
-    private static final long USER_DEFAULT_ID = 1L;
-
     private final BillService billService;
 
     @Autowired
@@ -21,8 +19,8 @@ public class BillController {
 
     @GetMapping("/bills")
     public String getBills(Model model) {
-        Iterable<Bill> oldBills = billService.listAllPaidBillsOfUser(USER_DEFAULT_ID);
-        Iterable<Bill> unpaidBills = billService.listAllUnpaidBillsOfUser(USER_DEFAULT_ID);
+        Iterable<Bill> oldBills = billService.listAllPaidBillsOfUser();
+        Iterable<Bill> unpaidBills = billService.listAllUnpaidBillsOfUser();
         model.addAttribute("paidBills", oldBills);
         model.addAttribute("unpaidBills", unpaidBills);
         return "bill/bill_list";

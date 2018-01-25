@@ -14,10 +14,12 @@ public class BillService {
     private static final boolean UNPAID = false;
 
     private final BillsRepository billsRepository;
+    private final UserService userService;
 
     @Autowired
-    public BillService(BillsRepository billsRepository) {
+    public BillService(BillsRepository billsRepository, UserService userService) {
         this.billsRepository = billsRepository;
+        this.userService = userService;
     }
 
     public void save(Bill bill) {
@@ -31,6 +33,7 @@ public class BillService {
         bill.setUser(user);
         bill.setServiceUnit(serviceUnit);
         bill.setPaidFor(false);
+        bill.setActualCost(serviceUnit.getCost());
         billsRepository.save(bill);
     }
 
@@ -38,20 +41,20 @@ public class BillService {
         billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
     }
 
-    public Iterable<Bill> listAllPaidBillsOfUser(long userId) {
-        return billsRepository.findAllByUser_IdAndPaidFor(userId, PAID);
+    public Iterable<Bill> listAllPaidBillsOfUser() {
+        return billsRepository.findAllByUser_IdAndPaidFor(userService.getCurrentUserId(), PAID);
     }
 
 
-    public Iterable<Bill> listAllUnpaidBillsOfUser(long userId) {
-        return billsRepository.findAllByUser_IdAndPaidFor(userId, UNPAID);
+    public Iterable<Bill> listAllUnpaidBillsOfUser() {
+        return billsRepository.findAllByUser_IdAndPaidFor(userService.getCurrentUserId(), UNPAID);
     }
 
     public int countTotalSum(Iterable<Bill> bills) {
         int total = 0;
 
         for (Bill bill: bills) {
-            total += bill.getServiceUnit().getCost();
+            total += bill.getActualCost();
         }
         return total;
     }

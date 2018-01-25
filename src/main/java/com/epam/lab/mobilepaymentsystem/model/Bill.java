@@ -16,6 +16,12 @@ public class Bill extends AbstractEntity {
     @Column(name = "is_paid")
     private boolean paidFor;
 
+    /**
+     * Actual cost is the cost of a service at the moment of subscribing
+     */
+    @Column(name = "actual_cost")
+    private int actualCost;
+
     public User getUser() {
         return user;
     }
@@ -40,6 +46,14 @@ public class Bill extends AbstractEntity {
         this.paidFor = paidFor;
     }
 
+    public int getActualCost() {
+        return actualCost;
+    }
+
+    public void setActualCost(int actualCost) {
+        this.actualCost = actualCost;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,7 +61,8 @@ public class Bill extends AbstractEntity {
         Bill bill = (Bill) o;
         return paidFor == bill.paidFor &&
                 user.getId() == bill.user.getId() &&
-                serviceUnit.getId() == bill.serviceUnit.getId();
+                serviceUnit.getId() == bill.serviceUnit.getId()
+                && actualCost == bill.actualCost;
     }
 
     @Override
