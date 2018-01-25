@@ -9,6 +9,13 @@ import java.util.Objects;
 @Table (name = "services")
 public class ServiceUnit extends AbstractEntity {
 
+    public static void main(String[] args) throws InterruptedException {
+        ServiceUnit su = new ServiceUnit();
+        Thread.sleep(5000);
+        ServiceUnit su1 = new ServiceUnit();
+        System.out.println(su.equals(su1));
+    }
+
     private final static int DURATION = 30;
 
     @Column (name = "name")
@@ -69,12 +76,14 @@ public class ServiceUnit extends AbstractEntity {
         if (o == null || getClass() != o.getClass()) return false;
         ServiceUnit that = (ServiceUnit) o;
         return cost == that.cost &&
-                Objects.equals(name, that.name);
+                Objects.equals(name, that.name) &&
+                startDate.toLocalDate().equals(that.startDate.toLocalDate()) &&
+                endDate.toLocalDate().equals(that.endDate.toLocalDate());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, cost);
+        return Objects.hash(name, cost, startDate, endDate);
     }
 }
