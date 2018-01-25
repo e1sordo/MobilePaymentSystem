@@ -23,7 +23,7 @@ public class BillController {
     public String getBills(Model model) {
         Iterable<Bill> oldBills = billService.listAllPaidBillsOfUser(USER_DEFAULT_ID);
         Iterable<Bill> unpaidBills = billService.listAllUnpaidBillsOfUser(USER_DEFAULT_ID);
-        model.addAttribute("allBills", oldBills);
+        model.addAttribute("paidBills", oldBills);
         model.addAttribute("unpaidBills", unpaidBills);
         return "bill/bill_list";
     }

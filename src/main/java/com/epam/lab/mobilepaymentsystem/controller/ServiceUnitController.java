@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -25,7 +26,6 @@ public class ServiceUnitController {
         this.serviceUnitService = serviceUnitService;
         this.billService = billService;
         this.userService = userService;
-        serviceUnitService.createTestService();
     }
 
     @GetMapping("/service/add")
@@ -36,8 +36,9 @@ public class ServiceUnitController {
 
     @PostMapping("/service/add")
     public String serviceAdding(@ModelAttribute("service") ServiceUnit serviceUnit) throws IOException {
-        if(serviceUnit.getCost() == 0)
+        if(serviceUnit.getCost() == 0) {
             throw new IllegalArgumentException("cost can't be equal to 0");
+        }
         serviceUnitService.save(serviceUnit);
         return "redirect:/service/add";
     }

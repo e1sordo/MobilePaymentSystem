@@ -73,7 +73,7 @@
             <div class="col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        All bills
+                        Paid bills
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
@@ -84,31 +84,14 @@
                                     <th>#</th>
                                     <th>Who</th>
                                     <th>When</th>
-                                    <th>What</th>
-                                    <th>How much</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Mark Twen</td>
-                                    <td>24.01.2018 19:35</td>
-                                    <td>1. Web</td>
-                                    <td>75 $</td>
+                                <tr th:each="bill : ${paidBills}">
+                                    <td th:text="${bill.serviceUnit.name}"></td>
+                                    <td th:text="${bill.serviceUnit.cost}"></td>
+                                    <td th:text="${bill.paidFor}"></td>
                                 </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Mark Twen</td>
-                                    <td>24.01.2018 18:21</td>
-                                    <td>1. TV</td>
-                                    <td>3 $</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Mark Twen</td>
-                                    <td>24.01.2018 17:35</td>
-                                    <td>1. WebTV</td>
-                                    <td>45 $</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -134,30 +117,13 @@
                                     <th>#</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
-                                    <th>Username</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Mark Twen</td>
-                                    <td>24.01.2018 19:35</td>
-                                    <td>1. Web</td>
-                                    <td>75 $</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Mark Twen</td>
-                                    <td>24.01.2018 18:21</td>
-                                    <td>1. TV</td>
-                                    <td>3 $</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Mark Twen</td>
-                                    <td>24.01.2018 17:35</td>
-                                    <td>1. WebTV</td>
-                                    <td>45 $</td>
+                                <tr th:each="bill : ${unpaidBills}">
+                                    <td th:text="${bill.serviceUnit.name}"></td>
+                                    <td th:text="${bill.serviceUnit.cost}"></td>
+                                    <td th:text="${bill.paidFor}"></td>
                                 </tr>
                                 </tbody>
                             </table>
