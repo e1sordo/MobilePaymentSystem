@@ -35,7 +35,7 @@ public class ServiceUnitController {
     }
 
     @PostMapping("/service/add")
-    public String serviceAdding(@ModelAttribute("service") ServiceUnit serviceUnit) throws IOException {
+    public String serviceAdding(@ModelAttribute("service") ServiceUnit serviceUnit) throws IllegalArgumentException {
         if(serviceUnit.getCost() == 0) {
             throw new IllegalArgumentException("cost can't be equal to 0");
         }

@@ -1,11 +1,15 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.Objects;
 
 @Entity
 @Table (name = "services")
 public class ServiceUnit extends AbstractEntity {
+
+    private final static int DURATION = 30;
 
     @Column (name = "name")
     private String name;
@@ -13,7 +17,21 @@ public class ServiceUnit extends AbstractEntity {
     @Column (name = "cost")
     private int cost;
 
+    @Column (name = "startDate")
+    private Date startDate;
+
+    @Column (name = "endDate")
+    private Date endDate;
+
     public ServiceUnit() {
+        Calendar calendar = Calendar.getInstance();
+        long currentMillis = System.currentTimeMillis();
+
+        this.startDate = new Date(currentMillis);
+
+        calendar.setTime(this.startDate);
+        calendar.add(Calendar.DAY_OF_YEAR, DURATION);
+        this.endDate = new Date(calendar.getTimeInMillis());
     }
 
     public ServiceUnit(String name, int cost) {
@@ -36,6 +54,14 @@ public class ServiceUnit extends AbstractEntity {
     public void setCost(int cost) {
         this.cost = cost;
     }
+
+    public Date getStartDate() { return startDate; }
+
+    public void setStartDate(Date startDate) { this.startDate = startDate; }
+
+    public Date getEndDate() { return endDate; }
+
+    public void setEndDate(Date endDate) { this.endDate = endDate; }
 
     @Override
     public boolean equals(Object o) {

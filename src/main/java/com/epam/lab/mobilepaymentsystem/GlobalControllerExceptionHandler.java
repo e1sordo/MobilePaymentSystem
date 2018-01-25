@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem;
 
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -14,6 +15,7 @@ class GlobalControllerExceptionHandler {
 
     public static final String DEFAULT_ERROR_VIEW = "errorhandler";
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = Exception.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
         if(AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null)
