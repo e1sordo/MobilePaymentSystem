@@ -41,18 +41,7 @@ public class Bill extends AbstractEntity {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Bill bill = (Bill) o;
-        return paidFor == bill.paidFor &&
-                user.getId() == bill.user.getId() &&
-                serviceUnit.getId() == bill.serviceUnit.getId();
-    }
-
-    @Override
     public int hashCode() {
-
         return Objects.hash(user, serviceUnit, paidFor);
     }
 }
