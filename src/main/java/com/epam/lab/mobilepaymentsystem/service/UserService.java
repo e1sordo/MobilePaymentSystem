@@ -2,10 +2,14 @@ package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.UserRepository;
 import com.epam.lab.mobilepaymentsystem.model.Role;
+import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -23,6 +27,7 @@ public class UserService {
     }
 
     public void deleteUserById(Long id) {
+        // todo
         userRepository.delete(id);
     }
 
@@ -48,5 +53,15 @@ public class UserService {
                         .getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByUsername(userSecurity.getUsername());
         return user.getId();
+    }
+
+    public void straightSave(User user) {
+        // todo change name "update"
+        userRepository.save(user);
+    }
+
+    public List<ServiceUnit> getActiveServicesByUserId(long userId) {
+        User user = userRepository.findUserById(userId);
+        return new ArrayList<>(user.getServiceUnits());
     }
 }

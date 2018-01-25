@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Service management</title>
+</head>
+<body>
+<!--/*@thymesVar id="serviceunit" type="com.epam.lab.mobilepaymentsystem.model.ServiceUnit"*/-->
+<form action="#" th:action="@{/service/all}" th:object="${services}" method="get">
+    <div>
+        <h2>Service list</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Cost</th>
+                <!--<th>Is connected?</th>-->
+            </tr>
+            <tr th:each="service : ${services}">
+                <td th:text="${service.name}"></td>
+                <td th:text="${service.cost}"></td>
+                <!--<td><input type="checkbox" th:checked="${service.getValue()}"/></td>-->
+            </tr>
+        </table>
+    </div>
+</form>
+</body>
+</html>

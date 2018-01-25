@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class BillController {
+
+    private static final long USER_DEFAULT_ID = 1L;
 
     private final BillService billService;
 
@@ -21,20 +21,19 @@ public class BillController {
 
     @GetMapping("/bills")
     public String getBills(Model model) {
-        model.addAttribute("allBills", null);
-        model.addAttribute("unpaidBills", null);
+        Iterable<Bill> oldBills = billService.listAllPaidBillsOfUser(USER_DEFAULT_ID);
+        Iterable<Bill> unpaidBills = billService.listAllUnpaidBillsOfUser(USER_DEFAULT_ID);
+        model.addAttribute("allBills", oldBills);
+        model.addAttribute("unpaidBills", unpaidBills);
         return "bill/bill_list";
     }
 
-    @GetMapping("/bills/add")
-    public String billForm(Model model) {
-        model.addAttribute("bill", new Bill());
-        return "bill";
-    }
-
-    @PostMapping("/bills/add")
-    public String billSubmit(@ModelAttribute("bill") Bill bill) {
-        billService.save(bill);
-        return "redirect:/bill/add";
-    }
+//    @GetMapping("/bills/payment")
+//    public String listAllUnpaidBills(Model model) {
+//        Iterable<Bill> unpaidBills = billService.listAllUnpaidBillsOfUser(USER_DEFAULT_ID);
+//        int total = billService.countTotalSum(unpaidBills);
+//        model.addAttribute("unpaidBills", unpaidBills);
+//        model.addAttribute("total", total);
+//        return "bill/payment";
+//    }
 }
