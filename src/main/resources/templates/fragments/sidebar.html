@@ -10,36 +10,36 @@
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
                 <li class="sidebar-search">
-                    <p>Your services</p>
-                    <p style="color: gray; font-size: 0.9em;"><i>No services yet...</i></p>
+                    <p th:text="#{sidebar.myservices.title}">Your services</p>
+                    <p style="color: gray; font-size: 0.9em;"><i th:text="#{sidebar.myservices.none}">No services yet...</i></p>
                 </li>
 
                 <li>
-                    <a href="/"><i class="fa fa-dashboard fa-fw"></i> Homepage</a>
+                    <a href="/"><i class="fa fa-dashboard fa-fw"></i> <span th:text="#{sidebar.link.homepage}">Homepage</span></a>
                 </li>
                 <li>
-                    <a href="/users"><i class="fa fa-table fa-fw"></i> Users</a>
+                    <a th:href="@{/users}"><i class="fa fa-table fa-fw"></i> <span th:text="#{sidebar.link.users}">Users</span></a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-wrench fa-fw"></i> Services<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-wrench fa-fw"></i> <span th:text="#{sidebar.link.services}">Services</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a th:href="@{/services}">All services</a>
+                            <a th:href="@{/services}"><span th:text="#{sidebar.link.services.all}">All services</span></a>
                         </li>
                         <li>
-                            <a th:href="@{/profile/services}">Your services</a>
+                            <a th:href="@{/profile/services}"><span th:text="#{sidebar.link.services.my}">Your services</span></a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-edit fa-fw"></i> Bills<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-edit fa-fw"></i> <span th:text="#{sidebar.link.bills}">Bills</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="/bills">All bills</a>
+                            <a th:href="@{/bills}"><span th:text="#{sidebar.link.bills.all}">All bills</span></a>
                         </li>
                         <li>
-                            <a href="/bills">Unpaid bills</a>
+                            <a th:href="@{/bills/unpaid}"><span th:text="#{sidebar.link.bills.unpaid}">Unpaid bills</span></a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->

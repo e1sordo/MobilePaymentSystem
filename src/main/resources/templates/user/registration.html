@@ -115,6 +115,12 @@
                 <input th:field="*{username}" type="text" name="username" placeholder="Username">
                 <input th:field="*{fullname}" type="text" name="fullname" placeholder="Fullname">
                 <input th:field="*{bankBook}" type="number" name="bankBook" placeholder="Bank book">
+                <!--<select>-->
+                    <!--<option th:each="role : ${T(com.epam.lab.mobilepaymentsystem.model.Role).values()}"-->
+                            <!--th:value="${role.getDisplayName()}"-->
+                            <!--th:text="${role.getDisplayName()}">-->
+                    <!--</option>-->
+                <!--</select>-->
                 <input th:field="*{password}" type="password" name="password" placeholder="Password">
                 <input th:field="*{confirmPassword}" type="password" name="confirmPassword" placeholder="Confirm password">
                 <input type="submit" name="register" class="login loginmodal-submit" value="Sign me up!">

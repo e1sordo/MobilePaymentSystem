@@ -31,7 +31,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Summary</h1>
+                <h1 class="page-header" th:text="#{title.page.home}">Summary</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div class="huge" th:text="${numberOfServices}">32</div>
-                                <div>Services</div>
+                                <div th:text="#{sidebar.link.services}">Services</div>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div class="huge" th:text="${numberOfBills}">124</div>
-                                <div>Bills</div>
+                                <div th:text="#{sidebar.link.bills}">Bills</div>
                             </div>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div class="huge" th:text="${numberOfUnpaidBills}">2</div>
-                                <div>Unpaid bills</div>
+                                <div th:text="#{container.word.unpaid}">Unpaid bills</div>
                             </div>
                         </div>
                     </div>
@@ -131,7 +131,8 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <i class="fa fa-bar-chart-o fa-fw"></i> Project #7. Mobile Payment System.
+                        <i class="fa fa-bar-chart-o fa-fw"></i>
+                        <span th:text="#{app.project.title}">Project #7. Mobile Payment System.</span>
                         <div class="pull-right">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -154,7 +155,7 @@
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <p>The administrator connects subscribers. The subscriber can choose one or several of the provided services. The subscriber pays the bill for calls and services. The administrator can view the list of unpaid invoices and block the subscriber.</p>
+                        <p th:text="#{app.project.description}">The administrator connects subscribers. The subscriber can choose one or several of the provided services. The subscriber pays the bill for calls and services. The administrator can view the list of unpaid invoices and block the subscriber.</p>
                     </div>
                     <!-- /.panel-body -->
                 </div>

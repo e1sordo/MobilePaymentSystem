@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.UserRepository;
+import com.epam.lab.mobilepaymentsystem.model.Role;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final String ROLE_USER = "ROLE_ADMIN";
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -18,7 +18,7 @@ public class UserService {
     }
 
     public void save(User user) {
-        user.setRole(ROLE_USER);
+        user.setRole(Role.ROLE_SUBSCRIBER.getDisplayName());
         userRepository.save(user);
     }
 

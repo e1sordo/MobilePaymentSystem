@@ -49,10 +49,17 @@
 
     <ul class="nav navbar-top-links navbar-right">
         <li class="dropdown">
-            <select class="selectpicker dropdown-toggle" data-toggle="dropdown" data-width="fit">
-                <option data-content='<span class="flag-icon flag-icon-us"></span> English'>English</option>
-                <option data-content='<span class="flag-icon flag-icon-ru"></span> Russia'>Русский</option>
-            </select>
+            <div th:if="__${#locale}__=='en'">
+                <select id="locales" class="selectpicker dropdown-toggle" data-toggle="dropdown" data-width="fit">
+                    <option value="en" th:text="#{lang.english}" data-content='<span class="flag-icon flag-icon-us"></span> English'>English</option>
+                    <option value="ru" th:text="#{lang.russian}" data-content='<span class="flag-icon flag-icon-ru"></span> Russia'>Русский</option>
+                </select>
+            </div>
+            <div th:unless="__${#locale}__=='en'">
+                <select id="locales" class="selectpicker dropdown-toggle" data-toggle="dropdown" data-width="fit">
+                    <option value="ru" th:text="#{lang.russian}" data-content='<span class="flag-icon flag-icon-ru"></span> Russia'>Русский</option>
+                    <option value="en" th:text="#{lang.english}" data-content='<span class="flag-icon flag-icon-us"></span> English'>English</option>
+                </select></div>
         </li>
 
         <li class="dropdown">
