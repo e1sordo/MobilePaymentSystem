@@ -7,8 +7,10 @@ import com.epam.lab.mobilepaymentsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -35,10 +37,15 @@ public class ServiceUnitController {
     }
 
     @PostMapping("/service/add")
-    public String serviceAdding(@ModelAttribute("service") ServiceUnit serviceUnit) throws IllegalArgumentException {
-        if(serviceUnit.getCost() == 0) {
-            throw new IllegalArgumentException("cost can't be equal to 0");
+    public String serviceAdding(@Valid @ModelAttribute("service") ServiceUnit serviceUnit, BindingResult bindingResult, Model model) {
+
+        if(serviceUnitService.getByServiceName(serviceUnit.getName()) != null) {
+            bindingResult.reject("name");
+            model.addAttribute("sameName", "Service with the same name is in the list");
         }
+        if(bindingResult.hasErrors())
+            return "serviceunit";
+
         serviceUnitService.save(serviceUnit);
         return "redirect:/service/add";
     }

@@ -1,7 +1,13 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
+import org.apache.tomcat.jni.Local;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -19,26 +25,23 @@ public class ServiceUnit extends AbstractEntity {
     private final static int DURATION = 30;
 
     @Column (name = "name")
+    @NotNull
+    @Size(min=2)
     private String name;
 
     @Column (name = "cost")
+    @Min(1)
     private int cost;
 
     @Column (name = "startDate")
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column (name = "endDate")
-    private Date endDate;
+    private LocalDate endDate;
 
     public ServiceUnit() {
-        Calendar calendar = Calendar.getInstance();
-        long currentMillis = System.currentTimeMillis();
-
-        this.startDate = new Date(currentMillis);
-
-        calendar.setTime(this.startDate);
-        calendar.add(Calendar.DAY_OF_YEAR, DURATION);
-        this.endDate = new Date(calendar.getTimeInMillis());
+        this.startDate = LocalDate.now();
+        this.endDate = this.startDate.plusDays(DURATION);
     }
 
     public ServiceUnit(String name, int cost) {
@@ -62,13 +65,13 @@ public class ServiceUnit extends AbstractEntity {
         this.cost = cost;
     }
 
-    public Date getStartDate() { return startDate; }
+    public LocalDate getStartDate() { return startDate; }
 
-    public void setStartDate(Date startDate) { this.startDate = startDate; }
+    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
 
-    public Date getEndDate() { return endDate; }
+    public LocalDate getEndDate() { return endDate; }
 
-    public void setEndDate(Date endDate) { this.endDate = endDate; }
+    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
 
     @Override
     public boolean equals(Object o) {
@@ -77,8 +80,8 @@ public class ServiceUnit extends AbstractEntity {
         ServiceUnit that = (ServiceUnit) o;
         return cost == that.cost &&
                 Objects.equals(name, that.name) &&
-                startDate.toLocalDate().equals(that.startDate.toLocalDate()) &&
-                endDate.toLocalDate().equals(that.endDate.toLocalDate());
+                startDate.equals(that.startDate) &&
+                endDate.equals(that.endDate);
     }
 
     @Override
