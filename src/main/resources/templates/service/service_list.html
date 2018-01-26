@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="EPAM lab">
+
+    <title th:text="#{title.page.users}"> User list</title>
+
+    <div th:replace="fragments/header :: header-css"></div>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div th:replace="fragments/header :: header"></div>
+
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+    </nav>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" th:text="#{title.page.services}">Service list.</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+        <style>
+            .input-group-append {
+                margin-left: -1px;
+            }
+
+            .input-group-append, .input-group-prepend {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+            }
+
+            .btn-outline-secondary {
+                background-color: #668aad;
+            }
+        </style>
+
+        <div class="well">
+            <h4>Краткая информация</h4>
+            <ul>
+                <li>Ниже вы можете ознакомиться со списком предоставляемых услуг.</li>
+                <li>Для того, чтобы добавить нужную услугу, выберете ее название в поле ниже и нажмите кнопку "Добавить".</li>
+                <li>После этого будет сформирован соответствующий счет, который нужно будет оплатить в ближайшее время.</li>
+                <li>Все услуги имеют свою продолжительность, будьте внимательны.</li>
+            </ul>
+            <!--<a class="btn btn-default btn-lg btn-block" target="_blank" href="">View-->
+                <!--DataTables Documentation</a>-->
+
+            <form action="#" th:action="@{/services}" th:object="${selectedService}" method="post">
+                <div>
+                    <div class="input-group mb-3">
+                        <select th:field="*{id}" id="subscribeToService" class="form-control" title="Select service to subscribe">
+                            <option value="-1">Select new service to subscribe</option>
+                            <option th:each="serviceUnit : ${inactiveServices}"
+                                    th:value="${serviceUnit.id}"
+                                    th:text="${serviceUnit.name}+' - '+${serviceUnit.cost}"
+                            ></option>
+                        </select>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" style="margin-left:1em;" type="submit">Subscribe</button>
+                        </div>
+                    </div>
+
+                </div>
+                <!--<tr th:each="instance : ${analysis.instanceMap}">-->
+                <!--<td th:text="${instance.key}">keyvalue</td>-->
+                <!--<td th:text="${instance.value.numOfData}">num</td>-->
+            </form>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Service list
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+
+                        <style>
+                            .services-list {
+                                padding: 0;
+                            }
+                            .services-list li {
+                                list-style: none;
+                                margin: 0;
+                                padding: 0;
+                                margin-bottom: .5em;
+                                border: 1px solid hsla(200, 100%, 15%, 0.3);
+                                border-radius: .125em;
+                                background: hsla(200, 100%, 15%, 0.02);
+                            }
+
+                            .services-list-items {
+                                display: -webkit-box;
+                                display: -ms-flexbox;
+                                display: flex;
+                                -webkit-box-orient: horizontal;
+                                -webkit-box-direction: normal;
+                                -ms-flex-direction: row;
+                                flex-direction: row;
+                                -ms-flex-line-pack: center;
+                                align-content: center;
+                            }
+
+                            .services-list-items > a, .laws-list-items > a {
+                                display: inline-block;
+                                width: 78%;
+                                width: calc(100% - 6em);
+                                padding: 1em .5em 1em 1em;
+                                color: #333;
+                                font-weight: 500;
+                                font-size: 16px;
+                                font-size: 1em;
+                                line-height: 1.2em;
+                                -webkit-transition: background .05s linear, color .2s ease;
+                                transition: background .05s linear, color .2s ease;
+                            }
+
+                            .services-list-items > a:hover, .laws-list-items > a:hover {
+                                color: white;
+                                background: #0084c4;
+                                text-decoration: none;
+                            }
+
+                            .services-list-items span {
+                                display: -webkit-box;
+                                display: -ms-flexbox;
+                                display: flex;
+                                -webkit-box-orient: horizontal;
+                                -webkit-box-direction: normal;
+                                -ms-flex-direction: row;
+                                flex-direction: row;
+                                -ms-flex-line-pack: stretch;
+                                align-content: stretch;
+                                -webkit-box-align: center;
+                                -ms-flex-align: center;
+                                align-items: center;
+                                text-align: center;
+                                width: 6em;
+                                padding: 0 1.5em;
+                                background: #ccc;
+                            }
+                        </style>
+
+
+                        <ul class="services-list" th:each="service : ${services}">
+                            <li>
+                                <div class="services-list-items">
+                                    <a th:href="@{'/services/' + ${service.id}}" th:text="${service.name}"></a>
+                                    <span th:text="${service.cost} + ' $'"></span>
+                                </div>
+                            </li>
+                        </ul>
+
+
+
+                        <div class="panel">
+                            <div class="col-md-12 well">
+                                <a th:href="@{/services/add}" class="btn btn-primary" data-toggle="modal" data-target="#usuario">
+                                    <i class="fa fa-fw -square -circle fa-plus-square"></i>
+                                    <span th:text="#{app.add-item}">Add new</span>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+
+
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+
+
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+
+</html>

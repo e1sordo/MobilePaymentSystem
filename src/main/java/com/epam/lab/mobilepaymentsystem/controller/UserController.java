@@ -33,7 +33,7 @@ public class UserController {
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute("userForm") @Validated User userForm) {
-        userService.save(userForm);
+        userService.addUser(userForm);
         securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
 
         return "redirect:/";
@@ -60,14 +60,8 @@ public class UserController {
 
     @GetMapping("/profile")
     public String showMyProfile(Principal principal) {
-        Long id = userService.getByUsername(principal.getName()).getId();
+        Long id = userService.getUserByUsername(principal.getName()).getId();
         return "redirect:/users/" + id;
-    }
-
-    @GetMapping("/profile/services")
-    public String showMyServices(Principal principal) {
-        Long id = userService.getByUsername(principal.getName()).getId();
-        return "redirect:/users/" + id + "/services";
     }
 
     @GetMapping("/users/{id}")
@@ -76,16 +70,23 @@ public class UserController {
         return "user/user_item";
     }
 
-    @GetMapping("/users/{id}/services")
-    public String showUserServices(@PathVariable long id, Model model) {
-        // todo ДОДЕЛАТЬ ВЫВОД УСЛУГ
-        model.addAttribute("userServices", null);
-        return "service/service_list";
+    @GetMapping("/profile/services")
+    public String showMyServices(Principal principal) {
+        Long id = userService.getUserByUsername(principal.getName()).getId();
+        return "redirect:/users/" + id + "/services";
     }
 
+    // НЕ НУЖЕН -- УДАЛИТЬ
+//    @GetMapping("/users/{id}/services")
+//    public String showUserServices(@PathVariable final Long id, Model model) {
+//        // todo ДОДЕЛАТЬ ВЫВОД УСЛУГ
+//        model.addAttribute("userServices", null);
+//        return "service/service_list";
+//    }
+
     @DeleteMapping("users/{id}/delete")
-    public String deleteUser(@PathVariable long id) {
-        // todo ПЕРЕНОС В ГРУППУ АРХИВ
+    public String deleteUser(@PathVariable final Long id) {
+        userService.deleteUserById(id);
         return "redirect:/users";
     }
 }

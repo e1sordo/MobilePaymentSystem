@@ -5,7 +5,6 @@ import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -49,7 +48,11 @@ public class ServiceUnitService {
         return serviceUnitsRepository.findOne(id);
     }
 
-    @Transactional
+    public long numberOfServices() {
+        return serviceUnitsRepository.count();
+    }
+
+   // @Transactional
     public void subscribeUserToService(long serviceId) {
         // if we chose actual existing service
         if (serviceId != -1) {

@@ -49,6 +49,14 @@ public class BillService {
         return billsRepository.findAllByUser_IdAndPaidFor(userService.getCurrentUserId(), UNPAID);
     }
 
+    public long numberOfPaidBills() {
+        return billsRepository.count();
+    }
+
+    public long numberOfUnpaidBills() {
+        return billsRepository.count();
+    }
+
     public int countTotalSum(Iterable<Bill> bills) {
         int total = 0;
 
