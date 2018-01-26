@@ -45,7 +45,6 @@ public class BillService {
         return billsRepository.findAllByUser_IdAndPaidFor(userService.getCurrentUserId(), PAID);
     }
 
-
     public Iterable<Bill> listAllUnpaidBillsOfUser() {
         return billsRepository.findAllByUser_IdAndPaidFor(userService.getCurrentUserId(), UNPAID);
     }

@@ -17,7 +17,7 @@ public class Bill extends AbstractEntity {
     private boolean paidFor;
 
     /**
-     * Actual cost is the cost of a service at the moment of subscribing
+     * Cost of a service at the moment of subscribing
      */
     @Column(name = "actual_cost")
     private int actualCost;
@@ -54,20 +54,9 @@ public class Bill extends AbstractEntity {
         this.actualCost = actualCost;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Bill bill = (Bill) o;
-        return paidFor == bill.paidFor &&
-                user.getId() == bill.user.getId() &&
-                serviceUnit.getId() == bill.serviceUnit.getId()
-                && actualCost == bill.actualCost;
-    }
-
+    // TODO: not sure about this hashcode! (c) Marsel
     @Override
     public int hashCode() {
-
-        return Objects.hash(user, serviceUnit, paidFor);
+        return Objects.hash(user.getId(), serviceUnit.getId(), paidFor, actualCost);
     }
 }
