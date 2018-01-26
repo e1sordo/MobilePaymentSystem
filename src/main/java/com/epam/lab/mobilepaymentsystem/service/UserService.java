@@ -6,6 +6,7 @@ import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,21 +18,26 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public void save(User user) {
+    public void addUser(User user) {
         user.setRole(Role.ROLE_SUBSCRIBER.getDisplayName());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
     public void deleteUserById(Long id) {
-        // todo
-        userRepository.delete(id);
+        User user = userRepository.findUserById(id);
+        user.setRole(Role.ROLE_DELETED.getDisplayName());
+        userRepository.save(user);
     }
 
-    public User getByUsername(String username) {
+    public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -43,7 +49,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public long count() {
+    public long numberOfUsers() {
         return userRepository.count();
     }
 

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="EPAM lab">
+
+    <title th:text="${service.name}"> Service unit </title>
+
+    <div th:replace="fragments/header :: header-css"></div>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div th:replace="fragments/header :: header"></div>
+
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+    </nav>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" th:text="${service.name}">Service unit.</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+
+        <style>
+            table.service-info {
+                margin-bottom: 1em;
+            }
+            table.service-info td {
+                padding: 1.5em;
+                font-size: 1.3em;
+            }
+        </style>
+
+        <div class="well">
+            <table border="0" width="100%" class="service-info">
+                <tr>
+                    <td><strong>Название</strong></td>
+                    <td th:text="${service.name}"></td>
+                </tr>
+                <tr>
+                    <td><strong>Описание</strong></td>
+                    <td th:text="${service.description}"></td>
+                </tr>
+                <tr>
+                    <td><strong>Стоимость</strong></td>
+                    <td th:text="${service.cost}"></td>
+                </tr>
+            </table>
+
+
+            <!--<ul>-->
+                <!--<li><strong>Название:</strong> <span th:text="${service.name}"></span> </li>-->
+                <!--<li><strong>Описание:</strong> <span th:text="${service.description}"></span> </li>-->
+                <!--<li><strong>Стоимость:</strong> <span th:text="${service.cost}"></span> </li>-->
+            <!--</ul>-->
+
+            <a class="btn btn-default btn-lg btn-block" th:href="@{/services}">
+                Вернуться к списку услуг.</a>
+
+        </div>
+
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+
+</html>

@@ -26,10 +26,10 @@ public class HomeController {
 
     @GetMapping("/")
     public String showHomePage(Model model) {
-        model.addAttribute("numberOfUsers", userService.count());
-        model.addAttribute("numberOfServices", 33);
-        model.addAttribute("numberOfBills", 55);
-        model.addAttribute("numberOfUnpaidBills", 77);
+        model.addAttribute("numberOfUsers", userService.numberOfUsers());
+        model.addAttribute("numberOfServices", serviceUnitService.numberOfServices());
+        model.addAttribute("numberOfBills", billService.numberOfUnpaidBills());
+        model.addAttribute("numberOfUnpaidBills", billService.numberOfUnpaidBills());
         model.addAttribute("userId", userService.getCurrentUserId());
         return "index";
     }

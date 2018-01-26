@@ -48,6 +48,10 @@ public class ServiceUnitService {
         return serviceUnitsRepository.findOne(id);
     }
 
+    public long numberOfServices() {
+        return serviceUnitsRepository.count();
+    }
+
     public void subscribeUserToService(long userId, long serviceId) {
         User user = userService.getUserById(userId);
         ServiceUnit service = getServiceById(serviceId);

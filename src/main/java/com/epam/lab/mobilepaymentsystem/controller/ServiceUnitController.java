@@ -28,54 +28,80 @@ public class ServiceUnitController {
         this.userService = userService;
     }
 
-    @GetMapping("/service/add")
+    // добавляет новую услугу. Отдельная страница
+    // возвращает шаблон добавления услуги
+    @GetMapping("/services/add")
     public String serviceForm(Model model) {
         model.addAttribute("service", new ServiceUnit());
-        return "serviceunit";
+        return "service/service_add";
     }
 
-    @PostMapping("/service/add")
+    // етод добавления услуги в базу
+    // после добавления делает редирект на эту же самую страницу
+    // можно добавить сообщение, что успешно добавлено
+    @PostMapping("/services/add")
     public String serviceAdding(@ModelAttribute("service") ServiceUnit serviceUnit) throws IOException {
         if(serviceUnit.getCost() == 0) {
             throw new IllegalArgumentException("cost can't be equal to 0");
         }
         serviceUnitService.save(serviceUnit);
-        return "redirect:/service/add";
+        return "redirect:/services/add";
     }
 
-    @GetMapping("service/all")
-    public String listAllServices(Model model) {
-        model.addAttribute("services", serviceUnitService.listAllServices());
-        return "service/all";
-    }
-
-    @GetMapping("service/new")
-    public String listInactiveServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        //  serviceUnitService.subscribeUserToService(1L, 1L);
-        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(USER_DEFAULT_ID);
+    // выводит список всех доступных услуг
+    // возвращает шаблон со всеми услугами
+    @GetMapping("/services")
+    public String listAllServices(Model model,
+                                  @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
+        Long userId = userService.getCurrentUserId();
+        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(userId);
         model.addAttribute("inactiveServices", inactiveServices);
-        return "service/new";
+        model.addAttribute("services", serviceUnitService.listAllServices());
+        return "service/service_list";
     }
 
-    @PostMapping("service/new")
+    @GetMapping("/services/{id}")
+    public String serviceUnitPage(@PathVariable Long id, Model model) {
+        model.addAttribute("service", serviceUnitService.getServiceById(id));
+        return "service/service_item";
+    }
+
+
+//    @GetMapping("/services")
+//    public String listInactiveServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
+//        //  serviceUnitService.subscribeUserToService(1L, 1L);
+//        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(userId);
+//        model.addAttribute("inactiveServices", inactiveServices);
+//        return "service/service_list";
+//    }
+
+    @PostMapping("/services")
     public String subscribeToService(@ModelAttribute("selectedService") ServiceUnit serviceUnit) {
+        Long userId = userService.getCurrentUserId();
         if (serviceUnit.getId() != -1) {
-            serviceUnitService.subscribeUserToService(USER_DEFAULT_ID, serviceUnit.getId());
+            serviceUnitService.subscribeUserToService(userId, serviceUnit.getId());
         }
-        return "redirect:/service/new";
+        return "redirect:/services";
     }
 
-    // TODO: doesnt return actual data after pressing a button
-    @GetMapping("service/my")
-    public String listActiveServices(@ModelAttribute("selectedService") ServiceUnit serviceUnit, Model model) {
-        List<ServiceUnit> activeServices = userService.getActiveServicesByUserId(USER_DEFAULT_ID);
-        model.addAttribute("activeServices", activeServices);
-        return "service/my";
-    }
 
-    @PostMapping("service/my")
-    public String unsubscribeFromService(@ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        serviceUnitService.unsubscribeUserFromService(USER_DEFAULT_ID, serviceUnit.getId());
-        return "redirect:/service/my";
+
+
+
+
+//    // TODO: doesnt return actual data after pressing a button
+//    @GetMapping("users/{id}/services")
+//    public String listActiveServices(@PathVariable Long id, Model model,
+//                                     @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
+//        List<ServiceUnit> activeServices = userService.getActiveServicesByUserId(id);
+//        model.addAttribute("activeServices", activeServices);
+//        return "service/list";
+//    }
+
+    @PostMapping("users/{id}/services")
+    public String unsubscribeFromService(@PathVariable Long id,
+                                         @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
+        serviceUnitService.unsubscribeUserFromService(id, serviceUnit.getId());
+        return "redirect:/users/" + id + "/services";
     }
 }

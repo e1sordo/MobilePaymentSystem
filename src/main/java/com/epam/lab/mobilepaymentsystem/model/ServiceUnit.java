@@ -7,10 +7,13 @@ import java.util.Objects;
 @Table (name = "services")
 public class ServiceUnit extends AbstractEntity {
 
-    @Column (name = "name")
+    @Column(name = "name")
     private String name;
 
-    @Column (name = "cost")
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "cost")
     private int cost;
 
     public ServiceUnit() {
@@ -27,6 +30,14 @@ public class ServiceUnit extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getCost() {
@@ -48,7 +59,6 @@ public class ServiceUnit extends AbstractEntity {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(name, cost);
     }
 }
