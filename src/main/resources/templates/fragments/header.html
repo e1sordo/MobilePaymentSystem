@@ -1,0 +1,102 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:fragment="header-css">
+        <!-- Bootstrap Core CSS -->
+        <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- MetisMenu CSS -->
+        <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+        <!-- DataTables CSS -->
+        <link href="../vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+        <!-- DataTables Responsive CSS -->
+        <link href="../vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+
+        <!-- Morris Charts CSS -->
+        <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+        <link rel="stylesheet" th:href="@{/css/main.css}"
+              href="../../css/main.css" />
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </div>
+</head>
+<body>
+<div th:fragment="header">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a th:inline="text" class="navbar-brand" href="/"><span th:utext="#{app.title}">Mobile Payment System</span>
+            <span th:text="#{app.version}">v1.1</span> </a>
+    </div>
+    <!-- /.navbar-header -->
+
+    <ul class="nav navbar-top-links navbar-right">
+        <li class="dropdown">
+            <div th:if="__${#locale}__=='en'">
+                <select id="locales" class="selectpicker dropdown-toggle" data-toggle="dropdown" data-width="fit">
+                    <option value="en" th:text="#{lang.english}" data-content='<span class="flag-icon flag-icon-us"></span> English'>English</option>
+                    <option value="ru" th:text="#{lang.russian}" data-content='<span class="flag-icon flag-icon-ru"></span> Russia'>Русский</option>
+                </select>
+            </div>
+            <div th:unless="__${#locale}__=='en'">
+                <select id="locales" class="selectpicker dropdown-toggle" data-toggle="dropdown" data-width="fit">
+                    <option value="ru" th:text="#{lang.russian}" data-content='<span class="flag-icon flag-icon-ru"></span> Russia'>Русский</option>
+                    <option value="en" th:text="#{lang.english}" data-content='<span class="flag-icon flag-icon-us"></span> English'>English</option>
+                </select></div>
+        </li>
+
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-alerts">
+                <li>
+                    <a href="#">
+                        <div>
+                            <i class="fa fa-tasks fa-fw"></i> You have an unpaid bill
+                            <span class="pull-right text-muted small">Pay now</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <!-- /.dropdown-alerts -->
+        </li>
+        <!-- /.dropdown -->
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <!--[[${#httpServletRequest.remoteUser}]]-->
+                <li><a th:href="@{/profile}"><i class="fa fa-user fa-fw"></i> My profile</a>
+                </li>
+                <li class="divider"></li>
+                <li><a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+            </ul>
+            <!-- /.dropdown-user -->
+        </li>
+        <!-- /.dropdown -->
+    </ul>
+    <!-- /.navbar-top-links -->
+
+</div>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "bills")
@@ -13,7 +14,7 @@ public class Bill extends AbstractEntity {
     private ServiceUnit serviceUnit;
 
     @Column(name = "is_paid")
-    private boolean isPaidFor;
+    private boolean paidFor;
 
     public User getUser() {
         return user;
@@ -32,10 +33,15 @@ public class Bill extends AbstractEntity {
     }
 
     public boolean getPaidFor() {
-        return isPaidFor;
+        return paidFor;
     }
 
     public void setPaidFor(boolean paidFor) {
-        isPaidFor = paidFor;
+        this.paidFor = paidFor;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, serviceUnit, paidFor);
     }
 }

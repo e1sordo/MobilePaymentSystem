@@ -1,7 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -21,36 +21,44 @@ public class User extends AbstractEntity {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "fullname")
+    private String fullname;
+
     @Column(name = "password")
     private String password;
 
     @Transient
     private String confirmPassword;
 
-    @ManyToMany
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @Column(name = "role")
+    private String role;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_services",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
-    private List<ServiceUnit> serviceUnits;
+    private Set<ServiceUnit> serviceUnits = new HashSet<>();
 
-    public List<ServiceUnit> getServiceUnits() {
+    public Set<ServiceUnit> getServiceUnits() {
         return serviceUnits;
     }
 
-    public void setServiceUnits(List<ServiceUnit> serviceUnits) {
+    public void setServiceUnits(Set<ServiceUnit> serviceUnits) {
         this.serviceUnits = serviceUnits;
+    }
+
+    public boolean addService(ServiceUnit serviceUnit) {
+        return serviceUnits.add(serviceUnit);
+    }
+
+    public boolean removeService(ServiceUnit serviceUnit) {
+       return serviceUnits.remove(serviceUnit);
     }
 
     public User() {
     }
 
-    public int getBankBook() {
+    public Integer getBankBook() {
         return bankBook;
     }
 
@@ -64,6 +72,14 @@ public class User extends AbstractEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getPassword() {
@@ -82,11 +98,11 @@ public class User extends AbstractEntity {
         this.confirmPassword = confirmPassword;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

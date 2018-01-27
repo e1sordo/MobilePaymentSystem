@@ -2,32 +2,33 @@ package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.UserRepository;
 import com.epam.lab.mobilepaymentsystem.model.Role;
+import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RoleService roleService;
-    private final String ROLE_REGISTERED = "REGISTERED";
 
     @Autowired
-    public UserService(UserRepository userRepository,
-                       RoleService roleService) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleService = roleService;
     }
 
     public void save(User user) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleService.getByRoleName(ROLE_REGISTERED));
-        user.setRoles(roles);
+        user.setRole(Role.ROLE_SUBSCRIBER.getDisplayName());
         userRepository.save(user);
+    }
+
+    public void deleteUserById(Long id) {
+        // todo
+        userRepository.delete(id);
     }
 
     public User getByUsername(String username) {
@@ -40,5 +41,27 @@ public class UserService {
 
     public Iterable<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public long count() {
+        return userRepository.count();
+    }
+
+    public Long getCurrentUserId() {
+        org.springframework.security.core.userdetails.User userSecurity =
+                (org.springframework.security.core.userdetails.User) SecurityContextHolder
+                        .getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByUsername(userSecurity.getUsername());
+        return user.getId();
+    }
+
+    public void straightSave(User user) {
+        // todo change name "update"
+        userRepository.save(user);
+    }
+
+    public List<ServiceUnit> getActiveServicesByUserId(long userId) {
+        User user = userRepository.findUserById(userId);
+        return new ArrayList<>(user.getServiceUnits());
     }
 }

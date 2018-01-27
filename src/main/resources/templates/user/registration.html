@@ -1,47 +1,137 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Registration page</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Roboto);
+
+        /****** LOGIN MODAL ******/
+        #login-modal:focus {
+            outline: none;
+        }
+
+        .loginmodal-container {
+            padding: 30px;
+            max-width: 350px;
+            width: 100% !important;
+            background-color: #F7F7F7;
+            margin: 0 auto;
+            border-radius: 2px;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            font-family: roboto;
+        }
+
+        .loginmodal-container h1 {
+            text-align: center;
+            font-size: 1.8em;
+            font-family: roboto;
+        }
+
+        .loginmodal-container input[type=submit] {
+            width: 100%;
+            display: block;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .loginmodal-container input[type=text], input[type=password], input[type=number] {
+            height: 44px;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 10px;
+            -webkit-appearance: none;
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            border-top: 1px solid #c0c0c0;
+            /* border-radius: 2px; */
+            padding: 0 8px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        .loginmodal-container input[type=text]:hover, input[type=password]:hover, input[type=number]:hover {
+            border: 1px solid #b9b9b9;
+            border-top: 1px solid #a0a0a0;
+            -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .loginmodal-submit {
+            /* border: 1px solid #3079ed; */
+            border: 0px;
+            color: #fff;
+            text-shadow: 0 1px rgba(0,0,0,0.1);
+            background-color: #4d90fe;
+            padding: 17px 0px;
+            font-family: roboto;
+            font-size: 14px;
+            /* background-image: -webkit-gradient(linear, 0 0, 0 100%,   from(#4d90fe), to(#4787ed)); */
+        }
+
+        .loginmodal-submit:hover {
+            /* border: 1px solid #2f5bb7; */
+            border: 0px;
+            text-shadow: 0 1px rgba(0,0,0,0.3);
+            background-color: #357ae8;
+            /* background-image: -webkit-gradient(linear, 0 0, 0 100%,   from(#4d90fe), to(#357ae8)); */
+        }
+
+        .loginmodal-container a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 400;
+            text-align: center;
+            display: inline-block;
+            opacity: 0.6;
+            transition: opacity ease 0.5s;
+        }
+
+        .login-help, p {
+            font-size: 12px;
+            text-align: center;
+        }
+
+    </style>
 </head>
+
 <body>
 
-<div class="container">
+<div id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="loginmodal-container">
+            <h1>Sign up now</h1>
+            <p>Fill in the form below to get instant access.</p><br>
+            <form th:action="@{/registration}" th:object="${userForm}" method="POST" enctype="utf8" role="form">
+                <input th:field="*{username}" type="text" name="username" placeholder="Username">
+                <input th:field="*{fullname}" type="text" name="fullname" placeholder="Fullname">
+                <input th:field="*{bankBook}" type="number" name="bankBook" placeholder="Bank book">
+                <!--<select>-->
+                    <!--<option th:each="role : ${T(com.epam.lab.mobilepaymentsystem.model.Role).values()}"-->
+                            <!--th:value="${role.getDisplayName()}"-->
+                            <!--th:text="${role.getDisplayName()}">-->
+                    <!--</option>-->
+                <!--</select>-->
+                <input th:field="*{password}" type="password" name="password" placeholder="Password">
+                <input th:field="*{confirmPassword}" type="password" name="confirmPassword" placeholder="Confirm password">
+                <input type="submit" name="register" class="login loginmodal-submit" value="Sign me up!">
+            </form>
 
-    <form action="" th:action="@{/registration}" th:object="${userForm}" method="POST" enctype="utf8" role="form">
-
-            Login:
-            <label>
-                <input type="text" th:field="*{username}"/>
-            </label>
-            <br/>
-            Password:
-            <label>
-                <input type="password" th:field="*{password}"/>
-            </label>
-            <br/>
-            Confirm Password:
-            <label>
-                <input type="password" th:field="*{confirmPassword}"/>
-            </label>
-            <br/>
-            Money:
-            <label>
-                <input type="number" th:field="*{bankBook}"/>
-            </label>
-            <br/>
-            <input type="submit" value="Create" />
-        </form>
-
-
-    </form>
+            <div class="login-help">
+                <a th:href="@{/login}">Already registered? Sign in!</a>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
-
-</div>
-<!-- /container -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
 </body>
 </html>
