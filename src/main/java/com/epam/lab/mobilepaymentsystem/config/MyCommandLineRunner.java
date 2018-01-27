@@ -13,11 +13,5 @@ public class MyCommandLineRunner implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-//        String pass1 = "admin";
-//        String pass2 = "123456";
-//        String pass3 = "qwerty";
-//        System.out.println(passwordEncoder.encode(pass1));
-//        System.out.println(passwordEncoder.encode(pass2));
-//        System.out.println(passwordEncoder.encode(pass3));
     }
 }
