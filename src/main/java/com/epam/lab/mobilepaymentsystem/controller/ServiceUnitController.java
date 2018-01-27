@@ -1,7 +1,6 @@
 package com.epam.lab.mobilepaymentsystem.controller;
 
 import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
-import com.epam.lab.mobilepaymentsystem.service.BillService;
 import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -47,16 +46,11 @@ public class ServiceUnitController {
         return "redirect:/services/add";
     }
 
-    @GetMapping("service/new")
-    public String listInactiveServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe();
     // выводит список всех доступных услуг
     // возвращает шаблон со всеми услугами
     @GetMapping("/services")
-    public String listAllServices(Model model,
-                                  @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        Long userId = userService.getCurrentUserId();
-        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(userId);
+    public String listAllServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
+        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe();
         model.addAttribute("inactiveServices", inactiveServices);
         model.addAttribute("services", serviceUnitService.listAllServices());
         return "service/service_list";
@@ -67,15 +61,6 @@ public class ServiceUnitController {
         model.addAttribute("service", serviceUnitService.getServiceById(id));
         return "service/service_item";
     }
-
-
-//    @GetMapping("/services")
-//    public String listInactiveServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-//        //  serviceUnitService.subscribeUserToService(1L, 1L);
-//        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(userId);
-//        model.addAttribute("inactiveServices", inactiveServices);
-//        return "service/service_list";
-//    }
 
     @PostMapping("/services")
     public String subscribeToService(@ModelAttribute("selectedService") ServiceUnit serviceUnit) {
@@ -90,15 +75,6 @@ public class ServiceUnitController {
         model.addAttribute("activeServices", activeServices);
         return "service/my";
     }
-
-//    // TODO: doesnt return actual data after pressing a button
-//    @GetMapping("users/{id}/services")
-//    public String listActiveServices(@PathVariable Long id, Model model,
-//                                     @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-//        List<ServiceUnit> activeServices = userService.getActiveServicesByUserId(id);
-//        model.addAttribute("activeServices", activeServices);
-//        return "service/list";
-//    }
 
     @PostMapping("users/{id}/services")
     public String unsubscribeFromService(@PathVariable Long id,
