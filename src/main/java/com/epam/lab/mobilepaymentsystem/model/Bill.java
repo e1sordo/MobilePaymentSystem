@@ -14,13 +14,13 @@ public class Bill extends AbstractEntity {
     private ServiceUnit serviceUnit;
 
     @Column(name = "is_paid")
-    private boolean paidFor;
+    private Boolean paidFor;
 
     /**
      * Cost of a service at the moment of subscribing
      */
     @Column(name = "actual_cost")
-    private int actualCost;
+    private Integer actualCost;
 
     public User getUser() {
         return user;
@@ -38,19 +38,19 @@ public class Bill extends AbstractEntity {
         this.serviceUnit = serviceUnit;
     }
 
-    public boolean getPaidFor() {
+    public Boolean getPaidFor() {
         return paidFor;
     }
 
-    public void setPaidFor(boolean paidFor) {
+    public void setPaidFor(Boolean paidFor) {
         this.paidFor = paidFor;
     }
 
-    public int getActualCost() {
+    public Integer getActualCost() {
         return actualCost;
     }
 
-    public void setActualCost(int actualCost) {
+    public void setActualCost(Integer actualCost) {
         this.actualCost = actualCost;
     }
 

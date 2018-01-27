@@ -19,7 +19,7 @@ public class ServiceUnit extends AbstractEntity {
 
     @Column(name = "cost")
     @Min(1)
-    private int cost;
+    private Integer cost;
 
     @Column (name = "startDate")
     private LocalDate startDate;
@@ -46,11 +46,11 @@ public class ServiceUnit extends AbstractEntity {
         this.description = description;
     }
 
-    public int getCost() {
+    public Integer getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public void setCost(Integer cost) {
         this.cost = cost;
     }
 

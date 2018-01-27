@@ -19,7 +19,7 @@ public class User extends AbstractEntity {
     @Column(name = "bankbook")
     @NotNull
     @Min(100)
-    private int bankBook;
+    private Integer bankBook;
 
     @Column(name = "username")
     @NotNull
@@ -66,11 +66,11 @@ public class User extends AbstractEntity {
     public User() {
     }
 
-    public int getBankBook() {
+    public Integer getBankBook() {
         return bankBook;
     }
 
-    public void setBankBook(int bankBook) {
+    public void setBankBook(Integer bankBook) {
         this.bankBook = bankBook;
     }
 
