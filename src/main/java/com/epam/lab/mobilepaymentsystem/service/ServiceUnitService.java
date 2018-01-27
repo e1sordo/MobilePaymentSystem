@@ -5,6 +5,8 @@ import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.Set;
@@ -27,8 +29,7 @@ public class ServiceUnitService {
         serviceUnitsRepository.save(serviceUnit);
     }
 
-    public Iterable<ServiceUnit> listAllServices() {
-        // todo add get as suffix
+    public Iterable<ServiceUnit> getAllServices() {
         return serviceUnitsRepository.findAll();
     }
 
@@ -76,5 +77,21 @@ public class ServiceUnitService {
             userService.updateUser(user);
             billService.deleteUnpaidBill(user.getId(), serviceId);
         }
+    }
+
+
+    // TODO: error about problems with cost doesn't appear
+    public String validateNewServiceAndAdd(ServiceUnit serviceUnit, BindingResult bindingResult, Model model) {
+        if(getByServiceName(serviceUnit.getName()) != null) {
+            bindingResult.reject("name");
+            model.addAttribute("sameName", "Service with the same name is in the list");
+        }
+
+        if(bindingResult.hasErrors()) {
+            return "service/service_add";
+        }
+
+        save(serviceUnit);
+        return "redirect:/services";
     }
 }

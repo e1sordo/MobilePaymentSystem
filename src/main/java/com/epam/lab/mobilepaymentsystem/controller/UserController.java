@@ -6,9 +6,10 @@ import com.epam.lab.mobilepaymentsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -32,36 +33,9 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") @Validated User userForm) {
-        userService.addUser(userForm);
-        securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
-
-        return "redirect:/";
+    public String registration(@Valid @ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+        return userService.validateNewUserAndRegister(userForm, bindingResult, model, securityService);
     }
-
-    // todo: check
-//    @PostMapping("/registration")
-//    public String registration(@Valid @ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
-//
-//        if(userService.getByUsername(userForm.getUsername()) != null) {
-//            bindingResult.reject("username");
-//            model.addAttribute("userWithSameUserName", "There is already a user registered with the username provided");
-//            return "user/registration";
-//        }
-//        if(!userForm.getPassword().equals(userForm.getConfirmPassword())) {
-//            bindingResult.reject("password");
-//            model.addAttribute("passwordsNotSame", "Passwords don't match");
-//            return "user/registration";
-//        }
-//        if(bindingResult.hasErrors()) {
-//            return "user/registration";
-//        }
-//
-//        userService.save(userForm);
-//        securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
-//
-//        return "redirect:/";
-//    }
 
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
@@ -84,7 +58,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public String showMyProfile(Principal principal) {
-        Long id = userService.getUserByUsername(principal.getName()).getId();
+        Long id = userService.getByUsername(principal.getName()).getId();
         return "redirect:/users/" + id;
     }
 
@@ -96,7 +70,7 @@ public class UserController {
 
     @GetMapping("/profile/services")
     public String showMyServices(Principal principal) {
-        Long id = userService.getUserByUsername(principal.getName()).getId();
+        Long id = userService.getByUsername(principal.getName()).getId();
         return "redirect:/users/" + id + "/services";
     }
 

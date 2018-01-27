@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User getUserByUsername(String username) {
+    public User getByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -75,5 +77,32 @@ public class UserService {
     public List<ServiceUnit> getActiveServicesByUserId() {
         User user = getCurrentUser();
         return new ArrayList<>(user.getServiceUnits());
+    }
+
+    // TODO: not sure about working with model in backend
+    // On the other hand validation logic being in frontend is bad
+    // And maybe it is better to autowire SecurityService in UserService instead of passing it as param
+    public String validateNewUserAndRegister(User user, BindingResult bindingResult, Model model, SecurityService securityService) {
+
+        if(getByUsername(user.getUsername()) != null) {
+            bindingResult.reject("username");
+            model.addAttribute("userWithSameUserName", "There is already a user registered with the username provided");
+            return "user/registration";
+        }
+
+        if(!user.getPassword().equals(user.getConfirmPassword())) {
+            bindingResult.reject("password");
+            model.addAttribute("passwordsNotSame", "Passwords don't match");
+            return "user/registration";
+        }
+
+        if(bindingResult.hasErrors()) {
+            return "user/registration";
+        }
+
+        addUser(user);
+        securityService.autoLogin(user.getUsername(), user.getConfirmPassword());
+
+        return "redirect:/";
     }
 }

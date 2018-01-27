@@ -1,6 +1,10 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -58,6 +62,7 @@ public class ServiceUnit extends AbstractEntity {
 
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
 
+    // todo: fix when we will change Set to List
     @Override
     public int hashCode() {
         return Objects.hash(name, cost, startDate, endDate);

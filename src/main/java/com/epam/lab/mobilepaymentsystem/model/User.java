@@ -33,7 +33,6 @@ public class User extends AbstractEntity {
 
     @Column(name = "password")
     @NotNull
-    @Size(min = 5, max = 15)
     private String password;
 
     @Transient

@@ -6,12 +6,13 @@ import com.epam.lab.mobilepaymentsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.io.IOException;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -38,28 +39,9 @@ public class ServiceUnitController {
     // после добавления делает редирект на эту же самую страницу
     // можно добавить сообщение, что успешно добавлено
     @PostMapping("/services/add")
-    public String serviceAdding(@ModelAttribute("service") ServiceUnit serviceUnit) throws IOException {
-        if(serviceUnit.getCost() == 0) {
-            throw new IllegalArgumentException("cost can't be equal to 0");
-        }
-        serviceUnitService.save(serviceUnit);
-        return "redirect:/services/add";
+    public String serviceAdding(@Valid @ModelAttribute("service") ServiceUnit serviceUnit, BindingResult bindingResult, Model model) {
+        return serviceUnitService.validateNewServiceAndAdd(serviceUnit, bindingResult, model);
     }
-
-    // TODO: check
-//    @PostMapping("/service/add")
-//    public String serviceAdding(@Valid @ModelAttribute("service") ServiceUnit serviceUnit, BindingResult bindingResult, Model model) {
-//
-//        if(serviceUnitService.getByServiceName(serviceUnit.getName()) != null) {
-//            bindingResult.reject("name");
-//            model.addAttribute("sameName", "Service with the same name is in the list");
-//        }
-//        if(bindingResult.hasErrors())
-//            return "serviceunit";
-//
-//        serviceUnitService.save(serviceUnit);
-//        return "redirect:/service/add";
-//    }
 
     // выводит список всех доступных услуг
     // возвращает шаблон со всеми услугами
@@ -67,7 +49,7 @@ public class ServiceUnitController {
     public String listAllServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
         List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe();
         model.addAttribute("inactiveServices", inactiveServices);
-        model.addAttribute("services", serviceUnitService.listAllServices());
+        model.addAttribute("services", serviceUnitService.getAllServices());
         return "service/service_list";
     }
 
@@ -83,7 +65,7 @@ public class ServiceUnitController {
         return "redirect:/services";
     }
 
-    // TODO: doesnt return actual data after pressing a button
+    // TODO: unsubscribe process doesn't return actual data after pressing a button
     @GetMapping("service/my")
     public String listActiveServices(@ModelAttribute("selectedService") ServiceUnit serviceUnit, Model model) {
         List<ServiceUnit> activeServices = userService.getActiveServicesByUserId();

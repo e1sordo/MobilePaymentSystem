@@ -54,7 +54,7 @@ public class Bill extends AbstractEntity {
         this.actualCost = actualCost;
     }
 
-    // TODO: not sure about this hashcode! (c) Marsel
+    // TODO: fix when we will change Set to List
     @Override
     public int hashCode() {
         return Objects.hash(user.getId(), serviceUnit.getId(), paidFor, actualCost);
