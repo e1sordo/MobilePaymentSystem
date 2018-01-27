@@ -27,24 +27,17 @@ public class ServiceUnitController {
         this.userService = userService;
     }
 
-    // добавляет новую услугу. Отдельная страница
-    // возвращает шаблон добавления услуги
     @GetMapping("/services/add")
     public String serviceForm(Model model) {
         model.addAttribute("service", new ServiceUnit());
         return "service/service_add";
     }
 
-    // етод добавления услуги в базу
-    // после добавления делает редирект на эту же самую страницу
-    // можно добавить сообщение, что успешно добавлено
     @PostMapping("/services/add")
     public String serviceAdding(@Valid @ModelAttribute("service") ServiceUnit serviceUnit, BindingResult bindingResult, Model model) {
         return serviceUnitService.validateNewServiceAndAdd(serviceUnit, bindingResult, model);
     }
 
-    // выводит список всех доступных услуг
-    // возвращает шаблон со всеми услугами
     @GetMapping("/services")
     public String listAllServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
         List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe();

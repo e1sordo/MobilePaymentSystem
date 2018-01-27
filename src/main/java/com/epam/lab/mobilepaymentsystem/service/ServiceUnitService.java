@@ -53,7 +53,6 @@ public class ServiceUnitService {
         return serviceUnitsRepository.count();
     }
 
-   // @Transactional
     public void subscribeUserToService(long serviceId) {
         // if we chose actual existing service
         if (serviceId != -1) {

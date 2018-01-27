@@ -27,8 +27,6 @@ public class BillService {
     }
 
     public void createAndSaveBill(User user, ServiceUnit serviceUnit) {
-//        Bill bill = billsRepository.findBillByUser_IdAndServiceUnit_id(user.getId(), serviceUnit.getId());
-//        if (bill == null)
         Bill bill = new Bill();
         bill.setUser(user);
         bill.setServiceUnit(serviceUnit);

@@ -25,13 +25,4 @@ public class BillController {
         model.addAttribute("unpaidBills", unpaidBills);
         return "bill/bill_list";
     }
-
-//    @GetMapping("/bills/payment")
-//    public String listAllUnpaidBills(Model model) {
-//        Iterable<Bill> unpaidBills = billService.listAllUnpaidBillsOfUser(USER_DEFAULT_ID);
-//        int total = billService.countTotalSum(unpaidBills);
-//        model.addAttribute("unpaidBills", unpaidBills);
-//        model.addAttribute("total", total);
-//        return "bill/payment";
-//    }
 }
