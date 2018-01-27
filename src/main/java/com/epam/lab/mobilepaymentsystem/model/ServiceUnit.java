@@ -14,14 +14,16 @@ public class ServiceUnit extends AbstractEntity {
     private String description;
 
     @Column(name = "cost")
+    @Min(1)
     private int cost;
 
-    public ServiceUnit() {
-    }
+    @Column (name = "startDate")
+    private LocalDate startDate;
 
-    public ServiceUnit(String name, int cost) {
-        this.name = name;
-        this.cost = cost;
+    @Column (name = "endDate")
+    private LocalDate endDate;
+
+    public ServiceUnit() {
     }
 
     public String getName() {
@@ -48,8 +50,16 @@ public class ServiceUnit extends AbstractEntity {
         this.cost = cost;
     }
 
+    public LocalDate getStartDate() { return startDate; }
+
+    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
+
+    public LocalDate getEndDate() { return endDate; }
+
+    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+
     @Override
     public int hashCode() {
-        return Objects.hash(name, cost);
+        return Objects.hash(name, cost, startDate, endDate);
     }
 }

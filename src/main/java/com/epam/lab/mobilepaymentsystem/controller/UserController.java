@@ -39,6 +39,30 @@ public class UserController {
         return "redirect:/";
     }
 
+    // todo: check
+//    @PostMapping("/registration")
+//    public String registration(@Valid @ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+//
+//        if(userService.getByUsername(userForm.getUsername()) != null) {
+//            bindingResult.reject("username");
+//            model.addAttribute("userWithSameUserName", "There is already a user registered with the username provided");
+//            return "user/registration";
+//        }
+//        if(!userForm.getPassword().equals(userForm.getConfirmPassword())) {
+//            bindingResult.reject("password");
+//            model.addAttribute("passwordsNotSame", "Passwords don't match");
+//            return "user/registration";
+//        }
+//        if(bindingResult.hasErrors()) {
+//            return "user/registration";
+//        }
+//
+//        userService.save(userForm);
+//        securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
+//
+//        return "redirect:/";
+//    }
+
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
         if (error != null) {
@@ -75,14 +99,6 @@ public class UserController {
         Long id = userService.getUserByUsername(principal.getName()).getId();
         return "redirect:/users/" + id + "/services";
     }
-
-    // НЕ НУЖЕН -- УДАЛИТЬ
-//    @GetMapping("/users/{id}/services")
-//    public String showUserServices(@PathVariable final Long id, Model model) {
-//        // todo ДОДЕЛАТЬ ВЫВОД УСЛУГ
-//        model.addAttribute("userServices", null);
-//        return "service/service_list";
-//    }
 
     @DeleteMapping("users/{id}/delete")
     public String deleteUser(@PathVariable final Long id) {

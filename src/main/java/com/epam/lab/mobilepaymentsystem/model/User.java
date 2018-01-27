@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,15 +17,23 @@ import java.util.Set;
 public class User extends AbstractEntity {
 
     @Column(name = "bankbook")
-    private Integer bankBook;
+    @NotNull
+    @Min(100)
+    private int bankBook;
 
     @Column(name = "username")
+    @NotNull
+    @Size(min = 5, max = 15)
     private String username;
 
     @Column(name = "fullname")
+    @NotNull
+    @Size(min = 2, max = 25)
     private String fullname;
 
     @Column(name = "password")
+    @NotNull
+    @Size(min = 5, max = 15)
     private String password;
 
     @Transient
@@ -58,7 +67,7 @@ public class User extends AbstractEntity {
     public User() {
     }
 
-    public Integer getBankBook() {
+    public int getBankBook() {
         return bankBook;
     }
 

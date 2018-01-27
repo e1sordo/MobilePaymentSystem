@@ -46,6 +46,21 @@ public class ServiceUnitController {
         return "redirect:/services/add";
     }
 
+    // TODO: check
+//    @PostMapping("/service/add")
+//    public String serviceAdding(@Valid @ModelAttribute("service") ServiceUnit serviceUnit, BindingResult bindingResult, Model model) {
+//
+//        if(serviceUnitService.getByServiceName(serviceUnit.getName()) != null) {
+//            bindingResult.reject("name");
+//            model.addAttribute("sameName", "Service with the same name is in the list");
+//        }
+//        if(bindingResult.hasErrors())
+//            return "serviceunit";
+//
+//        serviceUnitService.save(serviceUnit);
+//        return "redirect:/service/add";
+//    }
+
     // выводит список всех доступных услуг
     // возвращает шаблон со всеми услугами
     @GetMapping("/services")
