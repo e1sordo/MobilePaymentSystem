@@ -16,10 +16,9 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends AbstractEntity {
 
-    @Column(name = "bankbook")
+    @Column(name = "bankaccount")
     @NotNull
-    @Min(100)
-    private Integer bankBook;
+    private Integer bankAccount;
 
     @Column(name = "username")
     @NotNull
@@ -66,12 +65,12 @@ public class User extends AbstractEntity {
     public User() {
     }
 
-    public Integer getBankBook() {
-        return bankBook;
+    public Integer getBankAccount() {
+        return bankAccount;
     }
 
-    public void setBankBook(Integer bankBook) {
-        this.bankBook = bankBook;
+    public void setBankAccount(Integer bankAccount) {
+        this.bankAccount = bankAccount;
     }
 
     public String getUsername() {

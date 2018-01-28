@@ -32,12 +32,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/profile",
                         "/bills/**",
                         "/services/**",
+                        "/users/**",
                         "/h2/**",
                         "/test/**",
                         "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**",
                         "/data/**", "/dist/**", "/js/**", "/vendor/**").permitAll()
-                .antMatchers(
-                        "/users").access("hasRole('ROLE_ADMIN')")
+//                .antMatchers(
+//                        "/users").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -57,7 +58,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 

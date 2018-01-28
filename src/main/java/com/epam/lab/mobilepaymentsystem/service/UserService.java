@@ -27,8 +27,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void addUser(User user) {
-        user.setRole(Role.ROLE_SUBSCRIBER.getDisplayName());
+    private void addUser(User user) {
+        user.setBankAccount(0);
+        user.setRole(Role.ROLE_USER.getDisplayName());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
@@ -37,6 +38,16 @@ public class UserService {
         User user = userRepository.findUserById(id);
         user.setRole(Role.ROLE_DELETED.getDisplayName());
         userRepository.save(user);
+    }
+
+    public void topUpBalance(Long id, Integer tranche) {
+        User user = getUserById(id);
+        if (user.getRole().equals(Role.ROLE_USER.getDisplayName())) {
+            user.setRole(Role.ROLE_SUBSCRIBER.getDisplayName());
+        }
+
+        user.setBankAccount(user.getBankAccount() + tranche);
+        user = updateUser(user);
     }
 
     public User getByUsername(String username) {
@@ -70,8 +81,8 @@ public class UserService {
         return userRepository.findByUsername(userSecurity.getUsername());
     }
 
-    public void updateUser(User user) {
-        userRepository.save(user);
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 
     public List<ServiceUnit> getActiveServicesByUserId() {

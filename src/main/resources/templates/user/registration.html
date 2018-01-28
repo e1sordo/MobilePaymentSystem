@@ -117,8 +117,6 @@
                 <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
                 <input th:field="*{fullname}" type="text" name="fullname" placeholder="Fullname">
                 <p th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></p>
-                <input th:field="*{bankBook}" type="text" name="bankBook" placeholder="Bank book">
-                <p th:if="${#fields.hasErrors('bankBook')}" th:errors="*{bankBook}"></p>
                 <!--<select>-->
                     <!--<option th:each="role : ${T(com.epam.lab.mobilepaymentsystem.model.Role).values()}"-->
                             <!--th:value="${role.getDisplayName()}"-->

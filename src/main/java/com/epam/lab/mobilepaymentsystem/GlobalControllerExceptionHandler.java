@@ -13,20 +13,25 @@ import java.util.Arrays;
 @ControllerAdvice
 class GlobalControllerExceptionHandler {
 
-    public static final String DEFAULT_ERROR_VIEW = "errorhandler";
+    private static final String DEFAULT_ERROR_VIEW = "errorhandler";
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(value = Exception.class)
-    public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
-        if(AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null)
-            throw e;
-
+    @ExceptionHandler(Exception.class)
+    public ModelAndView defaultErrorHandler(Exception e) throws Exception {
         ModelAndView mav = new ModelAndView();
+        introduceErrors(e, mav);
+        return mav;
+    }
+
+    private void introduceErrors(Exception e, ModelAndView mav) throws Exception {
+        if(AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
+            throw e;
+        }
+
         String s = Arrays.deepToString(e.getStackTrace());
         mav.addObject("exception", e.toString());
         mav.addObject("stackTrace", s);
         mav.addObject("message", e.getMessage());
         mav.setViewName(DEFAULT_ERROR_VIEW);
-        return mav;
     }
 }

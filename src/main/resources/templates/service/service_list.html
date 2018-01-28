@@ -61,8 +61,7 @@
                 <li>После этого будет сформирован соответствующий счет, который нужно будет оплатить в ближайшее время.</li>
                 <li>Все услуги имеют свою продолжительность, будьте внимательны.</li>
             </ul>
-            <!--<a class="btn btn-default btn-lg btn-block" target="_blank" href="">View-->
-                <!--DataTables Documentation</a>-->
+
 
             <form action="#" th:action="@{/services}" th:object="${selectedService}" method="post">
                 <div>
@@ -80,9 +79,6 @@
                     </div>
 
                 </div>
-                <!--<tr th:each="instance : ${analysis.instanceMap}">-->
-                <!--<td th:text="${instance.key}">keyvalue</td>-->
-                <!--<td th:text="${instance.value.numOfData}">num</td>-->
             </form>
         </div>
 
@@ -178,9 +174,9 @@
 
                         <div class="panel">
                             <div class="col-md-12 well">
-                                <a th:href="@{/services/add}" class="btn btn-primary" data-target="#usuario">
+                                <a th:href="@{/services/add}" class="btn btn-primary">
                                     <i class="fa fa-fw -square -circle fa-plus-square"></i>
-                                    <span th:text="#{app.add-item}">Add new</span>
+                                    <span th:text="#{service.form.button.submit}">Add new</span>
                                 </a>
                             </div>
                         </div>
