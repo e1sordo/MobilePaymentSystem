@@ -81,15 +81,15 @@
                             <table class="table table-striped table-bordered table-hover">
                                 <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Who</th>
-                                    <th>When</th>
+                                    <th>Name</th>
+                                    <th>Cost</th>
+                                    <th>Paid</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="bill : ${paidBills}">
                                     <td th:text="${bill.serviceUnit.name}"></td>
-                                    <td th:text="${bill.serviceUnit.cost}"></td>
+                                    <td th:text="${bill.actualCost}"></td>
                                     <td th:text="${bill.paidFor}"></td>
                                 </tr>
                                 </tr>
@@ -114,15 +114,15 @@
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
+                                    <th>Name</th>
+                                    <th>Cost</th>
+                                    <th>Paid</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="bill : ${unpaidBills}">
                                     <td th:text="${bill.serviceUnit.name}"></td>
-                                    <td th:text="${bill.serviceUnit.cost}"></td>
+                                    <td th:text="${bill.actualCost}"></td>
                                     <td th:text="${bill.paidFor}"></td>
                                 </tr>
                                 </tbody>

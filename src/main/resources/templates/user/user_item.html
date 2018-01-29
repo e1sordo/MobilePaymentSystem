@@ -48,9 +48,27 @@
                             <div class="span8">
                                 <h3 th:text="${user.fullname}"> fullname</h3>
                                 <h6 th:text="${user.username}"> login</h6>
-                                <h6><strong>Bank book:</strong> <span th:text="${user.bankBook}"> 0</span> $</h6>
+                                <h6><strong>Bank book:</strong> <span th:text="${user.bankAccount}"> 0</span> $</h6>
                                 <h6><strong>Group:</strong> <span th:text="${user.role}"> subscriber</span></h6>
                             </div>
+
+                            <form role="form" method="post" th:object="${howMuchToIncrease}"
+                                  th:action="@{'/users/{id}/refill' (id=${user.id})}">
+                                <div>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-usd"></span></span>
+                                            <input type="number" class="form-control" th:field="*{tranche}"/>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" style="margin-left:1em;" type="submit">Пополнить</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+
+
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="panel panel-primary">

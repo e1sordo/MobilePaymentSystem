@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,16 +16,22 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends AbstractEntity {
 
-    @Column(name = "bankbook")
-    private Integer bankBook;
+    @Column(name = "bankaccount")
+    @NotNull
+    private Integer bankAccount;
 
     @Column(name = "username")
+    @NotNull
+    @Size(min = 5, max = 15)
     private String username;
 
     @Column(name = "fullname")
+    @NotNull
+    @Size(min = 2, max = 25)
     private String fullname;
 
     @Column(name = "password")
+    @NotNull
     private String password;
 
     @Transient
@@ -33,7 +40,7 @@ public class User extends AbstractEntity {
     @Column(name = "role")
     private String role;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_services",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
@@ -58,12 +65,12 @@ public class User extends AbstractEntity {
     public User() {
     }
 
-    public Integer getBankBook() {
-        return bankBook;
+    public Integer getBankAccount() {
+        return bankAccount;
     }
 
-    public void setBankBook(int bankBook) {
-        this.bankBook = bankBook;
+    public void setBankAccount(Integer bankAccount) {
+        this.bankAccount = bankAccount;
     }
 
     public String getUsername() {

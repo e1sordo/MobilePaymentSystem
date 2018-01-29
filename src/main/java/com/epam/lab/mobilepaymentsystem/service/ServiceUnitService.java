@@ -5,6 +5,8 @@ import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.Set;
@@ -27,14 +29,13 @@ public class ServiceUnitService {
         serviceUnitsRepository.save(serviceUnit);
     }
 
-    public Iterable<ServiceUnit> listAllServices() {
-        // todo add get as suffix
+    public Iterable<ServiceUnit> getAllServices() {
         return serviceUnitsRepository.findAll();
     }
 
-    public List<ServiceUnit> getAllServicesWithoutSubscribe(long userId) {
+    public List<ServiceUnit> getAllServicesWithoutSubscribe() {
         List<ServiceUnit> services = (List<ServiceUnit>) serviceUnitsRepository.findAll();
-        User user = userService.getUserById(userId);
+        User user = userService.getCurrentUser();
         Set<ServiceUnit> userServices = user.getServiceUnits();
         services.removeAll(userServices);
         return services;
@@ -48,25 +49,48 @@ public class ServiceUnitService {
         return serviceUnitsRepository.findOne(id);
     }
 
-    public void subscribeUserToService(long userId, long serviceId) {
-        User user = userService.getUserById(userId);
-        ServiceUnit service = getServiceById(serviceId);
+    public long numberOfServices() {
+        return serviceUnitsRepository.count();
+    }
 
-        // we create bill only if the service is new
-        if (user.addService(service)) {
-            userService.straightSave(user);
-            billService.createAndSaveBill(user, service);
+    public void subscribeUserToService(long serviceId) {
+        // if we chose actual existing service
+        if (serviceId != -1) {
+            User user = userService.getCurrentUser();
+            ServiceUnit service = getServiceById(serviceId);
+
+            // we create bill only if the service is new
+            if (user.addService(service)) {
+                billService.createAndSaveBill(user, service);
+                userService.updateUser(user);
+            }
         }
     }
 
-    public void unsubscribeUserFromService(long userId, long serviceId) {
-        User user = userService.getUserById(userId);
+    public void unsubscribeUserFromService(long serviceId) {
+        User user = userService.getCurrentUser();
         ServiceUnit service = getServiceById(serviceId);
 
         // if service exists and it is unpaid - remove also unpaid bill
         if (user.removeService(service)) {
-            userService.straightSave(user);
-            billService.deleteUnpaidBill(userId, serviceId);
+            userService.updateUser(user);
+            billService.deleteUnpaidBill(user.getId(), serviceId);
         }
+    }
+
+
+    // TODO: error about problems with cost doesn't appear
+    public String validateNewServiceAndAdd(ServiceUnit serviceUnit, BindingResult bindingResult, Model model) {
+        if(getByServiceName(serviceUnit.getName()) != null) {
+            bindingResult.reject("name");
+            model.addAttribute("sameName", "Service with the same name is in the list");
+        }
+
+        if(bindingResult.hasErrors()) {
+            return "service/service_add";
+        }
+
+        save(serviceUnit);
+        return "redirect:/services";
     }
 }

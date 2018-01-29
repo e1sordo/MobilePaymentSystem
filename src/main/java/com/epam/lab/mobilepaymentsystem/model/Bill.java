@@ -14,7 +14,13 @@ public class Bill extends AbstractEntity {
     private ServiceUnit serviceUnit;
 
     @Column(name = "is_paid")
-    private boolean paidFor;
+    private Boolean paidFor;
+
+    /**
+     * Cost of a service at the moment of subscribing
+     */
+    @Column(name = "actual_cost")
+    private Integer actualCost;
 
     public User getUser() {
         return user;
@@ -32,16 +38,25 @@ public class Bill extends AbstractEntity {
         this.serviceUnit = serviceUnit;
     }
 
-    public boolean getPaidFor() {
+    public Boolean getPaidFor() {
         return paidFor;
     }
 
-    public void setPaidFor(boolean paidFor) {
+    public void setPaidFor(Boolean paidFor) {
         this.paidFor = paidFor;
     }
 
+    public Integer getActualCost() {
+        return actualCost;
+    }
+
+    public void setActualCost(Integer actualCost) {
+        this.actualCost = actualCost;
+    }
+
+    // TODO: fix when we will change Set to List
     @Override
     public int hashCode() {
-        return Objects.hash(user, serviceUnit, paidFor);
+        return Objects.hash(user.getId(), serviceUnit.getId(), paidFor, actualCost);
     }
 }

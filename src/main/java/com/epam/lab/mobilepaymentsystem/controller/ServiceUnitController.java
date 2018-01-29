@@ -1,81 +1,75 @@
 package com.epam.lab.mobilepaymentsystem.controller;
 
 import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
-import com.epam.lab.mobilepaymentsystem.service.BillService;
 import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.io.IOException;
-import java.security.Principal;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 public class ServiceUnitController {
 
-    private final static long USER_DEFAULT_ID = 1L;
     private final ServiceUnitService serviceUnitService;
-    private final BillService billService;
     private final UserService userService;
 
     @Autowired
-    public ServiceUnitController(ServiceUnitService serviceUnitService, BillService billService, UserService userService) {
+    public ServiceUnitController(ServiceUnitService serviceUnitService, UserService userService) {
         this.serviceUnitService = serviceUnitService;
-        this.billService = billService;
         this.userService = userService;
     }
 
-    @GetMapping("/service/add")
+    @GetMapping("/services/add")
     public String serviceForm(Model model) {
         model.addAttribute("service", new ServiceUnit());
-        return "serviceunit";
+        return "service/service_add";
     }
 
-    @PostMapping("/service/add")
-    public String serviceAdding(@ModelAttribute("service") ServiceUnit serviceUnit) throws IOException {
-        if(serviceUnit.getCost() == 0) {
-            throw new IllegalArgumentException("cost can't be equal to 0");
-        }
-        serviceUnitService.save(serviceUnit);
-        return "redirect:/service/add";
+    @PostMapping("/services/add")
+    public String serviceAdding(@Valid @ModelAttribute("service") ServiceUnit serviceUnit, BindingResult bindingResult, Model model) {
+        return serviceUnitService.validateNewServiceAndAdd(serviceUnit, bindingResult, model);
     }
 
-    @GetMapping("service/all")
-    public String listAllServices(Model model) {
-        model.addAttribute("services", serviceUnitService.listAllServices());
-        return "service/all";
-    }
-
-    @GetMapping("service/new")
-    public String listInactiveServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        //  serviceUnitService.subscribeUserToService(1L, 1L);
-        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(USER_DEFAULT_ID);
+    @GetMapping("/services")
+    public String listAllServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
+        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe();
         model.addAttribute("inactiveServices", inactiveServices);
-        return "service/new";
+        model.addAttribute("services", serviceUnitService.getAllServices());
+        return "service/service_list";
     }
 
-    @PostMapping("service/new")
+    @GetMapping("/services/{id}")
+    public String serviceUnitPage(@PathVariable Long id, Model model) {
+        model.addAttribute("service", serviceUnitService.getServiceById(id));
+        return "service/service_item";
+    }
+
+    @PostMapping("/services")
     public String subscribeToService(@ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        if (serviceUnit.getId() != -1) {
-            serviceUnitService.subscribeUserToService(USER_DEFAULT_ID, serviceUnit.getId());
-        }
-        return "redirect:/service/new";
+        serviceUnitService.subscribeUserToService(serviceUnit.getId());
+        return "redirect:/services";
     }
 
-    // TODO: doesnt return actual data after pressing a button
+    // TODO: unsubscribe process doesn't return actual data after pressing a button
     @GetMapping("service/my")
     public String listActiveServices(@ModelAttribute("selectedService") ServiceUnit serviceUnit, Model model) {
-        List<ServiceUnit> activeServices = userService.getActiveServicesByUserId(USER_DEFAULT_ID);
+        List<ServiceUnit> activeServices = userService.getActiveServicesByUserId();
         model.addAttribute("activeServices", activeServices);
         return "service/my";
     }
 
-    @PostMapping("service/my")
-    public String unsubscribeFromService(@ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        serviceUnitService.unsubscribeUserFromService(USER_DEFAULT_ID, serviceUnit.getId());
-        return "redirect:/service/my";
+    @PostMapping("users/{id}/services")
+    public String unsubscribeFromService(@PathVariable Long id,
+                                         @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
+        serviceUnitService.unsubscribeUserFromService(serviceUnit.getId());
+        return "redirect:/users/" + id + "/services";
     }
 }

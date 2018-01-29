@@ -1,24 +1,33 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
 @Table (name = "services")
 public class ServiceUnit extends AbstractEntity {
 
-    @Column (name = "name")
+    @Column(name = "name")
     private String name;
 
-    @Column (name = "cost")
-    private int cost;
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "cost")
+    @Min(1)
+    private Integer cost;
+
+    @Column (name = "startDate")
+    private LocalDate startDate;
+
+    @Column (name = "endDate")
+    private LocalDate endDate;
 
     public ServiceUnit() {
-    }
-
-    public ServiceUnit(String name, int cost) {
-        this.name = name;
-        this.cost = cost;
     }
 
     public String getName() {
@@ -29,17 +38,33 @@ public class ServiceUnit extends AbstractEntity {
         this.name = name;
     }
 
-    public int getCost() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public void setCost(Integer cost) {
         this.cost = cost;
     }
 
+    public LocalDate getStartDate() { return startDate; }
+
+    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
+
+    public LocalDate getEndDate() { return endDate; }
+
+    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+
+    // todo: fix when we will change Set to List
     @Override
     public int hashCode() {
-
-        return Objects.hash(name, cost);
+        return Objects.hash(name, cost, startDate, endDate);
     }
 }

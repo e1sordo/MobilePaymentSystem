@@ -22,6 +22,8 @@
 
      <form action="#" th:action="@{/service/add}" th:object="${service}" method="post">
          <p th:text="#{service_name}"/> <input type="text" th:field="*{name}" title="Enter the service name"/>
+         <p th:if="${#fields.hasGlobalErrors()}" th:text="${sameName}"></p>
+         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
          <p th:text="#{service_cost}"/> <input type="text" th:field="*{cost}" title="Enter the service cost"/>
          <p><input type="submit" th:value="#{submit}"/></p>
     </form>
