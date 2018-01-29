@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.model;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -21,6 +22,12 @@ public class Bill extends AbstractEntity {
      */
     @Column(name = "actual_cost")
     private Integer actualCost;
+
+    @Column (name = "start_date")
+    private Date startDate;
+
+    @Column (name = "end_date")
+    private Date endDate;
 
     public User getUser() {
         return user;
@@ -54,9 +61,25 @@ public class Bill extends AbstractEntity {
         this.actualCost = actualCost;
     }
 
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
     // TODO: fix when we will change Set to List
     @Override
     public int hashCode() {
-        return Objects.hash(user.getId(), serviceUnit.getId(), paidFor, actualCost);
+        return Objects.hash(user.getId(), serviceUnit.getId(), paidFor, actualCost, startDate, endDate);
     }
 }

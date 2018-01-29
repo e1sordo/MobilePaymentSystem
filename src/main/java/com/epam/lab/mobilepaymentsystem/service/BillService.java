@@ -7,6 +7,9 @@ import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.Calendar;
+
 @Service
 public class BillService {
 
@@ -32,6 +35,19 @@ public class BillService {
         bill.setServiceUnit(serviceUnit);
         bill.setPaidFor(false);
         bill.setActualCost(serviceUnit.getCost());
+
+        Calendar calendar = Calendar.getInstance();
+        bill.setStartDate(new Date(calendar.getTimeInMillis()));
+        int duration = serviceUnit.getDuration();
+        if (duration <= 0) {
+            calendar.set(2038, Calendar.JANUARY, 13);
+            // https://en.wikipedia.org/wiki/Year_2038_problem :)
+            bill.setEndDate(new Date(calendar.getTimeInMillis()));
+        } else {
+            calendar.add(Calendar.DATE, serviceUnit.getDuration());
+            bill.setEndDate(new Date(calendar.getTimeInMillis()));
+        }
+
         billsRepository.save(bill);
     }
 
