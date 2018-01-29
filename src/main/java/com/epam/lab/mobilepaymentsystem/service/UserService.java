@@ -97,6 +97,7 @@ public class UserService {
         }
 
         if(bindingResult.hasErrors()) {
+            // TODO: info about other errors
             return "user/registration";
         }
 

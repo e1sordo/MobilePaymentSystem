@@ -13,6 +13,8 @@ import java.util.Arrays;
 @ControllerAdvice
 class GlobalControllerExceptionHandler {
 
+    // TODO: make a pretty page with error stuff and no stack trace
+
     public static final String DEFAULT_ERROR_VIEW = "errorhandler";
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
