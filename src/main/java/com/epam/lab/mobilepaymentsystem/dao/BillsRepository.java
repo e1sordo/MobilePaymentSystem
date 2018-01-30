@@ -3,6 +3,8 @@ package com.epam.lab.mobilepaymentsystem.dao;
 import com.epam.lab.mobilepaymentsystem.model.Bill;
 import org.springframework.data.repository.CrudRepository;
 
+import java.sql.Date;
+
 public interface BillsRepository extends CrudRepository<Bill, Long> {
 
     void deleteByUser_IdAndServiceUnit_IdAndPaidFor(long userId, long serviceId, boolean isPaid);
@@ -10,4 +12,6 @@ public interface BillsRepository extends CrudRepository<Bill, Long> {
     Bill findBillByUser_IdAndServiceUnit_id(long userId, long serviceId);
 
     Iterable<Bill> findAllByUser_IdAndPaidFor(long userId, boolean isPaid);
+
+    Iterable<Bill> findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfter(long user_id, Boolean paidFor, Date startDate, Date endDate);
 }

@@ -117,4 +117,9 @@ public class UserService {
 
         return "redirect:/";
     }
+
+    public void changeUserRole(User user, Role newRole) {
+        user.setRole(newRole.getDisplayName());
+        updateUser(user);
+    }
 }

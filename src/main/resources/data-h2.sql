@@ -15,11 +15,11 @@ INSERT INTO USERS (username, fullname, bankaccount, password, role)
 VALUES ('dram', 'Bertolt Breckht', 943, '444', 'ROLE_SUBSCRIBER');
 
 --
-INSERT INTO SERVICES (cost, name, description)
-VALUES (40, 'Интеллектуальный диктофон',
+INSERT INTO SERVICES (cost, duration, name, description)
+VALUES (40, 2, 'Интеллектуальный диктофон',
         'Не думайте, забудете Вы информацию или нет — просто наберите Вашего помощника! Мы запишем текст под диктовку и перешлём Вам на почту.');
 
-INSERT INTO SERVICES (cost, name, description)
-VALUES (130, 'Ведение телефонных переговоров по Вашему поручению',
+INSERT INTO SERVICES (cost, duration, name, description)
+VALUES (130, 5, 'Ведение телефонных переговоров по Вашему поручению',
         'Позвоним • дозвонимся в самые недоступные организации • договоримся и добьёмся того, что Вам необходимо.');
 

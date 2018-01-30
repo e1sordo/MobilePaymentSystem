@@ -2,6 +2,7 @@ package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.BillsRepository;
 import com.epam.lab.mobilepaymentsystem.model.Bill;
+import com.epam.lab.mobilepaymentsystem.model.Role;
 import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class BillService {
@@ -49,19 +52,26 @@ public class BillService {
         }
 
         billsRepository.save(bill);
+        changeRoleDueToBillsChange(user.getId());
     }
 
     public void deleteUnpaidBill(long userId, long serviceId) {
         billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
+        changeRoleDueToBillsChange(userId);
     }
 
-    public Iterable<Bill> listAllPaidBillsOfUser() {
-        return billsRepository.findAllByUser_IdAndPaidFor(userService.getCurrentUserId(), PAID);
+    public Iterable<Bill> listAllPaidBillsOfUser(long id) {
+        return billsRepository.findAllByUser_IdAndPaidFor(id, PAID);
     }
 
-    public Iterable<Bill> listAllUnpaidBillsOfUser() {
-        return billsRepository.findAllByUser_IdAndPaidFor(userService.getCurrentUserId(), UNPAID);
+    public Iterable<Bill> listAllUnpaidBillsOfUser(long id) {
+        return billsRepository.findAllByUser_IdAndPaidFor(id, UNPAID);
     }
+
+    // TODO: involve date in logic
+//    private Iterable<Bill> getAllUnpaidBillsOfUserForTodayOrderedByCost() {
+//        return
+//    }
 
     public long numberOfPaidBills() {
         return billsRepository.count();
@@ -78,5 +88,37 @@ public class BillService {
             total += bill.getActualCost();
         }
         return total;
+    }
+
+    public void withdrawCashToPayForBills(long id) {
+        List<Bill> unpaidBills = (List<Bill>) listAllUnpaidBillsOfUser(id);
+        User user = userService.getUserById(id);
+        Iterator<Bill> iterator = unpaidBills.iterator();
+
+        while (iterator.hasNext()) {
+            Bill bill = iterator.next();
+
+            if (bill.getActualCost() <= user.getBankAccount()) {
+                int bankAccount = user.getBankAccount() - bill.getActualCost();
+                user.setBankAccount(bankAccount);
+                bill.setPaidFor(true);
+                save(bill);
+                iterator.remove();
+            }
+        }
+
+        changeRoleDueToBillsChange(id);
+    }
+
+    // TODO: billService or userService?
+    private void changeRoleDueToBillsChange(long id) {
+        List<Bill> unpaidBills = (List<Bill>) listAllUnpaidBillsOfUser(id);
+        User user = userService.getUserById(id);
+        if (unpaidBills.isEmpty()) {
+            userService.changeUserRole(user, Role.ROLE_SUBSCRIBER);
+        } else {
+            // TODO: what role should we use?
+            userService.changeUserRole(user, Role.ROLE_LOCKED);
+        }
     }
 }
