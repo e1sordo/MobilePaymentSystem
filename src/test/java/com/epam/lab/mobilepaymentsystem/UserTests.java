@@ -21,7 +21,7 @@ public class UserTests {
     private UserService userService;
 
     private static int count = 0;
-
+    // TODO: use @After and @Before
     private User createTestUser() {
         ++count;
         User user = new User();
