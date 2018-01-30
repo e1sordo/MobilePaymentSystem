@@ -83,6 +83,8 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Cost</th>
+                                    <th>Start date</th>
+                                    <th>End date</th>
                                     <th>Paid</th>
                                 </tr>
                                 </thead>
@@ -90,6 +92,8 @@
                                 <tr th:each="bill : ${paidBills}">
                                     <td th:text="${bill.serviceUnit.name}"></td>
                                     <td th:text="${bill.actualCost}"></td>
+                                    <td th:text="${#dates.format(bill.startDate, 'dd-MM-yyyy')}"></td>
+                                    <td th:text="${#dates.format(bill.endDate, 'dd-MM-yyyy')}"></td>
                                     <td th:text="${bill.paidFor}"></td>
                                 </tr>
                                 </tr>
@@ -116,6 +120,8 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Cost</th>
+                                    <th>Start date</th>
+                                    <th>End date</th>
                                     <th>Paid</th>
                                 </tr>
                                 </thead>
@@ -123,6 +129,8 @@
                                 <tr th:each="bill : ${unpaidBills}">
                                     <td th:text="${bill.serviceUnit.name}"></td>
                                     <td th:text="${bill.actualCost}"></td>
+                                    <td th:text="${#dates.format(bill.startDate, 'dd-MM-yyyy')}"></td>
+                                    <td th:text="${#dates.format(bill.endDate, 'dd-MM-yyyy')}"></td>
                                     <td th:text="${bill.paidFor}"></td>
                                 </tr>
                                 </tbody>

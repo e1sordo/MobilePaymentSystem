@@ -87,6 +87,7 @@ public class ServiceUnitService {
         }
 
         if(bindingResult.hasErrors()) {
+            // TODO: info about other errors!
             return "service/service_add";
         }
 

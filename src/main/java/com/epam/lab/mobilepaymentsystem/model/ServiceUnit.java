@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
-import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -21,11 +20,8 @@ public class ServiceUnit extends AbstractEntity {
     @Min(1)
     private Integer cost;
 
-    @Column (name = "startDate")
-    private LocalDate startDate;
-
-    @Column (name = "endDate")
-    private LocalDate endDate;
+    @Column (name = "duration")
+    private Integer duration;
 
     public ServiceUnit() {
     }
@@ -54,17 +50,17 @@ public class ServiceUnit extends AbstractEntity {
         this.cost = cost;
     }
 
-    public LocalDate getStartDate() { return startDate; }
+    public Integer getDuration() {
+        return duration;
+    }
 
-    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
-
-    public LocalDate getEndDate() { return endDate; }
-
-    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
 
     // todo: fix when we will change Set to List
     @Override
     public int hashCode() {
-        return Objects.hash(name, cost, startDate, endDate);
+        return Objects.hash(name, cost, duration);
     }
 }

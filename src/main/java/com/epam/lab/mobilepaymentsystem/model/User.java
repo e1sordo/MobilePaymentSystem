@@ -17,7 +17,6 @@ import java.util.Set;
 public class User extends AbstractEntity {
 
     @Column(name = "bankaccount")
-    @NotNull
     private Integer bankAccount;
 
     @Column(name = "username")
