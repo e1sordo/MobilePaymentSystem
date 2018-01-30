@@ -27,9 +27,9 @@ public class HomeController {
     @GetMapping("/")
     public String showHomePage(Model model) {
         model.addAttribute("numberOfUsers", userService.numberOfUsers());
-        model.addAttribute("numberOfServices", serviceUnitService.numberOfServices());
-        model.addAttribute("numberOfBills", billService.numberOfUnpaidBills());
-        model.addAttribute("numberOfUnpaidBills", billService.numberOfUnpaidBills());
+        model.addAttribute("numberOfServices", serviceUnitService.numberOfAllService());
+        model.addAttribute("numberOfBills", billService.numberOfAllBills());
+        model.addAttribute("numberOfUnpaidBills", billService.numberOfAllUnpaidBills());
         model.addAttribute("userId", userService.getCurrentUserId());
         return "index";
     }

@@ -46,9 +46,9 @@ public class ServiceUnitService {
         return serviceUnits;
     }
 
-    public List<ServiceUnit> getAllServicesWithoutSubscribe() {
+    public List<ServiceUnit> getAllServicesWithoutSubscribe(long userId) {
         List<ServiceUnit> services = (List<ServiceUnit>) serviceUnitsRepository.findAll();
-        User user = userService.getCurrentUser();
+        User user = userService.getUserById(userId);
         Set<ServiceUnit> userServices = user.getServiceUnits();
         services.removeAll(userServices);
         return services;
@@ -66,22 +66,27 @@ public class ServiceUnitService {
         return getAllPaidServiceOfUser(userId).size();
     }
 
-    public void subscribeUserToService(long serviceId) {
+    public long numberOfAllService() {
+        return serviceUnitsRepository.count();
+    }
+
+    public void subscribeUserToService(long userId, long serviceId) {
         // if we chose actual existing service
         if (serviceId != -1) {
-            User user = userService.getCurrentUser();
+            User user = userService.getUserById(userId);
             ServiceUnit service = getServiceById(serviceId);
 
             // we create bill only if the service is new
             if (user.addService(service)) {
-                billService.createAndSaveBill(user, service);
+                Bill bill = billService.createAndSaveBill(user, service);
+                billService.withdrawCashToPayForOneBill(bill, user);
                 userService.updateUser(user);
             }
         }
     }
 
-    public void unsubscribeUserFromService(long serviceId) {
-        User user = userService.getCurrentUser();
+    public void unsubscribeUserFromService(long userId, long serviceId) {
+        User user = userService.getUserById(userId);
         ServiceUnit service = getServiceById(serviceId);
 
         // if service exists and it is unpaid - remove also unpaid bill

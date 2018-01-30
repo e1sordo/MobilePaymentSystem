@@ -29,11 +29,4 @@ public class BillController {
         model.addAttribute("unpaidBills", unpaidBills);
         return "bill/bill_list";
     }
-
-    @GetMapping("/testbillpay")
-    public String test(Model model) {
-        long id = userService.getCurrentUserId();
-        billService.withdrawCashToPayForBills(id);
-        return "bill/bill_list";
-    }
 }

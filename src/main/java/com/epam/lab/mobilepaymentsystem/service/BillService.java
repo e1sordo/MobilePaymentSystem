@@ -31,7 +31,7 @@ public class BillService {
         billsRepository.save(bill);
     }
 
-    public void createAndSaveBill(User user, ServiceUnit serviceUnit) {
+    public Bill createAndSaveBill(User user, ServiceUnit serviceUnit) {
         Bill bill = new Bill();
         bill.setUser(user);
         bill.setServiceUnit(serviceUnit);
@@ -51,6 +51,7 @@ public class BillService {
         }
 
         billsRepository.save(bill);
+        return bill;
     }
 
     public void deleteUnpaidBill(long userId, long serviceId) {
@@ -83,7 +84,7 @@ public class BillService {
         return billsRepository.count();
     }
 
-    public long numberOfUnpaidBills() {
+    public long numberOfAllUnpaidBills() {
         return billsRepository.countAllByPaidFor(UNPAID);
     }
 
@@ -100,21 +101,25 @@ public class BillService {
         return total;
     }
 
-    public void withdrawCashToPayForBills(long id) {
-        List<Bill> unpaidBills = (List<Bill>) getAllNonExpiredUnpaidBillsOfUser(id);
-        User user = userService.getUserById(id);
+    public void withdrawCashToPayForBills(long userId) {
+        List<Bill> unpaidBills = (List<Bill>) getAllNonExpiredUnpaidBillsOfUser(userId);
+        User user = userService.getUserById(userId);
         Iterator<Bill> iterator = unpaidBills.iterator();
 
         while (iterator.hasNext()) {
             Bill bill = iterator.next();
+            withdrawCashToPayForOneBill(bill, user);
+            iterator.remove();
+        }
+        userService.updateUser(user); // todo: maybe it's not needed
+    }
 
-            if (bill.getActualCost() <= user.getBankAccount()) {
-                int bankAccount = user.getBankAccount() - bill.getActualCost();
-                user.setBankAccount(bankAccount);
-                bill.setPaidFor(true);
-                save(bill);
-                iterator.remove();
-            }
+    public void withdrawCashToPayForOneBill(Bill bill, User user) {
+        if (bill.getActualCost() <= user.getBankAccount()) {
+            int bankAccount = user.getBankAccount() - bill.getActualCost();
+            user.setBankAccount(bankAccount);
+            bill.setPaidFor(true);
+            save(bill);
         }
     }
 

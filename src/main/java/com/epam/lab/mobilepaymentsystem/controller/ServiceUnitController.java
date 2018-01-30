@@ -40,7 +40,7 @@ public class ServiceUnitController {
 
     @GetMapping("/services")
     public String listAllServices(Model model, @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe();
+        List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(userService.getCurrentUserId());
         model.addAttribute("inactiveServices", inactiveServices);
         model.addAttribute("services", serviceUnitService.getAllServices());
         return "service/service_list";
@@ -54,14 +54,14 @@ public class ServiceUnitController {
 
     @PostMapping("/services")
     public String subscribeToService(@ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        serviceUnitService.subscribeUserToService(serviceUnit.getId());
+        serviceUnitService.subscribeUserToService(userService.getCurrentUserId(), serviceUnit.getId());
         return "redirect:/services";
     }
 
     // TODO: unsubscribe process doesn't return actual data after pressing a button
     @GetMapping("service/my")
     public String listActiveServices(@ModelAttribute("selectedService") ServiceUnit serviceUnit, Model model) {
-        List<ServiceUnit> activeServices = userService.getActiveServicesByUserId();
+        List<ServiceUnit> activeServices = serviceUnitService.getAllPaidServiceOfUser(userService.getCurrentUserId());
         model.addAttribute("activeServices", activeServices);
         return "service/my";
     }
@@ -69,7 +69,7 @@ public class ServiceUnitController {
     @PostMapping("users/{id}/services")
     public String unsubscribeFromService(@PathVariable Long id,
                                          @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        serviceUnitService.unsubscribeUserFromService(serviceUnit.getId());
+        serviceUnitService.unsubscribeUserFromService(userService.getCurrentUserId(), serviceUnit.getId());
         return "redirect:/users/" + id + "/services";
     }
 }

@@ -2,7 +2,6 @@ package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.UserRepository;
 import com.epam.lab.mobilepaymentsystem.model.Role;
-import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,9 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class UserService {
@@ -83,11 +79,6 @@ public class UserService {
 
     public User updateUser(User user) {
         return userRepository.save(user);
-    }
-
-    public List<ServiceUnit> getActiveServicesByUserId() {
-        User user = getCurrentUser();
-        return new ArrayList<>(user.getServiceUnits());
     }
 
     // TODO: not sure about working with model in backend
