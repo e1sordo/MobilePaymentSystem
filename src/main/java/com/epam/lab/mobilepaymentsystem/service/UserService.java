@@ -86,6 +86,14 @@ public class UserService {
     // And maybe it is better to autowire SecurityService in UserService instead of passing it as param
     public String validateNewUserAndRegister(User user, BindingResult bindingResult, Model model, SecurityService securityService) {
 
+        if((getByUsername(user.getUsername()) != null) && (!user.getPassword().equals(user.getConfirmPassword()))) {
+            bindingResult.reject("username");
+            bindingResult.reject("password");
+            model.addAttribute("userWithSameUserName", "There is already a user registered with the username provided");
+            model.addAttribute("passwordsNotSame", "Passwords don't match");
+            return "user/registration";
+        }
+
         if(getByUsername(user.getUsername()) != null) {
             bindingResult.reject("username");
             model.addAttribute("userWithSameUserName", "There is already a user registered with the username provided");
@@ -99,7 +107,6 @@ public class UserService {
         }
 
         if(bindingResult.hasErrors()) {
-            // TODO: info about other errors
             return "user/registration";
         }
 

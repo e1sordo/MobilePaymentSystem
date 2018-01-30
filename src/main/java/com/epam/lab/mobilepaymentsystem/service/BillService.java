@@ -58,18 +58,17 @@ public class BillService {
         billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
     }
 
-    public Iterable<Bill> getAllPaidBillsOfUser(long id) {
-        return billsRepository.findAllByUser_IdAndPaidFor(id, PAID);
+    public Iterable<Bill> getAllPaidBillsOfUser(long userId) {
+        return billsRepository.findAllByUser_IdAndPaidFor(userId, PAID);
     }
 
-    public Iterable<Bill> getAllNonExpiredPaidBillsOfUser(long id) {
-        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfterOrderByActualCostDesc(id, PAID, getToday(), getToday());
+    public Iterable<Bill> getAllNonExpiredPaidBillsOfUser(long userId) {
+        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfterOrderByActualCostDesc(userId, PAID, getToday(), getToday());
     }
 
-    public Iterable<Bill> getAllNonExpiredUnpaidBillsOfUser(long id) {
-        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfterOrderByActualCostDesc(id, UNPAID, getToday(), getToday());
+    public Iterable<Bill> getAllNonExpiredUnpaidBillsOfUser(long userId) {
+        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfterOrderByActualCostDesc(userId, UNPAID, getToday(), getToday());
     }
-
 
     // Методы для получения всех оплаченных и неоплаченных счетов всех пользователей [Admin]
     public Iterable<Bill> getAllNonExpiredUnpaidBillsOfAllUsersOrderedById() {
@@ -78,6 +77,10 @@ public class BillService {
 
     public Iterable<Bill> getAllNonExpiredPaidBillsOfAllUsersOrderedById() {
         return billsRepository.findAllByPaidForAndStartDateBeforeAndEndDateAfterOrderByUser_Id(PAID, getToday(), getToday());
+    }
+
+    public Iterable<Bill> getAllExpiredUnpaidBillsOfUser(long userId) {
+        return billsRepository.findAllByUser_IdAndPaidForAndEndDateBefore(userId, UNPAID, getToday());
     }
 
     public long numberOfAllBills() {

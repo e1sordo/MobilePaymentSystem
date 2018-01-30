@@ -112,4 +112,18 @@ public class ServiceUnitService {
         save(serviceUnit);
         return "redirect:/services";
     }
+
+    public void bigAdminButton() {
+        Iterable<User> users = userService.getAllUsers();
+        for (User user : users) {
+            Iterable<Bill> outOfDateUnpaidBills = billService.getAllExpiredUnpaidBillsOfUser(user.getId());
+
+            for (Bill bill : outOfDateUnpaidBills) {
+                unsubscribeUserFromService(user.getId(), bill.getServiceUnit().getId());
+            }
+
+            billService.withdrawCashToPayForBills(user.getId());
+
+        }
+    }
 }
