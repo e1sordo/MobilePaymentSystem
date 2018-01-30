@@ -2,7 +2,6 @@ package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.BillsRepository;
 import com.epam.lab.mobilepaymentsystem.model.Bill;
-import com.epam.lab.mobilepaymentsystem.model.Role;
 import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +51,10 @@ public class BillService {
         }
 
         billsRepository.save(bill);
-        changeRoleDueToBillsChange(user.getId());
     }
 
     public void deleteUnpaidBill(long userId, long serviceId) {
         billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
-        changeRoleDueToBillsChange(userId);
     }
 
     public Iterable<Bill> getAllPaidBillsOfUser(long id) {
@@ -118,20 +115,6 @@ public class BillService {
                 save(bill);
                 iterator.remove();
             }
-        }
-
-        changeRoleDueToBillsChange(id);
-    }
-
-    // TODO: billService or userService?
-    private void changeRoleDueToBillsChange(long id) {
-        List<Bill> unpaidBills = (List<Bill>) getAllNonExpiredUnpaidBillsOfUser(id);
-        User user = userService.getUserById(id);
-        if (unpaidBills.isEmpty()) {
-            userService.changeUserRole(user, Role.ROLE_SUBSCRIBER);
-        } else {
-            // TODO: what role should we use?
-            userService.changeUserRole(user, Role.ROLE_LOCKED);
         }
     }
 
