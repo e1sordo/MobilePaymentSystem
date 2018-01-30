@@ -62,8 +62,8 @@ public class ServiceUnitService {
         return serviceUnitsRepository.findOne(id);
     }
 
-    public long numberOfServices() {
-        return serviceUnitsRepository.count();
+    public long numberOfActiveServicesOfUser(long userId) {
+        return getAllPaidServiceOfUser(userId).size();
     }
 
     public void subscribeUserToService(long serviceId) {
@@ -107,10 +107,4 @@ public class ServiceUnitService {
         save(serviceUnit);
         return "redirect:/services";
     }
-
-//    public void updateService(ServiceUnit serviceUnit) {
-//
-//    }
-
-
 }

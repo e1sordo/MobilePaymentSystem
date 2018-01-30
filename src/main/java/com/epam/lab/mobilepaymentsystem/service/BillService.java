@@ -65,11 +65,11 @@ public class BillService {
     }
 
     public Iterable<Bill> getAllNonExpiredPaidBillsOfUser(long id) {
-        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfter(id, PAID, getToday(), getToday());
+        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfterOrderByActualCostDesc(id, PAID, getToday(), getToday());
     }
 
     public Iterable<Bill> getAllNonExpiredUnpaidBillsOfUser(long id) {
-        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfter(id, UNPAID, getToday(), getToday());
+        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfterOrderByActualCostDesc(id, UNPAID, getToday(), getToday());
     }
 
 
@@ -82,17 +82,16 @@ public class BillService {
         return billsRepository.findAllByPaidForAndStartDateBeforeAndEndDateAfterOrderByUser_Id(PAID, getToday(), getToday());
     }
 
-    // TODO: involve date in logic
-//    private Iterable<Bill> getAllUnpaidBillsOfUserForTodayOrderedByCost() {
-//        return
-//    }
-
-    public long numberOfPaidBills() {
+    public long numberOfAllBills() {
         return billsRepository.count();
     }
 
     public long numberOfUnpaidBills() {
-        return billsRepository.count();
+        return billsRepository.countAllByPaidFor(UNPAID);
+    }
+
+    public long numberOfUnpaidBillsOfUser(long userId) {
+        return billsRepository.countAllByPaidForAndUser_Id(UNPAID, userId);
     }
 
     public int countTotalSum(Iterable<Bill> bills) {
