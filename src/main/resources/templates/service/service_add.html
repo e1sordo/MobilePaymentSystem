@@ -76,6 +76,7 @@
                                     <input type="number" class="form-control"
                                            th:field="*{cost}"  th:placeholder="#{service.form.add.cost}"/>
                                 </div>
+                                <p th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"></p>
                             </div>
 
                             <input class="btn btn-sm btn-primary btn-block"

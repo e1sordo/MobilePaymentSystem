@@ -23,8 +23,8 @@ public class BillController {
     @GetMapping("/bills")
     public String getBills(Model model) {
         long id = userService.getCurrentUserId();
-        Iterable<Bill> oldBills = billService.listAllPaidBillsOfUser(id);
-        Iterable<Bill> unpaidBills = billService.listAllUnpaidBillsOfUser(id);
+        Iterable<Bill> oldBills = billService.getAllPaidBillsOfUser(id);
+        Iterable<Bill> unpaidBills = billService.getAllNonExpiredUnpaidBillsOfUser(id);
         model.addAttribute("paidBills", oldBills);
         model.addAttribute("unpaidBills", unpaidBills);
         return "bill/bill_list";

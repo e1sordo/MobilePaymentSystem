@@ -13,5 +13,7 @@ public interface BillsRepository extends CrudRepository<Bill, Long> {
 
     Iterable<Bill> findAllByUser_IdAndPaidFor(long userId, boolean isPaid);
 
+    Iterable<Bill> findAllByPaidForAndStartDateBeforeAndEndDateAfterOrderByUser_Id(Boolean paidFor, Date startDate, Date endDate);
+
     Iterable<Bill> findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfter(long user_id, Boolean paidFor, Date startDate, Date endDate);
 }

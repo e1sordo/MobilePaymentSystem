@@ -60,12 +60,26 @@ public class BillService {
         changeRoleDueToBillsChange(userId);
     }
 
-    public Iterable<Bill> listAllPaidBillsOfUser(long id) {
+    public Iterable<Bill> getAllPaidBillsOfUser(long id) {
         return billsRepository.findAllByUser_IdAndPaidFor(id, PAID);
     }
 
-    public Iterable<Bill> listAllUnpaidBillsOfUser(long id) {
-        return billsRepository.findAllByUser_IdAndPaidFor(id, UNPAID);
+    public Iterable<Bill> getAllNonExpiredPaidBillsOfUser(long id) {
+        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfter(id, PAID, getToday(), getToday());
+    }
+
+    public Iterable<Bill> getAllNonExpiredUnpaidBillsOfUser(long id) {
+        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfter(id, UNPAID, getToday(), getToday());
+    }
+
+
+    // Методы для получения всех оплаченных и неоплаченных счетов всех пользователей [Admin]
+    public Iterable<Bill> getAllNonExpiredUnpaidBillsOfAllUsersOrderedById() {
+        return billsRepository.findAllByPaidForAndStartDateBeforeAndEndDateAfterOrderByUser_Id(UNPAID, getToday(), getToday());
+    }
+
+    public Iterable<Bill> getAllNonExpiredPaidBillsOfAllUsersOrderedById() {
+        return billsRepository.findAllByPaidForAndStartDateBeforeAndEndDateAfterOrderByUser_Id(PAID, getToday(), getToday());
     }
 
     // TODO: involve date in logic
@@ -91,7 +105,7 @@ public class BillService {
     }
 
     public void withdrawCashToPayForBills(long id) {
-        List<Bill> unpaidBills = (List<Bill>) listAllUnpaidBillsOfUser(id);
+        List<Bill> unpaidBills = (List<Bill>) getAllNonExpiredUnpaidBillsOfUser(id);
         User user = userService.getUserById(id);
         Iterator<Bill> iterator = unpaidBills.iterator();
 
@@ -112,7 +126,7 @@ public class BillService {
 
     // TODO: billService or userService?
     private void changeRoleDueToBillsChange(long id) {
-        List<Bill> unpaidBills = (List<Bill>) listAllUnpaidBillsOfUser(id);
+        List<Bill> unpaidBills = (List<Bill>) getAllNonExpiredUnpaidBillsOfUser(id);
         User user = userService.getUserById(id);
         if (unpaidBills.isEmpty()) {
             userService.changeUserRole(user, Role.ROLE_SUBSCRIBER);
@@ -120,5 +134,9 @@ public class BillService {
             // TODO: what role should we use?
             userService.changeUserRole(user, Role.ROLE_LOCKED);
         }
+    }
+
+    private Date getToday() {
+        return new Date(System.currentTimeMillis());
     }
 }

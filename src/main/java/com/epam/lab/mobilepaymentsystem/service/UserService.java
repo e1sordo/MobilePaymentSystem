@@ -47,7 +47,7 @@ public class UserService {
         }
 
         user.setBankAccount(user.getBankAccount() + tranche);
-        user = updateUser(user);
+        updateUser(user);
     }
 
     public User getByUsername(String username) {

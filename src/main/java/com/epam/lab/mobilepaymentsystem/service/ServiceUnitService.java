@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.ServiceUnitsRepository;
+import com.epam.lab.mobilepaymentsystem.model.Bill;
 import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +33,17 @@ public class ServiceUnitService {
 
     public Iterable<ServiceUnit> getAllServices() {
         return serviceUnitsRepository.findAll();
+    }
+
+    public List<ServiceUnit> getAllPaidServiceOfUser(long userId) {
+        List<Bill> paidBills = (List<Bill>) billService.getAllNonExpiredPaidBillsOfUser(userId);
+        List<ServiceUnit> serviceUnits = new ArrayList<>();
+
+        for (Bill bill : paidBills) {
+            serviceUnits.add(bill.getServiceUnit());
+        }
+
+        return serviceUnits;
     }
 
     public List<ServiceUnit> getAllServicesWithoutSubscribe() {
@@ -94,4 +107,10 @@ public class ServiceUnitService {
         save(serviceUnit);
         return "redirect:/services";
     }
+
+//    public void updateService(ServiceUnit serviceUnit) {
+//
+//    }
+
+
 }
