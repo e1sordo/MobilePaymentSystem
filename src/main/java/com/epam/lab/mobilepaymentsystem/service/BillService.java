@@ -62,28 +62,28 @@ public class BillService {
         billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
     }
 
-    public Iterable<Bill> getAllPaidBillsOfUser(long userId) {
+    public List<Bill> getAllPaidBillsOfUser(long userId) {
         return billsRepository.findAllByUser_IdAndPaidFor(userId, PAID);
     }
 
-    public Iterable<Bill> getAllNonExpiredPaidBillsOfUser(long userId) {
+    public List<Bill> getAllNonExpiredPaidBillsOfUser(long userId) {
         return billsRepository.findAllByUser_IdAndPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByActualCostDesc(userId, PAID, getToday(), getToday());
     }
 
-    public Iterable<Bill> getAllNonExpiredUnpaidBillsOfUser(long userId) {
+    public List<Bill> getAllNonExpiredUnpaidBillsOfUser(long userId) {
         return billsRepository.findAllByUser_IdAndPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByActualCostDesc(userId, UNPAID, getToday(), getToday());
     }
 
     // Методы для получения всех оплаченных и неоплаченных счетов всех пользователей [Admin]
-    public Iterable<Bill> getAllNonExpiredUnpaidBillsOfAllUsersOrderedById() {
+    public List<Bill> getAllNonExpiredUnpaidBillsOfAllUsersOrderedById() {
         return billsRepository.findAllByPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByUser_Id(UNPAID, getToday(), getToday());
     }
 
-    public Iterable<Bill> getAllNonExpiredPaidBillsOfAllUsersOrderedById() {
+    public List<Bill> getAllNonExpiredPaidBillsOfAllUsersOrderedById() {
         return billsRepository.findAllByPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByUser_Id(PAID, getToday(), getToday());
     }
 
-    public Iterable<Bill> getAllExpiredUnpaidBillsOfUser(long userId) {
+    public List<Bill> getAllExpiredUnpaidBillsOfUser(long userId) {
         return billsRepository.findAllByUser_IdAndPaidForAndEndDateBefore(userId, UNPAID, getToday());
     }
 
@@ -109,7 +109,7 @@ public class BillService {
     }
 
     public void withdrawCashToPayForBills(long userId) {
-        List<Bill> unpaidBills = (List<Bill>) getAllNonExpiredUnpaidBillsOfUser(userId);
+        List<Bill> unpaidBills = getAllNonExpiredUnpaidBillsOfUser(userId);
         User user = userService.getUserById(userId);
         Iterator<Bill> iterator = unpaidBills.iterator();
 

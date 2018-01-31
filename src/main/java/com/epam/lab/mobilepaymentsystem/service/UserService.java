@@ -77,8 +77,8 @@ public class UserService {
         return userRepository.findByUsername(userSecurity.getUsername());
     }
 
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public void updateUser(User user) {
+        userRepository.save(user);
     }
 
     // TODO: not sure about working with model in backend

@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 @Controller
 public class BillController {
@@ -24,17 +25,10 @@ public class BillController {
     @GetMapping("/bills")
     public String getBills(Model model) {
         long id = userService.getCurrentUserId();
-        Iterable<Bill> oldBills = billService.getAllPaidBillsOfUser(id);
-        Iterable<Bill> unpaidBills = billService.getAllNonExpiredUnpaidBillsOfUser(id);
+        List<Bill> oldBills = billService.getAllPaidBillsOfUser(id);
+        List<Bill> unpaidBills = billService.getAllNonExpiredUnpaidBillsOfUser(id);
         model.addAttribute("paidBills", oldBills);
         model.addAttribute("unpaidBills", unpaidBills);
         return "bill/bill_list";
-    }
-
-    @GetMapping("/bills/{id}")
-    public String getBillUnit(@PathVariable final Long id, Model model) {
-        model.addAttribute("bill", billService.getById(id));
-        model.addAttribute("unpaidBills", billService.getAllNonExpiredUnpaidBillsOfUser(userService.getCurrentUserId()));
-        return "bill/bill_item";
     }
 }

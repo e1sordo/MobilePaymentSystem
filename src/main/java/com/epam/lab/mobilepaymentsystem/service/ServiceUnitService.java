@@ -36,7 +36,7 @@ public class ServiceUnitService {
     }
 
     public List<ServiceUnit> getAllPaidServiceOfUser(long userId) {
-        List<Bill> paidBills = (List<Bill>) billService.getAllNonExpiredPaidBillsOfUser(userId);
+        List<Bill> paidBills = billService.getAllNonExpiredPaidBillsOfUser(userId);
         List<ServiceUnit> serviceUnits = new ArrayList<>();
 
         for (Bill bill : paidBills) {
@@ -116,7 +116,7 @@ public class ServiceUnitService {
     public void bigAdminButton() {
         Iterable<User> users = userService.getAllUsers();
         for (User user : users) {
-            Iterable<Bill> outOfDateUnpaidBills = billService.getAllExpiredUnpaidBillsOfUser(user.getId());
+            List<Bill> outOfDateUnpaidBills = billService.getAllExpiredUnpaidBillsOfUser(user.getId());
 
             for (Bill bill : outOfDateUnpaidBills) {
                 unsubscribeUserFromService(user.getId(), bill.getServiceUnit().getId());
