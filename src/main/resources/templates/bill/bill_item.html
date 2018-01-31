@@ -58,7 +58,7 @@
             <li class="dropdown">
                 <select class="selectpicker dropdown-toggle" data-toggle="dropdown" data-width="fit">
                     <option data-content='<span class="flag-icon flag-icon-us"></span> English'>English</option>
-                    <option data-content='<span class="flag-icon flag-icon-ru"></span> Russia'>Р СѓСЃСЃРєРёР№</option>
+                    <option data-content='<span class="flag-icon flag-icon-ru"></span> Russia'>Русский</option>
                 </select>
             </li>
 
@@ -174,19 +174,18 @@
         </style>
 
 
-        <div class="row" th:object="${bill}">
+        <div class="row">
             <div class="col-xs-12">
                 <div class="invoice-title">
-                    <h2>Invoice</h2><h3 class="pull-right">Order # <span th:text="*{id}"></span></h3>
+                    <h2>Invoice</h2><h3 class="pull-right">Order # <span th:text="${id}"></span></h3>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-xs-6">
                         <address>
                             <strong>Billed To:</strong><br>
-                            <p th:text="${bill.user.fullname}"></p>
-                            <!--TODO: not sure-->
-                            <a th:href="@{'/test/users/' + ${bill.user.id}}" target="_blank" th:text="${bill.user.username}"></a><br>
+                            Vladimir Kostin<br>
+                            <a href="/test/users/1" target="_blank">vlavik</a><br>
                         </address>
                     </div>
                     <div class="col-xs-6 text-right">
@@ -206,7 +205,7 @@
                     <div class="col-xs-6 text-right">
                         <address>
                             <strong>Order Date:</strong><br>
-                            <p th:text="${#dates.format(bill.startDate, 'dd-MM-yyyy')}"></p> <br><br>
+                            January 23, 2018<br><br>
                         </address>
                     </div>
                 </div>
@@ -233,11 +232,35 @@
                                 </thead>
                                 <tbody>
                                 <!-- foreach ($order->lineItems as $line) or some such thing here -->
-                                <tr th:each="bill :${unpaidBills}">
-                                    <td th:text="${bill.serviceUnit.name}"></td>
-                                    <td class="text-center" th:text="${bill.serviceUnit.cost}"></td>
-                                    <td class="text-center" >1</td>
-                                    <td class="text-right" th:text="${bill.actualCost}"></td>
+                                <tr>
+                                    <td>WebTV</td>
+                                    <td class="text-center">$10.99</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-right">$10.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Kaspersky Crystal</td>
+                                    <td class="text-center">$20.00</td>
+                                    <td class="text-center">3</td>
+                                    <td class="text-right">$60.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Static IP-adress</td>
+                                    <td class="text-center">$600.00</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-right">$600.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="thick-line"></td>
+                                    <td class="thick-line"></td>
+                                    <td class="thick-line text-center"><strong>Subtotal</strong></td>
+                                    <td class="thick-line text-right">$670.99</td>
+                                </tr>
+                                <tr>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line text-center"><strong>Shipping</strong></td>
+                                    <td class="no-line text-right">$15</td>
                                 </tr>
                                 <tr>
                                     <td class="no-line"></td>
@@ -257,7 +280,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
         <!-- /.row -->
     </div>
     <!-- /#page-wrapper -->
