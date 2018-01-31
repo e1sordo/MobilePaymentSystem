@@ -32,7 +32,20 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header" th:text="#{title.page.home}">Summary</h1>
+                <div style="overflow:hidden;" class="page-header" >
+                    <h1 sec:authorize="hasAnyRole('USER', 'SUBSCRIBER', 'ADMIN')"
+                        style="float:left; margin-top:0;" th:text="#{title.page.home}">Summary</h1>
+
+                    <h1 sec:authorize="hasRole('LOCKED')" th:text="#{title.page.home.locked}"></h1>
+                    <h1 sec:authorize="hasRole('DELETED')" th:text="#{title.page.home.deleted}"></h1>
+
+                    <span style="float: right;" sec:authorize="hasRole('ADMIN')">
+                        <form action="/" method="post">
+                            <button type="button" th:text="#{title.page.check.button}"
+                                    class="btn btn-primary btn-lg">Check bills</button>
+                        </form>
+                    </span>
+                </div>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -46,14 +59,17 @@
                                 <i class="fa fa-user fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge" th:text="${numberOfUsers}">17</div>
+                                <div class="huge" th:text="${numberOfSubs}">17</div>
                                 <div th:text="#{container.word.subscribers}">Subscribers</div>
                             </div>
                         </div>
                     </div>
                     <a th:href="@{/users}">
                         <div class="panel-footer">
-                            <span class="pull-left">3 <span th:text="#{container.word.unconfirmed}">Unconfirmed</span></span>
+                            <span class="pull-left">
+                                <span th:text="${numberOfUsers}"></span>
+                                <span th:text="#{container.word.unconfirmed}">Unconfirmed</span>
+                            </span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                             <div class="clearfix"></div>
                         </div>
@@ -130,7 +146,16 @@
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="panel panel-default">
+
+                <div class="well" th:if="${userRole} == 'ROLE_USER'">
+                    <h4 th:text="#{role.user.greeting}">Добро пожаловать!</h4>
+                    <p th:utext="#{role.user.text}"></p>
+                    <a class="btn btn-default btn-lg btn-block"
+                       th:text="#{role.user.refill}"
+                       th:href="@{/profile}">Перейти к пополнению счета</a>
+                </div>
+
+                <div class="panel panel-default" th:if="${userRole} != 'ROLE_DELETED'">
                     <div class="panel-heading">
                         <i class="fa fa-bar-chart-o fa-fw"></i>
                         <span th:text="#{app.project.title}">Project #7. Mobile Payment System.</span>

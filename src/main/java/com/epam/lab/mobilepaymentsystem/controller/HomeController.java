@@ -1,5 +1,6 @@
 package com.epam.lab.mobilepaymentsystem.controller;
 
+import com.epam.lab.mobilepaymentsystem.model.Role;
 import com.epam.lab.mobilepaymentsystem.service.BillService;
 import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class HomeController {
@@ -26,11 +28,21 @@ public class HomeController {
 
     @GetMapping("/")
     public String showHomePage(Model model) {
-        model.addAttribute("numberOfUsers", userService.numberOfUsers());
+        model.addAttribute("numberOfSubs", userService.numberOfUsersByRole(
+                Role.ROLE_SUBSCRIBER.getDisplayName()));
+        model.addAttribute("numberOfUsers", userService.numberOfUsersByRole(
+                Role.ROLE_USER.getDisplayName()));
         model.addAttribute("numberOfServices", serviceUnitService.numberOfAllService());
         model.addAttribute("numberOfBills", billService.numberOfAllBills());
         model.addAttribute("numberOfUnpaidBills", billService.numberOfAllUnpaidBills());
         model.addAttribute("userId", userService.getCurrentUserId());
+        model.addAttribute("userRole", userService.getCurrentUser().getRole());
         return "index";
+    }
+
+    @PostMapping("/")
+    public String checkBills() {
+        serviceUnitService.bigAdminButton();
+        return "redirect:/";
     }
 }

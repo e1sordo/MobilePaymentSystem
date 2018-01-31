@@ -68,9 +68,10 @@
             </a>
             <ul class="dropdown-menu dropdown-user">
                 <!--[[${#httpServletRequest.remoteUser}]]-->
-                <li><a th:href="@{/profile}"><i class="fa fa-user fa-fw"></i> My profile</a>
+                <li sec:authorize="hasAnyRole('USER', 'SUBSCRIBER', 'ADMIN')">
+                    <a th:href="@{/profile}"><i class="fa fa-user fa-fw"></i> My profile</a>
                 </li>
-                <li class="divider"></li>
+                <li class="divider" sec:authorize="hasAnyRole('USER', 'SUBSCRIBER', 'ADMIN')"></li>
                 <li><a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
             </ul>
             <!-- /.dropdown-user -->

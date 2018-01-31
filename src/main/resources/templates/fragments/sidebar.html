@@ -15,7 +15,7 @@
                 <li sec:authorize="hasRole('ADMIN')">
                     <a th:href="@{/users}"><i class="fa fa-table fa-fw"></i> <span th:text="#{sidebar.link.users}">Users</span></a>
                 </li>
-                <li>
+                <li sec:authorize="hasAnyRole('USER', 'SUBSCRIBER', 'ADMIN')">
                     <a href="#"><i class="fa fa-wrench fa-fw"></i> <span th:text="#{sidebar.link.services}">Services</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
@@ -28,18 +28,8 @@
                     <!-- /.nav-second-level -->
                 </li>
                 <li sec:authorize="hasRole('ADMIN')">
-                    <a th:href="#{/bills}"><i class="fa fa-edit fa-fw"></i> <span th:text="#{sidebar.link.bills}">Bills</span>
-                        <!--<span class="fa arrow"></span>-->
+                    <a th:href="@{/bills}"><i class="fa fa-edit fa-fw"></i> <span th:text="#{sidebar.link.bills}">Bills</span>
                     </a>
-                    <!--<ul class="nav nav-second-level">-->
-                        <!--<li>-->
-                            <!--<a th:href="@{/bills}"><span th:text="#{sidebar.link.bills.all}">All bills</span></a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a th:href="@{/bills/unpaid}"><span th:text="#{sidebar.link.bills.unpaid}">Unpaid bills</span></a>-->
-                        <!--</li>-->
-                    <!--</ul>-->
-                    <!-- /.nav-second-level -->
                 </li>
                 <li class="sidebar-search">
                     <p style="color: gray;"><i th:text="#{sidebar.copyrights.title}">All rights reserved</i></p>

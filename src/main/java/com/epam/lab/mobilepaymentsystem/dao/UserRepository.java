@@ -12,4 +12,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
     void removeById(long id);
 
     User findUserById(long id);
+
+    Iterable<User> findAllByRoleNot(String role);
+
+    long countAllByRole(String role);
 }

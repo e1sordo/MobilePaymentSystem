@@ -59,11 +59,16 @@ public class UserService {
     }
 
     public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAllByRoleNot(
+                Role.ROLE_DELETED.getDisplayName());
     }
 
     public long numberOfUsers() {
         return userRepository.count();
+    }
+
+    public long numberOfUsersByRole(String role) {
+        return userRepository.countAllByRole(role);
     }
 
     public void updateUser(User user) {

@@ -43,6 +43,7 @@ public class ServiceUnitController {
         List<ServiceUnit> inactiveServices = serviceUnitService.getAllServicesWithoutSubscribe(userService.getCurrentUserId());
         model.addAttribute("inactiveServices", inactiveServices);
         model.addAttribute("services", serviceUnitService.getAllServices());
+        model.addAttribute("userRole", userService.getCurrentUser().getRole());
         return "service/service_list";
     }
 

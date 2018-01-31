@@ -67,8 +67,9 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-usd"></span></span>
-                                            <input type="text" class="form-control" name="tranche" id="tranche"
+                                            <input type="number" class="form-control" name="tranche" id="tranche"
                                                    th:field="*{tranche}"/>
+                                            <div th:if="${error}" th:text="${error}"></div>
                                         </div>
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" style="margin-left:1em;" type="submit">Пополнить</button>
