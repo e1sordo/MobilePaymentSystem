@@ -54,6 +54,10 @@ public class BillService {
         return bill;
     }
 
+    public Bill getById(long billId) {
+        return billsRepository.findOne(billId);
+    }
+
     public void deleteUnpaidBill(long userId, long serviceId) {
         billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
     }
@@ -63,20 +67,20 @@ public class BillService {
     }
 
     public Iterable<Bill> getAllNonExpiredPaidBillsOfUser(long userId) {
-        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfterOrderByActualCostDesc(userId, PAID, getToday(), getToday());
+        return billsRepository.findAllByUser_IdAndPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByActualCostDesc(userId, PAID, getToday(), getToday());
     }
 
     public Iterable<Bill> getAllNonExpiredUnpaidBillsOfUser(long userId) {
-        return billsRepository.findAllByUser_IdAndPaidForAndStartDateBeforeAndEndDateAfterOrderByActualCostDesc(userId, UNPAID, getToday(), getToday());
+        return billsRepository.findAllByUser_IdAndPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByActualCostDesc(userId, UNPAID, getToday(), getToday());
     }
 
     // Методы для получения всех оплаченных и неоплаченных счетов всех пользователей [Admin]
     public Iterable<Bill> getAllNonExpiredUnpaidBillsOfAllUsersOrderedById() {
-        return billsRepository.findAllByPaidForAndStartDateBeforeAndEndDateAfterOrderByUser_Id(UNPAID, getToday(), getToday());
+        return billsRepository.findAllByPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByUser_Id(UNPAID, getToday(), getToday());
     }
 
     public Iterable<Bill> getAllNonExpiredPaidBillsOfAllUsersOrderedById() {
-        return billsRepository.findAllByPaidForAndStartDateBeforeAndEndDateAfterOrderByUser_Id(PAID, getToday(), getToday());
+        return billsRepository.findAllByPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByUser_Id(PAID, getToday(), getToday());
     }
 
     public Iterable<Bill> getAllExpiredUnpaidBillsOfUser(long userId) {
