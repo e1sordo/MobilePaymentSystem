@@ -70,7 +70,7 @@ public class ServiceUnitController {
     @PostMapping("users/{id}/services")
     public String unsubscribeFromService(@PathVariable Long id,
                                          @ModelAttribute("selectedService") ServiceUnit serviceUnit) {
-        serviceUnitService.unsubscribeUserFromServiceByUserAndServiceId(userService.getCurrentUserId(), serviceUnit.getId());
+       // serviceUnitService.unsubscribeUserFromServiceByUserAndServiceId(userService.getCurrentUserId(), serviceUnit.getId());
         return "redirect:/users/" + id + "/services";
     }
 }
