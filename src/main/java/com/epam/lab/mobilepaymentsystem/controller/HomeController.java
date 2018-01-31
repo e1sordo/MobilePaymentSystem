@@ -42,7 +42,7 @@ public class HomeController {
 
     @PostMapping("/")
     public String checkBills() {
-        serviceUnitService.bigAdminButton();
+        serviceUnitService.globalCheckBill();
         return "redirect:/";
     }
 }

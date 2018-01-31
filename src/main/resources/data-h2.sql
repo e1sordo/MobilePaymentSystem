@@ -21,9 +21,11 @@ VALUES
          'Позвоним • дозвонимся в самые недоступные организации ' ||
          '• договоримся и добьёмся того, что Вам необходимо.');
 
-INSERT INTO USER_SERVICES (user_id, service_id) VALUES (1, 1), (1, 2);
+INSERT INTO USER_SERVICES (user_id, service_id) VALUES (1, 1), (1, 2), (2, 1), (2, 2);
 
 INSERT INTO BILLS (actual_cost, end_date, is_paid, start_date, service_unit_id, user_id)
 VALUES
         (130,	'2018-02-05',	TRUE,	'2018-01-31',	2,	1),
-        (40,	'2018-02-02',	FALSE,	'2018-01-31',	1,	1);
+        (40,	'2018-02-02',	FALSE,	'2018-01-31',	1,	1),
+        (50, '2018-01-23', FALSE, '2018-01-25', 1, 2),
+        (100, '2017-09-10', TRUE, '2017-09-15', 2, 2);
