@@ -61,8 +61,8 @@
                                         <a th:href="@{'/bills/' + ${bill.id}}" th:text="${bill.serviceUnit.name}"></a>
                                     </td>
                                     <td th:text="${bill.actualCost}"></td>
-                                    <td th:text="${#dates.format(bill.startDate, 'dd-MM-yyyy')}"></td>
-                                    <td th:text="${#dates.format(bill.endDate, 'dd-MM-yyyy')}"></td>
+                                    <td th:text="${#dates.format(bill.startDate, 'dd:MM:yyyy')}"></td>
+                                    <td th:text="${#dates.format(bill.endDate, 'dd:MM:yyyy')}"></td>
                                     <td>
                                         <a th:href="@{'/users/' + ${bill.user.id}}" th:text="${bill.user.username}"></a>
                                     </td>
