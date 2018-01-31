@@ -33,8 +33,10 @@ public class BillController {
 
     @GetMapping("/bills/{id}")
     public String getBillUnit(@PathVariable final Long id, Model model) {
-        model.addAttribute("bill", billService.getById(id));
-        model.addAttribute("unpaidBills", billService.getAllNonExpiredUnpaidBillsOfUser(userService.getCurrentUserId()));
+        Bill currentBill = billService.getById(id);
+        model.addAttribute("bill", currentBill);
+        model.addAttribute("service", currentBill.getServiceUnit());
+        // model.addAttribute("unpaidBills", billService.getAllNonExpiredUnpaidBillsOfUser(userService.getCurrentUserId()));
         return "bill/bill_item";
     }
 }

@@ -113,10 +113,10 @@
             <p>Fill in the form below to get instant access.</p><br>
             <form th:action="@{/registration}" th:object="${userForm}" method="POST" enctype="utf8" role="form">
                 <input th:field="*{username}" type="text" name="username" placeholder="Username">
-                <p th:if="${#fields.hasGlobalErrors()}" th:text="${userWithSameUserName}"></p>
-                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+                <div th:if="${#fields.hasGlobalErrors()}" th:text="${userWithSameUserName}" class="alert alert-danger"></div>
+                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="alert alert-danger"></div>
                 <input th:field="*{fullname}" type="text" name="fullname" placeholder="Fullname">
-                <p th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></p>
+                <div th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}" class="alert alert-danger"></div>
                 <!--<select>-->
                     <!--<option th:each="role : ${T(com.epam.lab.mobilepaymentsystem.model.Role).values()}"-->
                             <!--th:value="${role.getDisplayName()}"-->
@@ -124,9 +124,9 @@
                     <!--</option>-->
                 <!--</select>-->
                 <input th:field="*{password}" type="password" name="password" placeholder="Password">
-                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="alert alert-danger"></div>
                 <input th:field="*{confirmPassword}" type="password" name="confirmPassword" placeholder="Confirm password">
-                <p th:if="${#fields.hasGlobalErrors()}" th:text="${passwordsNotSame}"></p>
+                <div th:if="${#fields.hasGlobalErrors()}" th:text="${passwordsNotSame}" class="alert alert-danger"></div>
                 <input type="submit" name="register" class="login loginmodal-submit" value="Sign me up!">
             </form>
 

@@ -2,6 +2,7 @@ package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.UserRepository;
 import com.epam.lab.mobilepaymentsystem.model.Role;
+import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,6 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -62,6 +66,10 @@ public class UserService {
         return userRepository.count();
     }
 
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
+
     public Long getCurrentUserId() {
         org.springframework.security.core.userdetails.User userSecurity =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder
@@ -77,8 +85,9 @@ public class UserService {
         return userRepository.findByUsername(userSecurity.getUsername());
     }
 
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public List<ServiceUnit> getActiveServicesByUserId() {
+        User user = getCurrentUser();
+        return new ArrayList<>(user.getServiceUnits());
     }
 
     // TODO: not sure about working with model in backend
@@ -96,17 +105,21 @@ public class UserService {
 
         if(getByUsername(user.getUsername()) != null) {
             bindingResult.reject("username");
-            model.addAttribute("userWithSameUserName", "There is already a user registered with the username provided");
+            model.addAttribute(
+                    "userWithSameUserName",
+                    "There is already a user registered with the username provided");
             return "user/registration";
         }
 
-        if(!user.getPassword().equals(user.getConfirmPassword())) {
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
             bindingResult.reject("password");
-            model.addAttribute("passwordsNotSame", "Passwords don't match");
+            model.addAttribute(
+                    "passwordsNotSame",
+                    "Passwords don't match");
             return "user/registration";
         }
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "user/registration";
         }
 

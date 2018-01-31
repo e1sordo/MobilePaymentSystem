@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.w3.org/1999/xhtml">
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
 
@@ -36,7 +37,7 @@
             <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
-        <div class="row">
+        <div class="row" sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="col-lg-3 col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -46,13 +47,13 @@
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div class="huge" th:text="${numberOfUsers}">17</div>
-                                <div>Subscribers</div>
+                                <div th:text="#{container.word.subscribers}">Subscribers</div>
                             </div>
                         </div>
                     </div>
                     <a th:href="@{/users}">
                         <div class="panel-footer">
-                            <span class="pull-left">3 Unconfirmed</span>
+                            <span class="pull-left">3 <span th:text="#{container.word.unconfirmed}">Unconfirmed</span></span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                             <div class="clearfix"></div>
                         </div>
@@ -74,7 +75,7 @@
                     </div>
                     <a th:href="@{/services}">
                         <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
+                            <span class="pull-left" th:text="#{container.word.view-details}">View Details</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                             <div class="clearfix"></div>
                         </div>
@@ -94,9 +95,9 @@
                             </div>
                         </div>
                     </div>
-                    <a href="/bills">
+                    <a th:href="@{/bills}">
                         <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
+                            <span class="pull-left" th:text="#{container.word.view-details}">View Details</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                             <div class="clearfix"></div>
                         </div>
@@ -116,9 +117,9 @@
                             </div>
                         </div>
                     </div>
-                    <a href="/bills">
+                    <a th:href="@{/bills}">
                         <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
+                            <span class="pull-left" th:text="#{container.word.view-details}">View Details</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                             <div class="clearfix"></div>
                         </div>
@@ -133,29 +134,11 @@
                     <div class="panel-heading">
                         <i class="fa fa-bar-chart-o fa-fw"></i>
                         <span th:text="#{app.project.title}">Project #7. Mobile Payment System.</span>
-                        <div class="pull-right">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                    Actions
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu pull-right" role="menu">
-                                    <li><a href="#">Action</a>
-                                    </li>
-                                    <li><a href="#">Another action</a>
-                                    </li>
-                                    <li><a href="#">Something else here</a>
-                                    </li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Separated link</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <p th:text="#{app.project.description}">The administrator connects subscribers. The subscriber can choose one or several of the provided services. The subscriber pays the bill for calls and services. The administrator can view the list of unpaid invoices and block the subscriber.</p>
+                        <p><img src="http://www.beliefmedia.com/wp-content/uploads/2017/06/telephone-wp-shortcode-1000x200.jpg" class="img-responsive"></p>
                     </div>
                     <!-- /.panel-body -->
                 </div>

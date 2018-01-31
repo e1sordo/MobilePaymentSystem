@@ -59,9 +59,11 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String showMyProfile(Principal principal) {
+    public String showMyProfile(Principal principal, Model model) {
         Long id = userService.getByUsername(principal.getName()).getId();
-        return "redirect:/users/" + id;
+        model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("howMuchToIncrease", new IntegerWrapper());
+        return "user/user_item";
     }
 
     @GetMapping("/users/{id}")
@@ -73,11 +75,9 @@ public class UserController {
 
     @PostMapping("/users/{id}/refill")
     public String showButtonTopUpBalance(@PathVariable final Long id,
-                                         @ModelAttribute("howMuchToIncrease") IntegerWrapper howMuch) {
-        // todo минимальная сумма для пополнения 50
+                                         @Valid @ModelAttribute("howMuchToIncrease") IntegerWrapper howMuch) {
         userService.topUpBalance(id, howMuch.getTranche());
-        // todo add binding with success message
-        return "redirect:/users/" + id;
+        return "redirect:/profile";
     }
 
     @GetMapping("/profile/services")
