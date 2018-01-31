@@ -35,8 +35,8 @@ public class ServiceUnitService {
         return serviceUnitsRepository.findAll();
     }
 
-    public List<ServiceUnit> getAllPaidServiceOfUser(long userId) {
-        List<Bill> paidBills = (List<Bill>) billService.getAllNonExpiredPaidBillsOfUser(userId);
+    public List<ServiceUnit> getAllPaidServiceOfUserByUserId(long userId) {
+        List<Bill> paidBills = billService.getAllNonExpiredPaidBillsOfUserByUserId(userId);
         List<ServiceUnit> serviceUnits = new ArrayList<>();
 
         for (Bill bill : paidBills) {
@@ -46,8 +46,8 @@ public class ServiceUnitService {
         return serviceUnits;
     }
 
-    public List<ServiceUnit> getAllServicesWithoutSubscribe(long userId) {
-        List<ServiceUnit> services = (List<ServiceUnit>) serviceUnitsRepository.findAll();
+    public List<ServiceUnit> getAllServicesWithoutSubscribeOfUserByUserId(long userId) {
+        List<ServiceUnit> services = serviceUnitsRepository.findAll();
         User user = userService.getUserById(userId);
         Set<ServiceUnit> userServices = user.getServiceUnits();
         services.removeAll(userServices);
@@ -62,15 +62,15 @@ public class ServiceUnitService {
         return serviceUnitsRepository.findOne(id);
     }
 
-    public long numberOfActiveServicesOfUser(long userId) {
-        return getAllPaidServiceOfUser(userId).size();
+    public long numberOfActiveServicesOfUserByUserId(long userId) {
+        return getAllPaidServiceOfUserByUserId(userId).size();
     }
 
     public long numberOfAllService() {
         return serviceUnitsRepository.count();
     }
 
-    public void subscribeUserToService(long userId, long serviceId) {
+    public void subscribeUserToServiceByUserAndServiceId(long userId, long serviceId) {
         // if we chose actual existing service
         if (serviceId != -1) {
             User user = userService.getUserById(userId);
@@ -85,19 +85,17 @@ public class ServiceUnitService {
         }
     }
 
-    public void unsubscribeUserFromService(long userId, long serviceId) {
+    public void unsubscribeUserFromServiceByUserAndServiceId(long userId, long serviceId) {
         User user = userService.getUserById(userId);
         ServiceUnit service = getServiceById(serviceId);
 
         // if service exists and it is unpaid - remove also unpaid bill
         if (user.removeService(service)) {
             userService.updateUser(user);
-            billService.deleteUnpaidBill(user.getId(), serviceId);
+            billService.deleteUnpaidBillByUserIdAndServiceId(user.getId(), serviceId);
         }
     }
 
-
-    // TODO: error about problems with cost doesn't appear
     public String validateNewServiceAndAdd(ServiceUnit serviceUnit, BindingResult bindingResult, Model model) {
         if(getByServiceName(serviceUnit.getName()) != null) {
             bindingResult.reject("name");
@@ -105,7 +103,6 @@ public class ServiceUnitService {
         }
 
         if(bindingResult.hasErrors()) {
-            // TODO: info about other errors!
             return "service/service_add";
         }
 
@@ -113,17 +110,20 @@ public class ServiceUnitService {
         return "redirect:/services";
     }
 
-    public void bigAdminButton() {
+    public void globalCheckBill() {
         Iterable<User> users = userService.getAllUsers();
         for (User user : users) {
-            Iterable<Bill> outOfDateUnpaidBills = billService.getAllExpiredUnpaidBillsOfUser(user.getId());
-
-            for (Bill bill : outOfDateUnpaidBills) {
-                unsubscribeUserFromService(user.getId(), bill.getServiceUnit().getId());
-            }
-
-            billService.withdrawCashToPayForBills(user.getId());
-
+           localCheckBill(user.getId());
         }
+    }
+
+    public void localCheckBill(long userId) {
+        Iterable<Bill> outOfDateUnpaidBills = billService.getAllUnpaidBillsOfUserByUserId(userId);
+
+        for (Bill bill : outOfDateUnpaidBills) {
+            unsubscribeUserFromServiceByUserAndServiceId(userId, bill.getServiceUnit().getId());
+        }
+
+        billService.withdrawCashToPayForServicesByUserId(userId);
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -37,54 +36,59 @@ public class BillService {
         bill.setServiceUnit(serviceUnit);
         bill.setPaidFor(false);
         bill.setActualCost(serviceUnit.getCost());
+        setDateForBill(bill);
 
+        billsRepository.save(bill);
+        return bill;
+    }
+
+    private void setDateForBill(Bill bill) {
         Calendar calendar = Calendar.getInstance();
         bill.setStartDate(new Date(calendar.getTimeInMillis()));
-        int duration = serviceUnit.getDuration();
+        int duration = bill.getServiceUnit().getDuration();
         if (duration <= 0) {
             calendar.set(2038, Calendar.JANUARY, 13);
             // https://en.wikipedia.org/wiki/Year_2038_problem :)
             bill.setEndDate(new Date(calendar.getTimeInMillis()));
         } else {
-            calendar.add(Calendar.DATE, serviceUnit.getDuration());
+            calendar.add(Calendar.DATE, bill.getServiceUnit().getDuration());
             bill.setEndDate(new Date(calendar.getTimeInMillis()));
         }
-
-        billsRepository.save(bill);
-        return bill;
     }
 
     public Bill getById(long billId) {
         return billsRepository.findOne(billId);
     }
 
-    public void deleteUnpaidBill(long userId, long serviceId) {
+    public void deleteUnpaidBillByUserIdAndServiceId(long userId, long serviceId) {
         billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
     }
 
-    public Iterable<Bill> getAllPaidBillsOfUser(long userId) {
+    public List<Bill> getAllPaidBillsOfUserByUserId(long userId) {
         return billsRepository.findAllByUser_IdAndPaidFor(userId, PAID);
     }
 
-    public Iterable<Bill> getAllNonExpiredPaidBillsOfUser(long userId) {
-        return billsRepository.findAllByUser_IdAndPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByActualCostDesc(userId, PAID, getToday(), getToday());
+    public List<Bill> getAllNonExpiredPaidBillsOfUserByUserId(long userId) {
+        return billsRepository.
+                findAllByUser_IdAndPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByActualCostDesc(userId, PAID, getCurrentDate(), getCurrentDate());
     }
 
-    public Iterable<Bill> getAllNonExpiredUnpaidBillsOfUser(long userId) {
-        return billsRepository.findAllByUser_IdAndPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByActualCostDesc(userId, UNPAID, getToday(), getToday());
+    public List<Bill> getAllUnpaidBillsOfUserByUserId(long userId) {
+        return billsRepository.findAllByUser_IdAndPaidFor(userId, UNPAID);
     }
 
     // Методы для получения всех оплаченных и неоплаченных счетов всех пользователей [Admin]
-    public Iterable<Bill> getAllNonExpiredUnpaidBillsOfAllUsersOrderedById() {
-        return billsRepository.findAllByPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByUser_Id(UNPAID, getToday(), getToday());
+    public List<Bill> getAllUnpaidBillsOfAllUsersOrderedById() {
+        return billsRepository.findAllByPaidForOrderByUser_Id(UNPAID);
     }
 
-    public Iterable<Bill> getAllNonExpiredPaidBillsOfAllUsersOrderedById() {
-        return billsRepository.findAllByPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByUser_Id(PAID, getToday(), getToday());
+    public List<Bill> getAllNonExpiredPaidBillsOfAllUsersOrderedById() {
+        return billsRepository.
+                findAllByPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByUser_Id(PAID, getCurrentDate(), getCurrentDate());
     }
 
-    public Iterable<Bill> getAllExpiredUnpaidBillsOfUser(long userId) {
-        return billsRepository.findAllByUser_IdAndPaidForAndEndDateBefore(userId, UNPAID, getToday());
+    public List<Bill> getAllExpiredPaidBillsOfUserByUserId(long userId) {
+        return billsRepository.findAllByUser_IdAndPaidForAndEndDateBefore(userId, PAID, getCurrentDate());
     }
 
     public long numberOfAllBills() {
@@ -95,29 +99,22 @@ public class BillService {
         return billsRepository.countAllByPaidFor(UNPAID);
     }
 
-    public long numberOfUnpaidBillsOfUser(long userId) {
+    public long numberOfUnpaidBillsOfUserByUserId(long userId) {
         return billsRepository.countAllByPaidForAndUser_Id(UNPAID, userId);
     }
 
-    public int countTotalSum(Iterable<Bill> bills) {
-        int total = 0;
-
-        for (Bill bill: bills) {
-            total += bill.getActualCost();
-        }
-        return total;
-    }
-
-    public void withdrawCashToPayForBills(long userId) {
-        List<Bill> unpaidBills = (List<Bill>) getAllNonExpiredUnpaidBillsOfUser(userId);
+    // payment for EXPIRED PAID BILL
+    public void withdrawCashToPayForServicesByUserId(long userId) {
+        List<ServiceUnit> serviceUnits = userService.getActiveServicesByUserId();
         User user = userService.getUserById(userId);
-        Iterator<Bill> iterator = unpaidBills.iterator();
 
-        while (iterator.hasNext()) {
-            Bill bill = iterator.next();
-            withdrawCashToPayForOneBill(bill, user);
-            iterator.remove();
+        for (ServiceUnit service : serviceUnits) {
+            Bill bill = getExpiredPaidBillByUserIdAndServiceId(userId, service.getId());
+            if (bill != null) {
+                withdrawCashToPayForOneBill(bill, user);
+            }
         }
+
         userService.updateUser(user); // todo: maybe it's not needed
     }
 
@@ -126,11 +123,16 @@ public class BillService {
             int bankAccount = user.getBankAccount() - bill.getActualCost();
             user.setBankAccount(bankAccount);
             bill.setPaidFor(true);
+            setDateForBill(bill);
             save(bill);
         }
     }
 
-    private Date getToday() {
+    private Date getCurrentDate() {
         return new Date(System.currentTimeMillis());
+    }
+
+    public Bill getExpiredPaidBillByUserIdAndServiceId(long userId, long serviceId) {
+        return billsRepository.findBillByUser_IdAndServiceUnit_idAndEndDateBefore(userId, serviceId, getCurrentDate());
     }
 }

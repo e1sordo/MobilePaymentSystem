@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+
 @Controller
 public class BillController {
 
@@ -24,8 +26,8 @@ public class BillController {
     @GetMapping("/bills")
     public String getBills(Model model) {
         long id = userService.getCurrentUserId();
-        Iterable<Bill> oldBills = billService.getAllPaidBillsOfUser(id);
-        Iterable<Bill> unpaidBills = billService.getAllNonExpiredUnpaidBillsOfUser(id);
+        List<Bill> oldBills = billService.getAllPaidBillsOfUserByUserId(id);
+        List<Bill> unpaidBills = billService.getAllUnpaidBillsOfUserByUserId(id);
         model.addAttribute("paidBills", oldBills);
         model.addAttribute("unpaidBills", unpaidBills);
         return "bill/bill_list";
