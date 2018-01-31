@@ -36,7 +36,7 @@ public class ServiceUnitService {
     }
 
     public List<ServiceUnit> getAllPaidServiceOfUserByUserId(long userId) {
-        List<Bill> paidBills = (List<Bill>) billService.getAllNonExpiredPaidBillsOfUserByUserId(userId);
+        List<Bill> paidBills = billService.getAllNonExpiredPaidBillsOfUserByUserId(userId);
         List<ServiceUnit> serviceUnits = new ArrayList<>();
 
         for (Bill bill : paidBills) {
@@ -47,7 +47,7 @@ public class ServiceUnitService {
     }
 
     public List<ServiceUnit> getAllServicesWithoutSubscribeOfUserByUserId(long userId) {
-        List<ServiceUnit> services = (List<ServiceUnit>) serviceUnitsRepository.findAll();
+        List<ServiceUnit> services = serviceUnitsRepository.findAll();
         User user = userService.getUserById(userId);
         Set<ServiceUnit> userServices = user.getServiceUnits();
         services.removeAll(userServices);

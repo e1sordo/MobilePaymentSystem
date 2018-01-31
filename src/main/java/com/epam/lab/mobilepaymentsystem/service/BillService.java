@@ -64,30 +64,30 @@ public class BillService {
         billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
     }
 
-    public Iterable<Bill> getAllPaidBillsOfUserByUserId(long userId) {
+    public List<Bill> getAllPaidBillsOfUserByUserId(long userId) {
         return billsRepository.findAllByUser_IdAndPaidFor(userId, PAID);
     }
 
-    public Iterable<Bill> getAllNonExpiredPaidBillsOfUserByUserId(long userId) {
+    public List<Bill> getAllNonExpiredPaidBillsOfUserByUserId(long userId) {
         return billsRepository.
                 findAllByUser_IdAndPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByActualCostDesc(userId, PAID, getCurrentDate(), getCurrentDate());
     }
 
-    public Iterable<Bill> getAllUnpaidBillsOfUserByUserId(long userId) {
+    public List<Bill> getAllUnpaidBillsOfUserByUserId(long userId) {
         return billsRepository.findAllByUser_IdAndPaidFor(userId, UNPAID);
     }
 
     // Методы для получения всех оплаченных и неоплаченных счетов всех пользователей [Admin]
-    public Iterable<Bill> getAllUnpaidBillsOfAllUsersOrderedById() {
+    public List<Bill> getAllUnpaidBillsOfAllUsersOrderedById() {
         return billsRepository.findAllByPaidForOrderByUser_Id(UNPAID);
     }
 
-    public Iterable<Bill> getAllNonExpiredPaidBillsOfAllUsersOrderedById() {
+    public List<Bill> getAllNonExpiredPaidBillsOfAllUsersOrderedById() {
         return billsRepository.
                 findAllByPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByUser_Id(PAID, getCurrentDate(), getCurrentDate());
     }
 
-    public Iterable<Bill> getAllExpiredPaidBillsOfUserByUserId(long userId) {
+    public List<Bill> getAllExpiredPaidBillsOfUserByUserId(long userId) {
         return billsRepository.findAllByUser_IdAndPaidForAndEndDateBefore(userId, PAID, getCurrentDate());
     }
 
