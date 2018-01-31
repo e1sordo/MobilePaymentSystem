@@ -4,14 +4,17 @@ import com.epam.lab.mobilepaymentsystem.model.Bill;
 import org.springframework.data.repository.CrudRepository;
 
 import java.sql.Date;
+import java.util.List;
 
 public interface BillsRepository extends CrudRepository<Bill, Long> {
 
     void deleteByUser_IdAndServiceUnit_IdAndPaidFor(long userId, long serviceId, boolean isPaid);
 
-    Bill findBillByUser_IdAndServiceUnit_id(long userId, long serviceId);
+    Bill findBillByUser_IdAndServiceUnit_idAndEndDateBefore(long user_id, long serviceUnit_id, Date endDate);
 
     Iterable<Bill> findAllByUser_IdAndPaidFor(long userId, boolean isPaid);
+
+    List<Bill> findAllByPaidForOrderByUser_Id(Boolean paidFor);
 
     Iterable<Bill> findAllByPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByUser_Id(Boolean paidFor, Date startDate, Date endDate);
 
