@@ -123,7 +123,8 @@
                         </div>
 
                         <div class="col-md-12" style="margin-bottom: 1em; text-align: right;">
-                            <form action="" method="post" th:if="${bill.paidFor != true}"
+                            <form th:action="@{'/users/{uid}/bills/{bid}/pay' (uid=${userId}, bid=${bill.id})}"
+                                  method="post" th:if="${bill.paidFor != true}"
                                   style="float:right; margin-left: 1em;">
                                 <button type="submit" th:text="#{bills.item.button.pay}"
                                         class="btn btn-primary">Оплатить</button>

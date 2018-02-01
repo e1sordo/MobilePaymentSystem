@@ -47,7 +47,7 @@ public class BillController {
 
     @GetMapping("/users/{uid}/services")
     public String getServiceListByUser(@PathVariable final long uid, Model model) {
-        List<ServiceUnit> userBills = serviceUnitService.getAllPaidServiceOfUserByUserId(uid);
+        List<Bill> userBills = billService.getAllPaidBillsOfUserByUserId(uid);
         model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
         return "service/service_user_list";
@@ -65,7 +65,7 @@ public class BillController {
     @GetMapping("/profile/services")
     public String getServiceListByCurrentUser(Model model) {
         final long id = userService.getCurrentUserId();
-        List<ServiceUnit> userBills = serviceUnitService.getAllPaidServiceOfUserByUserId(id);
+        List<Bill> userBills = billService.getAllPaidBillsOfUserByUserId(id);
         model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
         return "service/service_user_list";
@@ -89,6 +89,14 @@ public class BillController {
                                             @PathVariable("bid") final long bid) {
         serviceUnitService.unsubscribeUserFromServiceByUserAndServiceId(
                 uid, billService.getById(bid).getServiceUnit().getId());
+        return "redirect:/users/" + uid + "/bills";
+    }
+
+    @PostMapping("/users/{uid}/bills/{bid}/pay")
+    public String payUnpaidBill(@PathVariable("uid") final long uid,
+                                @PathVariable("bid") final long bid) {
+        billService.withdrawCashToPayForOneBill(billService.getById(bid),
+                userService.getUserById(uid));
         return "redirect:/users/" + uid + "/bills";
     }
 }
