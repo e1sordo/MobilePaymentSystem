@@ -1,7 +1,6 @@
 package com.epam.lab.mobilepaymentsystem.controller;
 
 import com.epam.lab.mobilepaymentsystem.model.Bill;
-import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.service.BillService;
 import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
@@ -30,7 +29,7 @@ public class BillController {
 
     @GetMapping("/bills")
     public String getBills(Model model) {
-        List<Bill> oldBills = billService.getAllNonExpiredPaidBillsOfAllUsersOrderedById();
+        List<Bill> oldBills = billService.getAllPaidBillsOfAllUsersOrderedById();
         List<Bill> unpaidBills = billService.getAllUnpaidBillsOfAllUsersOrderedById();
         model.addAttribute("paidBills", oldBills);
         model.addAttribute("unpaidBills", unpaidBills);
@@ -65,7 +64,7 @@ public class BillController {
     @GetMapping("/profile/services")
     public String getServiceListByCurrentUser(Model model) {
         final long id = userService.getCurrentUserId();
-        List<Bill> userBills = billService.getAllPaidBillsOfUserByUserId(id);
+        List<Bill> userBills = billService.getAllPaidServiceOfUserByUserId(id);
         model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
         return "service/service_user_list";

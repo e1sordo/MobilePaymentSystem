@@ -84,9 +84,9 @@ public class BillService {
         return billsRepository.findAllByPaidForOrderByUser_Id(UNPAID);
     }
 
-    public List<Bill> getAllNonExpiredPaidBillsOfAllUsersOrderedById() {
+    public List<Bill> getAllPaidBillsOfAllUsersOrderedById() {
         return billsRepository.
-                findAllByPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByUser_Id(PAID, getCurrentDate(), getCurrentDate());
+                findAllByPaidForOrderByUser_Id(PAID);
     }
 
     public List<Bill> getAllExpiredPaidBillsOfUserByUserId(long userId) {
@@ -107,7 +107,7 @@ public class BillService {
 
     // payment for EXPIRED PAID BILL
     public void withdrawCashToPayForServicesByUserId(long userId) {
-        List<ServiceUnit> serviceUnits = userService.getActiveServicesByUserId();
+        List<ServiceUnit> serviceUnits = userService.getActiveServicesByUserId(userId);
         User user = userService.getUserById(userId);
 
         for (ServiceUnit service : serviceUnits) {
@@ -146,6 +146,9 @@ public class BillService {
     }
 
     public List<Bill> getAllPaidServiceOfUserByUserId(long userId) {
-        return getAllNonExpiredPaidBillsOfUserByUserId(userId);
+        List<Bill> allServices = getAllNonExpiredPaidBillsOfUserByUserId(userId);
+
+        allServices.removeIf(bill -> !bill.getUser().getServiceUnits().contains(bill.getServiceUnit()));
+        return allServices;
     }
 }

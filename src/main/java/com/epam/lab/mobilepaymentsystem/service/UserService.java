@@ -90,8 +90,8 @@ public class UserService {
         return userRepository.findByUsername(userSecurity.getUsername());
     }
 
-    public List<ServiceUnit> getActiveServicesByUserId() {
-        User user = getCurrentUser();
+    public List<ServiceUnit> getActiveServicesByUserId(long userId) {
+        User user = getUserById(userId);
         return new ArrayList<>(user.getServiceUnits());
     }
 
