@@ -60,7 +60,7 @@ public class ServiceUnitController {
     }
 
     // TODO: unsubscribe process doesn't return actual data after pressing a button
-    @GetMapping("service/my")
+    @GetMapping("/profile/services")
     public String listActiveServices(@ModelAttribute("selectedService") ServiceUnit serviceUnit, Model model) {
         List<ServiceUnit> activeServices = serviceUnitService.getAllPaidServiceOfUserByUserId(userService.getCurrentUserId());
         model.addAttribute("activeServices", activeServices);

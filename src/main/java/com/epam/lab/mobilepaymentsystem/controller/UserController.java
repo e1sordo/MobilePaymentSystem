@@ -70,10 +70,8 @@ public class UserController {
     public String showMyProfile(Model model) {
         long id = userService.getCurrentUserId();
         model.addAttribute("user", userService.getCurrentUser());
-        model.addAttribute("currentUserId", id);
-        model.addAttribute("numberOfServices", serviceUnitService.numberOfActiveServicesOfUserByUserId(id));
-        model.addAttribute("numberOfBills", billService.numberOfUnpaidBillsOfUserByUserId(id));
-        model.addAttribute("howMuchToIncrease", new IntegerWrapper());
+        model.addAttribute("myProfile", true);
+        addModelAttributes(model, id);
         return "user/user_item";
     }
 
@@ -81,15 +79,9 @@ public class UserController {
     public String showButtonTopUpBalance(@Valid @ModelAttribute("howMuchToIncrease") IntegerWrapper howMuch,
                                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-//            model.addAllAttributes(bindingResult.getModel());
-
             long id = userService.getCurrentUserId();
+            addModelAttributes(model, id);
             model.addAttribute("user", userService.getCurrentUser());
-            model.addAttribute("currentUserId", id);
-            model.addAttribute("numberOfServices", serviceUnitService.numberOfActiveServicesOfUserByUserId(id));
-            model.addAttribute("numberOfBills", billService.numberOfUnpaidBillsOfUserByUserId(id));
-            model.addAttribute("howMuchToIncrease", new IntegerWrapper());
-
             model.addAttribute("error", true);
             return "user/user_item";
         }
@@ -100,14 +92,25 @@ public class UserController {
     @GetMapping("/users/{id}")
     public String showUserProfile(@PathVariable final Long id, Model model) {
         model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("myProfile", false);
+        addModelAttributes(model, id);
         return "user/user_item";
     }
 
-    @GetMapping("/profile/services")
-    public String showMyServices(Principal principal) {
-        Long id = userService.getByUsername(principal.getName()).getId();
-        return "redirect:/users/" + id + "/services";
+    private void addModelAttributes(Model model, long userId) {
+        model.addAttribute("currentUserId", userId);
+        model.addAttribute("numberOfServices",
+                serviceUnitService.numberOfActiveServicesOfUserByUserId(userId));
+        model.addAttribute("numberOfBills",
+                billService.numberOfUnpaidBillsOfUserByUserId(userId));
+        model.addAttribute("howMuchToIncrease", new IntegerWrapper());
     }
+
+//    @GetMapping("/profile/services")
+//    public String showMyServices(Principal principal) {
+//        Long id = userService.getByUsername(principal.getName()).getId();
+//        return "redirect:/users/" + id + "/services";
+//    }
 
     @DeleteMapping("users/{id}/delete")
     public String deleteUser(@PathVariable final Long id) {

@@ -137,4 +137,8 @@ public class BillService {
     public Bill getExpiredPaidBillByUserIdAndServiceId(long userId, long serviceId) {
         return billsRepository.findBillByUser_IdAndServiceUnit_idAndEndDateBefore(userId, serviceId, getCurrentDate());
     }
+
+    public boolean checkOldBill(Bill bill) {
+        return bill.getEndDate().compareTo(getCurrentDate()) < 0;
+    }
 }

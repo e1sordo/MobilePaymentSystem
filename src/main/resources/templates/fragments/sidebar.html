@@ -16,7 +16,7 @@
                     <a th:href="@{/users}"><i class="fa fa-table fa-fw"></i> <span th:text="#{sidebar.link.users}">Users</span></a>
                 </li>
                 <li sec:authorize="hasAnyRole('USER', 'SUBSCRIBER', 'ADMIN')">
-                    <a href="#"><i class="fa fa-wrench fa-fw"></i> <span th:text="#{sidebar.link.services}">Services</span><span class="fa arrow"></span></a>
+                    <a th:href="@{/services}"><i class="fa fa-wrench fa-fw"></i> <span th:text="#{sidebar.link.services}">Services</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
                             <a th:href="@{/services}"><span th:text="#{sidebar.link.services.all}">All services</span></a>
