@@ -105,7 +105,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="bill : ${oldUserServices}" th:if="${empty == false}">
+                                <tr th:each="bill : ${oldUserServices}" th:if="${empty2 == false}">
                                     <td th:if="${currentUserId == bill.user.id}">
                                         <a th:href="@{'/profile/bills/{bid}' (bid=${bill.id})}"
                                            th:text="${bill.serviceUnit.name}"></a>
@@ -124,7 +124,7 @@
                                         <a th:href="@{'/users/' + ${bill.user.id}}" th:text="${bill.user.username}"></a>
                                     </td>
                                 </tr>
-                                <tr th:unless="${empty == false}"><td colspan="5" th:text="#{global.isEmpty}"></td></tr>
+                                <tr th:unless="${empty2 == false}"><td colspan="5" th:text="#{global.isEmpty}"></td></tr>
                                 </tbody>
                             </table>
                         </div>

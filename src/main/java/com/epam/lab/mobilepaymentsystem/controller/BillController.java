@@ -1,7 +1,6 @@
 package com.epam.lab.mobilepaymentsystem.controller;
 
 import com.epam.lab.mobilepaymentsystem.model.Bill;
-import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.service.BillService;
 import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
@@ -30,7 +29,7 @@ public class BillController {
 
     @GetMapping("/bills")
     public String getBills(Model model) {
-        List<Bill> oldBills = billService.getAllNonExpiredPaidBillsOfAllUsersOrderedById();
+        List<Bill> oldBills = billService.getAllPaidBillsOfAllUsersOrderedById(); // todo: check
         List<Bill> unpaidBills = billService.getAllUnpaidBillsOfAllUsersOrderedById();
         model.addAttribute("paidBills", oldBills);
         model.addAttribute("unpaidBills", unpaidBills);
@@ -48,10 +47,13 @@ public class BillController {
 
     @GetMapping("/users/{uid}/services")
     public String getServiceListByUser(@PathVariable final long uid, Model model) {
-        List<Bill> userBills = billService.getAllPaidBillsOfUserByUserId(uid);
+        List<Bill> userBills = billService.getAllPaidServiceOfUserByUserId(uid);
+        List<Bill> userInactiveBills = billService.getAllExpiredActiveServicesOfUserByUserId(uid);
         model.addAttribute("currentUserId", userService.getCurrentUserId());
         model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
+        model.addAttribute("oldUserServices", userInactiveBills);
+        model.addAttribute("empty2", userInactiveBills.isEmpty());
         return "service/service_user_list";
     }
 
@@ -69,10 +71,12 @@ public class BillController {
     public String getServiceListByCurrentUser(Model model) {
         final long id = userService.getCurrentUserId();
         List<Bill> userBills = billService.getAllPaidServiceOfUserByUserId(id);
+        List<Bill> userInactiveBills = billService.getAllExpiredActiveServicesOfUserByUserId(id);
         model.addAttribute("currentUserId", userService.getCurrentUserId());
         model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
-        model.addAttribute("oldUserServices", userBills);
+        model.addAttribute("oldUserServices", userInactiveBills);
+        model.addAttribute("empty2", userInactiveBills.isEmpty());
         return "service/service_user_list";
     }
 
