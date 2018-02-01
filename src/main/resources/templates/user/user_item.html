@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="EPAM lab">
 
-    <title th:text="#{title.page.users}"> User list</title>
+    <title th:text="#{title.page.user-item}"> User list</title>
 
     <div th:replace="fragments/header :: header-css"></div>
 
@@ -61,43 +61,29 @@
                                 }
                             </style>
 
-                            <form role="form" method="post" th:object="${howMuchToIncrease}"
-                                  th:action="@{'/users/{id}/refill' (id=${user.id})}" id="refill-form">
+                            <form role="form" method="post" th:if="${user.id == currentUserId}"
+                                  data-th-object="${howMuchToIncrease}"
+                                  data-th-action="@{/profile}" id="refill-form">
                                 <div>
                                     <div class="input-group mb-3">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-usd"></span></span>
                                             <input type="number" class="form-control" name="tranche" id="tranche"
-                                                   th:field="*{tranche}"/>
-                                            <div th:if="${error}" th:text="${error}"></div>
+                                                   placeholder="Введите число от 50 до 1000"
+                                                   data-th-field="${howMuchToIncrease.tranche}"/>
+                                            <!--<div th:if="${error}" th:text="${error}"></div>-->
                                         </div>
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" style="margin-left:1em;" type="submit">Пополнить</button>
                                         </div>
                                     </div>
-
                                 </div>
                             </form>
 
-
-                            <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-                            <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-                            <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
-
-                            <script type="text/javascript">
-                                $(function(){
-                                    $('#refill-form').validate({
-                                        rules: {
-                                            tranche: {
-                                                range: [50, 1000],
-                                                required: true
-                                            }
-                                        }
-                                    });
-                                });
-
-                            </script>
-
+                            <div class="alert alert-danger" style="float: left; margin-top: 1em;"
+                                 data-th-if="${error == true}">
+                                The input value should be in range from 50 to 1000.
+                            </div>
 
                         </div>
                         <div class="col-lg-3 col-md-6">
@@ -108,14 +94,14 @@
                                             <i class="fa fa-exchange fa-5x"></i>
                                         </div>
                                         <div class="col-xs-9 text-right">
-                                            <div class="huge">4</div>
-                                            <div>Services</div>
+                                            <div class="huge" th:text="${numberOfServices}"></div>
+                                            <div th:text="#{sidebar.link.services}">Services</div>
                                         </div>
                                     </div>
                                 </div>
                                 <a th:href="@{${user.id} + '/services'}">
                                     <div class="panel-footer">
-                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-left" th:text="#{container.word.view-details}">View Details</span>
                                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                         <div class="clearfix"></div>
                                     </div>
@@ -130,14 +116,14 @@
                                             <i class="fa fa-credit-card fa-5x"></i>
                                         </div>
                                         <div class="col-xs-9 text-right">
-                                            <div class="huge">2</div>
-                                            <div>Unpaid bills</div>
+                                            <div class="huge" th:text="${numberOfBills}">2</div>
+                                            <div th:text="#{sidebar.link.bills}">Unpaid bills</div>
                                         </div>
                                     </div>
                                 </div>
                                 <a th:href="@{${user.id}+'/bills'}">
                                     <div class="panel-footer">
-                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-left" th:text="#{container.word.view-details}">View Details</span>
                                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                         <div class="clearfix"></div>
                                     </div>
