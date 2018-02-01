@@ -48,8 +48,10 @@
                             <div class="span8">
                                 <h3 th:text="${user.fullname}"> fullname</h3>
                                 <h6 th:text="${user.username}"> login</h6>
-                                <h6><strong>Bank book:</strong> <span th:text="${user.bankAccount}"> 0</span> $</h6>
-                                <h6><strong>Group:</strong> <span th:text="${user.role}"> subscriber</span></h6>
+                                <h6><strong th:text="#{users.list.table.bankbook}">Bank book:</strong>
+                                    <span th:text="${user.bankAccount}"> 0</span> $</h6>
+                                <h6><strong th:text="#{users.list.table.group}">Group:</strong>
+                                    <span th:text="${user.role}"> subscriber</span></h6>
                             </div>
 
                             <style>
@@ -74,16 +76,15 @@
                                             <!--<div th:if="${error}" th:text="${error}"></div>-->
                                         </div>
                                         <div class="input-group-append">
-                                            <button class="btn btn-primary" style="margin-left:1em;" type="submit">Пополнить</button>
+                                            <button class="btn btn-primary" style="margin-left:1em;"
+                                                    type="submit" th:text="#{users.item.refill}">Пополнить</button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
 
                             <div class="alert alert-danger" style="float: left; margin-top: 1em;"
-                                 data-th-if="${error == true}">
-                                The input value should be in range from 50 to 1000.
-                            </div>
+                                 data-th-if="${error == true}" th:text="#{error.tranche}"></div>
 
                         </div>
                         <div class="col-lg-3 col-md-6">

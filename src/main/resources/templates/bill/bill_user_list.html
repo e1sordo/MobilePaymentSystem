@@ -55,12 +55,19 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="bill : ${userBills}" th:if="${empty == false}">
-                                    <td>
+                                    <td th:if="${currentUserId == bill.user.id}">
+                                        <a th:href="@{'/profile/bills/{bid}' (bid=${bill.id})}"
+                                           th:text="${bill.serviceUnit.name}"></a>
+                                    </td>
+                                    <td th:unless="${currentUserId == bill.user.id}">
                                         <a th:href="@{'/users/{uid}/bills/{bid}' (uid=${bill.user.id}, bid=${bill.id})}"
                                            th:text="${bill.serviceUnit.name}"></a>
                                     </td>
                                     <td th:text="${bill.actualCost}"></td>
-                                    <td>
+                                    <td th:if="${currentUserId == bill.user.id}">
+                                        <a th:href="@{/profile}" th:text="${bill.user.username}"></a>
+                                    </td>
+                                    <td th:unless="${currentUserId == bill.user.id}">
                                         <a th:href="@{'/users/' + ${bill.user.id}}" th:text="${bill.user.username}"></a>
                                     </td>
                                 </tr>

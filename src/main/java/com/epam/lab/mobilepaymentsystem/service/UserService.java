@@ -34,9 +34,19 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUserById(Long id) {
+    public void deleteUserById(long id) {
         User user = userRepository.findUserById(id);
         user.setRole(Role.ROLE_DELETED.getDisplayName());
+        userRepository.save(user);
+    }
+
+    public void blockUserById(long id, boolean isAlreadyBlocked) {
+        User user = userRepository.findUserById(id);
+        String role = Role.ROLE_LOCKED.getDisplayName();
+        if (isAlreadyBlocked) {
+            role = Role.ROLE_SUBSCRIBER.getDisplayName();
+        }
+        user.setRole(role);
         userRepository.save(user);
     }
 

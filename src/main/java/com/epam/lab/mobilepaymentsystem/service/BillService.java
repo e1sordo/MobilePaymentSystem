@@ -146,6 +146,9 @@ public class BillService {
     }
 
     public List<Bill> getAllPaidServiceOfUserByUserId(long userId) {
-        return getAllNonExpiredPaidBillsOfUserByUserId(userId);
+        List<Bill> allServices = getAllNonExpiredPaidBillsOfUserByUserId(userId);
+
+        allServices.removeIf(bill -> !bill.getUser().getServiceUnits().contains(bill.getServiceUnit()));
+        return allServices;
     }
 }
