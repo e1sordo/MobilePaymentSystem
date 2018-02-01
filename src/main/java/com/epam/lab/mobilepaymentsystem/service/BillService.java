@@ -137,4 +137,15 @@ public class BillService {
     public Bill getExpiredPaidBillByUserIdAndServiceId(long userId, long serviceId) {
         return billsRepository.findBillByUser_IdAndServiceUnit_idAndEndDateBefore(userId, serviceId, getCurrentDate());
     }
+
+    public String validateWithdrawAndPayByBillId(long billId) {
+        Bill bill = getById(billId);
+        if (bill.getEndDate().compareTo(getCurrentDate()) < 0) {
+            return "redirect:/";
+        }
+
+        User user = bill.getUser();
+        withdrawCashToPayForOneBill(bill, user);
+        return "bill/bill_list";
+     }
 }
