@@ -58,7 +58,7 @@ public class BillController {
         model.addAttribute("bill", currentBill);
         model.addAttribute("service", currentBill.getServiceUnit());
         model.addAttribute("userId", uid);
-        model.addAttribute("unsubscribeAviable", billService.checkOldBill(currentBill));
+        model.addAttribute("unsubscribeAviable", billService.isNewBill(currentBill));
         // model.addAttribute("unpaidBills", billService.getAllNonExpiredUnpaidBillsOfUser(userService.getCurrentUserId()));
         return "bill/bill_item";
     }

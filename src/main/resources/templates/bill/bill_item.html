@@ -129,7 +129,7 @@
                                         class="btn btn-primary">Оплатить</button>
                             </form>
                             <form th:action="@{'/users/{uid}/bills/{bid}/unsub' (uid=${userId}, bid=${bill.id})}"
-                                  method="post" th:if="${unsubscribeAviable == false or bill.paidFor == false}">
+                                  method="post" th:if="${unsubscribeAviable == true or bill.paidFor == false}">
                                 <button type="submit" th:text="#{bills.item.button.cancel}"
                                         class="btn btn-secondary">Отказаться</button>
                             </form>
