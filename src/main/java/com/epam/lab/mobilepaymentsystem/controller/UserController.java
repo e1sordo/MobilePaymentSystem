@@ -1,9 +1,9 @@
 package com.epam.lab.mobilepaymentsystem.controller;
 
-import com.epam.lab.mobilepaymentsystem.model.Bill;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import com.epam.lab.mobilepaymentsystem.service.BillService;
 import com.epam.lab.mobilepaymentsystem.service.SecurityService;
+import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
 import com.epam.lab.mobilepaymentsystem.wrapper.IntegerWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Map;
 
 @Controller
 public class UserController {
@@ -22,14 +21,17 @@ public class UserController {
     private final UserService userService;
     private final SecurityService securityService;
     private final BillService billService;
+    private final ServiceUnitService serviceUnitService;
 
     @Autowired
     public UserController(UserService userService,
                           SecurityService securityService,
-                          BillService billService) {
+                          BillService billService,
+                          ServiceUnitService serviceUnitService) {
         this.userService = userService;
         this.securityService = securityService;
         this.billService = billService;
+        this.serviceUnitService = serviceUnitService;
     }
 
     @GetMapping("/registration")
@@ -69,8 +71,8 @@ public class UserController {
         long id = userService.getCurrentUserId();
         model.addAttribute("user", userService.getCurrentUser());
         model.addAttribute("currentUserId", id);
-        model.addAttribute("numberOfServices", billService.getAllNonExpiredPaidBillsOfUserByUserId(id));
-        model.addAttribute("numberOfBills", billService.getAllUnpaidBillsOfUserByUserId(id));
+        model.addAttribute("numberOfServices", serviceUnitService.numberOfActiveServicesOfUserByUserId(id));
+        model.addAttribute("numberOfBills", billService.numberOfUnpaidBillsOfUserByUserId(id));
         model.addAttribute("howMuchToIncrease", new IntegerWrapper());
         return "user/user_item";
     }
@@ -79,7 +81,15 @@ public class UserController {
     public String showButtonTopUpBalance(@Valid @ModelAttribute("howMuchToIncrease") IntegerWrapper howMuch,
                                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAllAttributes(bindingResult.getModel());
+//            model.addAllAttributes(bindingResult.getModel());
+
+            long id = userService.getCurrentUserId();
+            model.addAttribute("user", userService.getCurrentUser());
+            model.addAttribute("currentUserId", id);
+            model.addAttribute("numberOfServices", serviceUnitService.numberOfActiveServicesOfUserByUserId(id));
+            model.addAttribute("numberOfBills", billService.numberOfUnpaidBillsOfUserByUserId(id));
+            model.addAttribute("howMuchToIncrease", new IntegerWrapper());
+
             model.addAttribute("error", true);
             return "user/user_item";
         }
