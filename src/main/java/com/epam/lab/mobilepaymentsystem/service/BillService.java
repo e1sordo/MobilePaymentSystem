@@ -89,10 +89,6 @@ public class BillService {
                 findAllByPaidForOrderByUser_Id(PAID);
     }
 
-    public List<Bill> getAllExpiredPaidBillsOfUserByUserId(long userId) {
-        return billsRepository.findAllByUser_IdAndPaidForAndEndDateBefore(userId, PAID, getCurrentDate());
-    }
-
     public long numberOfAllBills() {
         return billsRepository.count();
     }
@@ -150,5 +146,12 @@ public class BillService {
 
         allServices.removeIf(bill -> !bill.getUser().getServiceUnits().contains(bill.getServiceUnit()));
         return allServices;
+    }
+
+    public List<Bill> getAllExpiredActiveServicesOfUserByUserId(long userId) {
+        List<Bill> bills = billsRepository.findAllByUser_IdAndPaidForAndEndDateBefore(userId, PAID, getCurrentDate());
+
+        bills.removeIf(bill -> !bill.getUser().getServiceUnits().contains(bill.getServiceUnit()));
+        return bills;
     }
 }
