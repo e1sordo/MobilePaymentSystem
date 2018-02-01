@@ -1,7 +1,9 @@
 package com.epam.lab.mobilepaymentsystem.controller;
 
 import com.epam.lab.mobilepaymentsystem.model.User;
+import com.epam.lab.mobilepaymentsystem.service.BillService;
 import com.epam.lab.mobilepaymentsystem.service.SecurityService;
+import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
 import com.epam.lab.mobilepaymentsystem.wrapper.IntegerWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,18 @@ public class UserController {
 
     private final UserService userService;
     private final SecurityService securityService;
+    private final BillService billService;
+    private final ServiceUnitService serviceUnitService;
 
     @Autowired
     public UserController(UserService userService,
-                          SecurityService securityService) {
+                          SecurityService securityService,
+                          BillService billService,
+                          ServiceUnitService serviceUnitService) {
         this.userService = userService;
         this.securityService = securityService;
+        this.billService = billService;
+        this.serviceUnitService = serviceUnitService;
     }
 
     @GetMapping("/registration")
@@ -59,32 +67,50 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String showMyProfile(Principal principal, Model model) {
-        Long id = userService.getByUsername(principal.getName()).getId();
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("howMuchToIncrease", new IntegerWrapper());
+    public String showMyProfile(Model model) {
+        long id = userService.getCurrentUserId();
+        model.addAttribute("user", userService.getCurrentUser());
+        model.addAttribute("myProfile", true);
+        addModelAttributes(model, id);
         return "user/user_item";
+    }
+
+    @PostMapping("/profile")
+    public String showButtonTopUpBalance(@Valid @ModelAttribute("howMuchToIncrease") IntegerWrapper howMuch,
+                                         BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            long id = userService.getCurrentUserId();
+            addModelAttributes(model, id);
+            model.addAttribute("user", userService.getCurrentUser());
+            model.addAttribute("error", true);
+            return "user/user_item";
+        }
+        userService.topUpBalance(userService.getCurrentUserId(), howMuch.getTranche());
+        return "redirect:/profile";
     }
 
     @GetMapping("/users/{id}")
     public String showUserProfile(@PathVariable final Long id, Model model) {
         model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("howMuchToIncrease", new IntegerWrapper());
+        model.addAttribute("myProfile", false);
+        addModelAttributes(model, id);
         return "user/user_item";
     }
 
-    @PostMapping("/users/{id}/refill")
-    public String showButtonTopUpBalance(@PathVariable final Long id,
-                                         @Valid @ModelAttribute("howMuchToIncrease") IntegerWrapper howMuch) {
-        userService.topUpBalance(id, howMuch.getTranche());
-        return "redirect:/profile";
+    private void addModelAttributes(Model model, long userId) {
+        model.addAttribute("currentUserId", userId);
+        model.addAttribute("numberOfServices",
+                serviceUnitService.numberOfActiveServicesOfUserByUserId(userId));
+        model.addAttribute("numberOfBills",
+                billService.numberOfUnpaidBillsOfUserByUserId(userId));
+        model.addAttribute("howMuchToIncrease", new IntegerWrapper());
     }
 
-    @GetMapping("/profile/services")
-    public String showMyServices(Principal principal) {
-        Long id = userService.getByUsername(principal.getName()).getId();
-        return "redirect:/users/" + id + "/services";
-    }
+//    @GetMapping("/profile/services")
+//    public String showMyServices(Principal principal) {
+//        Long id = userService.getByUsername(principal.getName()).getId();
+//        return "redirect:/users/" + id + "/services";
+//    }
 
     @DeleteMapping("users/{id}/delete")
     public String deleteUser(@PathVariable final Long id) {

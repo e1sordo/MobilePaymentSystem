@@ -125,11 +125,12 @@
                         <div class="col-md-12" style="margin-bottom: 1em; text-align: right;">
                             <form action="" method="post" th:if="${bill.paidFor != true}"
                                   style="float:right; margin-left: 1em;">
-                                <button type="button" th:text="#{bills.item.button.pay}"
+                                <button type="submit" th:text="#{bills.item.button.pay}"
                                         class="btn btn-primary">Оплатить</button>
                             </form>
-                            <form action="" method="post">
-                                <button type="button" th:text="#{bills.item.button.cancel}"
+                            <form th:action="@{'/users/{uid}/bills/{bid}/unsub' (uid=${userId}, bid=${bill.id})}"
+                                  method="post" th:if="${unsubscribeAviable == false or bill.paidFor == false}">
+                                <button type="submit" th:text="#{bills.item.button.cancel}"
                                         class="btn btn-secondary">Отказаться</button>
                             </form>
                         </div>

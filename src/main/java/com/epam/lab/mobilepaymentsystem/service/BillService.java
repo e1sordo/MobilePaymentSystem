@@ -138,6 +138,10 @@ public class BillService {
         return billsRepository.findBillByUser_IdAndServiceUnit_idAndEndDateBefore(userId, serviceId, getCurrentDate());
     }
 
+    public boolean checkOldBill(Bill bill) {
+        return bill.getEndDate().compareTo(getCurrentDate()) < 0;
+    }
+
     public List<Bill> getAllPaidServiceOfUserByUserId(long userId) {
         return getAllNonExpiredPaidBillsOfUserByUserId(userId);
     }
