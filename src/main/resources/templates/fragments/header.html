@@ -66,10 +66,10 @@
             <ul class="dropdown-menu dropdown-user">
                 <!--[[${#httpServletRequest.remoteUser}]]-->
                 <li sec:authorize="hasAnyRole('USER', 'SUBSCRIBER', 'ADMIN')">
-                    <a th:href="@{/profile}"><i class="fa fa-user fa-fw"></i> My profile</a>
+                    <a th:href="@{/profile}"><i class="fa fa-user fa-fw"></i> <span th:text="#{app.header.myprofile}"></span> </a>
                 </li>
                 <li class="divider" sec:authorize="hasAnyRole('USER', 'SUBSCRIBER', 'ADMIN')"></li>
-                <li><a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+                <li><a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> <span th:text="#{app.header.logout}"></span></a></li>
             </ul>
             <!-- /.dropdown-user -->
         </li>

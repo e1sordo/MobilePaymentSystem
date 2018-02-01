@@ -36,7 +36,6 @@ public class UserController {
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
-
         return "user/registration";
     }
 
@@ -62,6 +61,7 @@ public class UserController {
     @GetMapping("/users")
     public String getUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("userService", userService);
         return "user/user_list";
     }
 
@@ -96,6 +96,24 @@ public class UserController {
         return "user/user_item";
     }
 
+    @PostMapping("/users/{id}/delete")
+    public String deleteUser(@PathVariable final long id) {
+        userService.deleteUserById(id);
+        return "redirect:/users";
+    }
+
+    @PostMapping("/users/{id}/block")
+    public String blockUser(@PathVariable final long id) {
+        userService.blockUserById(id, false);
+        return "redirect:/users";
+    }
+
+    @PostMapping("/users/{id}/unblock")
+    public String unblockUser(@PathVariable final long id) {
+        userService.blockUserById(id, true);
+        return "redirect:/users";
+    }
+
     private void addModelAttributes(Model model, long userId) {
         model.addAttribute("currentUserId", userId);
         model.addAttribute("numberOfServices",
@@ -103,17 +121,5 @@ public class UserController {
         model.addAttribute("numberOfBills",
                 billService.numberOfUnpaidBillsOfUserByUserId(userId));
         model.addAttribute("howMuchToIncrease", new IntegerWrapper());
-    }
-
-//    @GetMapping("/profile/services")
-//    public String showMyServices(Principal principal) {
-//        Long id = userService.getByUsername(principal.getName()).getId();
-//        return "redirect:/users/" + id + "/services";
-//    }
-
-    @DeleteMapping("users/{id}/delete")
-    public String deleteUser(@PathVariable final Long id) {
-        userService.deleteUserById(id);
-        return "redirect:/users";
     }
 }

@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.controller;
 
 import com.epam.lab.mobilepaymentsystem.model.Bill;
+import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.service.BillService;
 import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
@@ -29,7 +30,7 @@ public class BillController {
 
     @GetMapping("/bills")
     public String getBills(Model model) {
-        List<Bill> oldBills = billService.getAllPaidBillsOfAllUsersOrderedById();
+        List<Bill> oldBills = billService.getAllNonExpiredPaidBillsOfAllUsersOrderedById();
         List<Bill> unpaidBills = billService.getAllUnpaidBillsOfAllUsersOrderedById();
         model.addAttribute("paidBills", oldBills);
         model.addAttribute("unpaidBills", unpaidBills);
@@ -39,6 +40,7 @@ public class BillController {
     @GetMapping("/users/{uid}/bills")
     public String getBillListByUser(@PathVariable final long uid, Model model) {
         List<Bill> userBills = billService.getAllUnpaidBillsOfUserByUserId(uid);
+        model.addAttribute("currentUserId", userService.getCurrentUserId());
         model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
         return "bill/bill_user_list";
@@ -47,6 +49,7 @@ public class BillController {
     @GetMapping("/users/{uid}/services")
     public String getServiceListByUser(@PathVariable final long uid, Model model) {
         List<Bill> userBills = billService.getAllPaidBillsOfUserByUserId(uid);
+        model.addAttribute("currentUserId", userService.getCurrentUserId());
         model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
         return "service/service_user_list";
@@ -56,6 +59,7 @@ public class BillController {
     public String getBillListByCurrentUser(Model model) {
         final long id = userService.getCurrentUserId();
         List<Bill> userBills = billService.getAllUnpaidBillsOfUserByUserId(id);
+        model.addAttribute("currentUserId", userService.getCurrentUserId());
         model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
         return "bill/bill_user_list";
@@ -65,9 +69,22 @@ public class BillController {
     public String getServiceListByCurrentUser(Model model) {
         final long id = userService.getCurrentUserId();
         List<Bill> userBills = billService.getAllPaidServiceOfUserByUserId(id);
+        model.addAttribute("currentUserId", userService.getCurrentUserId());
         model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
+        model.addAttribute("oldUserServices", userBills);
         return "service/service_user_list";
+    }
+
+    @GetMapping("/profile/bills/{bid}")
+    public String getBillUnit(@PathVariable("bid") final long bid,
+                              Model model) {
+        Bill currentBill = billService.getById(bid);
+        model.addAttribute("bill", currentBill);
+        model.addAttribute("service", currentBill.getServiceUnit());
+        model.addAttribute("userId", userService.getCurrentUserId());
+        model.addAttribute("unsubscribeAviable", billService.isNewBill(currentBill));
+        return "bill/bill_item";
     }
 
     @GetMapping("/users/{uid}/bills/{bid}")
@@ -78,9 +95,17 @@ public class BillController {
         model.addAttribute("bill", currentBill);
         model.addAttribute("service", currentBill.getServiceUnit());
         model.addAttribute("userId", uid);
+        model.addAttribute("currentUserId", userService.getCurrentUserId());
         model.addAttribute("unsubscribeAviable", billService.isNewBill(currentBill));
-        // model.addAttribute("unpaidBills", billService.getAllNonExpiredUnpaidBillsOfUser(userService.getCurrentUserId()));
         return "bill/bill_item";
+    }
+
+    @PostMapping("/profile/bills/{bid}/unsub")
+    public String unsubscribeFromUnpaidBill(@PathVariable("bid") final long bid) {
+        long uid = userService.getCurrentUserId();
+        serviceUnitService.unsubscribeUserFromServiceByUserAndServiceId(
+                uid, billService.getById(bid).getServiceUnit().getId());
+        return "redirect:/profile/bills";
     }
 
     @PostMapping("/users/{uid}/bills/{bid}/unsub")
@@ -89,6 +114,14 @@ public class BillController {
         serviceUnitService.unsubscribeUserFromServiceByUserAndServiceId(
                 uid, billService.getById(bid).getServiceUnit().getId());
         return "redirect:/users/" + uid + "/bills";
+    }
+
+    @PostMapping("/profile/bills/{bid}/pay")
+    public String payUnpaidBill(@PathVariable("bid") final long bid) {
+        long uid = userService.getCurrentUserId();
+        billService.withdrawCashToPayForOneBill(billService.getById(bid),
+                userService.getUserById(uid));
+        return "redirect:/profile/bills";
     }
 
     @PostMapping("/users/{uid}/bills/{bid}/pay")

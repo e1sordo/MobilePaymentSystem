@@ -51,27 +51,26 @@
         <div class="well">
             <table border="0" width="100%" class="service-info">
                 <tr>
-                    <td><strong>Название</strong></td>
+                    <td><strong th:text="#{services.item.name}">Название</strong></td>
                     <td th:text="${service.name}"></td>
                 </tr>
                 <tr>
-                    <td><strong>Описание</strong></td>
+                    <td><strong th:text="#{services.item.description}">Описание</strong></td>
                     <td th:text="${service.description}"></td>
                 </tr>
                 <tr>
-                    <td><strong>Стоимость</strong></td>
+                    <td><strong th:text="#{services.item.cost}">Стоимость</strong></td>
                     <td th:text="${service.cost}"></td>
+                </tr>
+                <tr>
+                    <td><strong th:text="#{services.item.duration}">Длительность</strong></td>
+                    <td th:text="${service.duration}"></td>
                 </tr>
             </table>
 
 
-            <!--<ul>-->
-                <!--<li><strong>Название:</strong> <span th:text="${service.name}"></span> </li>-->
-                <!--<li><strong>Описание:</strong> <span th:text="${service.description}"></span> </li>-->
-                <!--<li><strong>Стоимость:</strong> <span th:text="${service.cost}"></span> </li>-->
-            <!--</ul>-->
 
-            <a class="btn btn-default btn-lg btn-block" th:href="@{/services}">
+            <a class="btn btn-default btn-lg btn-block" th:href="@{/services}" th:text="#{services.item.backtolist}">
                 Вернуться к списку услуг.</a>
 
         </div>
