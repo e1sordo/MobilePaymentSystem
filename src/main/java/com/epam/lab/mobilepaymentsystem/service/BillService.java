@@ -137,4 +137,8 @@ public class BillService {
     public Bill getExpiredPaidBillByUserIdAndServiceId(long userId, long serviceId) {
         return billsRepository.findBillByUser_IdAndServiceUnit_idAndEndDateBefore(userId, serviceId, getCurrentDate());
     }
+
+    public List<Bill> getAllPaidServiceOfUserByUserId(long userId) {
+        return getAllNonExpiredPaidBillsOfUserByUserId(userId);
+    }
 }

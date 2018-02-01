@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,17 +35,6 @@ public class ServiceUnitService {
         return serviceUnitsRepository.findAll();
     }
 
-    public List<ServiceUnit> getAllPaidServiceOfUserByUserId(long userId) {
-        List<Bill> paidBills = billService.getAllNonExpiredPaidBillsOfUserByUserId(userId);
-        List<ServiceUnit> serviceUnits = new ArrayList<>();
-
-        for (Bill bill : paidBills) {
-            serviceUnits.add(bill.getServiceUnit());
-        }
-
-        return serviceUnits;
-    }
-
     public List<ServiceUnit> getAllServicesWithoutSubscribeOfUserByUserId(long userId) {
         List<ServiceUnit> services = serviceUnitsRepository.findAll();
         User user = userService.getUserById(userId);
@@ -64,7 +52,7 @@ public class ServiceUnitService {
     }
 
     public long numberOfActiveServicesOfUserByUserId(long userId) {
-        return getAllPaidServiceOfUserByUserId(userId).size();
+        return billService.getAllPaidServiceOfUserByUserId(userId).size();
     }
 
     public long numberOfAllService() {
