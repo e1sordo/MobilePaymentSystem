@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="EPAM lab">
 
-    <title th:text="#{title.page.bills}"> Bill list</title>
+    <title th:text="#{title.page.services}"> Service list</title>
 
     <div th:replace="fragments/header :: header-css"></div>
 
@@ -31,7 +31,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header" th:text="#{title.page.bills}">Bill list.</h1>
+                <h1 class="page-header" th:text="#{title.page.services}">Service list.</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -41,7 +41,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading" th:text="#{bills.table.unpaid.title}"></div>
+                    <div class="panel-heading" th:text="#{title.page.services}"></div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -50,6 +50,8 @@
                                 <tr>
                                     <th th:text="#{bills.table.th.service}">Name</th>
                                     <th th:text="#{bills.table.th.cost}">Cost</th>
+                                    <th th:text="#{bills.table.th.start-date}">Start date</th>
+                                    <th th:text="#{bills.table.th.end-date}">End date</th>
                                     <th th:text="#{bills.table.th.owner}">Owner</th>
                                 </tr>
                                 </thead>
@@ -60,11 +62,13 @@
                                            th:text="${bill.serviceUnit.name}"></a>
                                     </td>
                                     <td th:text="${bill.actualCost}"></td>
+                                    <td th:text="${#dates.format(bill.startDate, 'dd:MM:yyyy')}"></td>
+                                    <td th:text="${#dates.format(bill.endDate, 'dd:MM:yyyy')}"></td>
                                     <td>
                                         <a th:href="@{'/users/' + ${bill.user.id}}" th:text="${bill.user.username}"></a>
                                     </td>
                                 </tr>
-                                <tr th:unless="${empty == false}"><td colspan="3" th:text="#{global.isEmpty}"></td></tr>
+                                <tr th:unless="${empty == false}"><td colspan="5" th:text="#{global.isEmpty}"></td></tr>
                                 </tbody>
                             </table>
                         </div>

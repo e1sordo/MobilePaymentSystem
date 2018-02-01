@@ -59,13 +59,13 @@ public class ServiceUnitController {
         return "redirect:/services";
     }
 
-    // TODO: unsubscribe process doesn't return actual data after pressing a button
-    @GetMapping("/profile/services")
-    public String listActiveServices(@ModelAttribute("selectedService") ServiceUnit serviceUnit, Model model) {
-        List<ServiceUnit> activeServices = serviceUnitService.getAllPaidServiceOfUserByUserId(userService.getCurrentUserId());
-        model.addAttribute("activeServices", activeServices);
-        return "service/my";
-    }
+//    // TODO: unsubscribe process doesn't return actual data after pressing a button
+//    @GetMapping("/profile/services")
+//    public String listActiveServices(@ModelAttribute("selectedService") ServiceUnit serviceUnit, Model model) {
+//        List<ServiceUnit> activeServices = serviceUnitService.getAllPaidServiceOfUserByUserId(userService.getCurrentUserId());
+//        model.addAttribute("activeServices", activeServices);
+//        return "service/my";
+//    }
 
     @PostMapping("users/{id}/services")
     public String unsubscribeFromService(@PathVariable Long id,

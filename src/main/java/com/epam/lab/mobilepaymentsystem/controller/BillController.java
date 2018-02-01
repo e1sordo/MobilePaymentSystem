@@ -1,6 +1,7 @@
 package com.epam.lab.mobilepaymentsystem.controller;
 
 import com.epam.lab.mobilepaymentsystem.model.Bill;
+import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.service.BillService;
 import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
@@ -39,15 +40,35 @@ public class BillController {
     @GetMapping("/users/{uid}/bills")
     public String getBillListByUser(@PathVariable final long uid, Model model) {
         List<Bill> userBills = billService.getAllUnpaidBillsOfUserByUserId(uid);
+        model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
         return "bill/bill_user_list";
     }
 
+    @GetMapping("/users/{uid}/services")
+    public String getServiceListByUser(@PathVariable final long uid, Model model) {
+        List<ServiceUnit> userBills = serviceUnitService.getAllPaidServiceOfUserByUserId(uid);
+        model.addAttribute("empty", userBills.isEmpty());
+        model.addAttribute("userBills", userBills);
+        return "service/service_user_list";
+    }
+
     @GetMapping("/profile/bills")
-    public String getBillListByCurrentUser(@PathVariable final long uid, Model model) {
-        List<Bill> userBills = billService.getAllUnpaidBillsOfUserByUserId(uid);
+    public String getBillListByCurrentUser(Model model) {
+        final long id = userService.getCurrentUserId();
+        List<Bill> userBills = billService.getAllUnpaidBillsOfUserByUserId(id);
+        model.addAttribute("empty", userBills.isEmpty());
         model.addAttribute("userBills", userBills);
         return "bill/bill_user_list";
+    }
+
+    @GetMapping("/profile/services")
+    public String getServiceListByCurrentUser(Model model) {
+        final long id = userService.getCurrentUserId();
+        List<ServiceUnit> userBills = serviceUnitService.getAllPaidServiceOfUserByUserId(id);
+        model.addAttribute("empty", userBills.isEmpty());
+        model.addAttribute("userBills", userBills);
+        return "service/service_user_list";
     }
 
     @GetMapping("/users/{uid}/bills/{bid}")
