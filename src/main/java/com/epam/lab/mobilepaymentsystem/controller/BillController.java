@@ -25,9 +25,8 @@ public class BillController {
 
     @GetMapping("/bills")
     public String getBills(Model model) {
-        long id = userService.getCurrentUserId();
-        List<Bill> oldBills = billService.getAllPaidBillsOfUserByUserId(id);
-        List<Bill> unpaidBills = billService.getAllUnpaidBillsOfUserByUserId(id);
+        List<Bill> oldBills = billService.getAllNonExpiredPaidBillsOfAllUsersOrderedById();
+        List<Bill> unpaidBills = billService.getAllUnpaidBillsOfAllUsersOrderedById();
         model.addAttribute("paidBills", oldBills);
         model.addAttribute("unpaidBills", unpaidBills);
         return "bill/bill_list";
