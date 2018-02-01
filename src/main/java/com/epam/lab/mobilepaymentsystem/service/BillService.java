@@ -6,6 +6,7 @@ import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.Calendar;
@@ -60,6 +61,7 @@ public class BillService {
         return billsRepository.findOne(billId);
     }
 
+    @Transactional
     public void deleteUnpaidBillByUserIdAndServiceId(long userId, long serviceId) {
         billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
     }

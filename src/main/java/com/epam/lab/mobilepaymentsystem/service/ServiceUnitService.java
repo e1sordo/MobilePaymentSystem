@@ -6,6 +6,7 @@ import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
@@ -92,7 +93,7 @@ public class ServiceUnitService {
         // if service exists and it is unpaid - remove also unpaid bill
         if (user.removeService(service)) {
             userService.updateUser(user);
-            billService.deleteUnpaidBillByUserIdAndServiceId(user.getId(), serviceId);
+            billService.deleteUnpaidBillByUserIdAndServiceId(userId, serviceId);
         }
     }
 
@@ -117,8 +118,9 @@ public class ServiceUnitService {
         }
     }
 
+    @Transactional
     public void localCheckBill(long userId) {
-        Iterable<Bill> outOfDateUnpaidBills = billService.getAllUnpaidBillsOfUserByUserId(userId);
+        List<Bill> outOfDateUnpaidBills = billService.getAllUnpaidBillsOfUserByUserId(userId);
 
         for (Bill bill : outOfDateUnpaidBills) {
             unsubscribeUserFromServiceByUserAndServiceId(userId, bill.getServiceUnit().getId());
