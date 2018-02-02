@@ -8,7 +8,7 @@ VALUES
         ('admin', 'Vladimir Kostin', 99999, '$2a$10$hW7TdoUPWhEdprtj0XjCJ.iDopWV2UUaHWp2l7FoK3mRbLTX7W81q', 'ROLE_ADMIN'),
         ('mikey', 'Marsel Allaiarov', 435, '$2a$10$fPK7rqD0QjOBVGp9YdxnfOxBBX2ZSdiNp3wCp1nlLIxQf6EAaOlsK', 'ROLE_SUBSCRIBER'),
         ('stranger', 'Bill Gates', 107, '$2a$10$fPK7rqD0QjOBVGp9YdxnfOxBBX2ZSdiNp3wCp1nlLIxQf6EAaOlsK', 'ROLE_LOCKED'),
-        ('exceptional', 'Gryu Felonius', 0, '$2a$10$fPK7rqD0QjOBVGp9YdxnfOxBBX2ZSdiNp3wCp1nlLIxQf6EAaOlsK', 'ROLE_DELETED');
+        ('exceptional', 'Gryu Felonius', 0, '$2a$10$fPK7rqD0QjOBVGp9YdxnfOxBBX2ZSdiNp3wCp1nlLIxQf6EAaOlsK', 'ROLE_LOCKED');
 
 --
 INSERT INTO SERVICES (cost, duration, name, description)

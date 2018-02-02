@@ -60,13 +60,20 @@ public class ServiceUnitService {
                 + billService.getAllExpiredActiveServicesOfUserByUserId(userId).size();
     }
 
+    /**
+     * Subscribe User with ID userId to Service with ID serviceID
+     * Withdraw cash at the moment of subscribing
+     * Create paid bill if payment is successful
+     * Create unpaid bill if payment is unsuccessful
+     * Already existing Service cannot be subscribed to User
+     * @param userId ID of User
+     * @param serviceId ID of Service
+     */
     public void subscribeUserToServiceByUserAndServiceId(long userId, long serviceId) {
-        // if we chose actual existing service
         if (serviceId != -1) {
             User user = userService.getUserById(userId);
             ServiceUnit service = getServiceById(serviceId);
 
-            // we create bill only if the service is new
             if (user.addService(service)) {
                 Bill bill = billService.createAndSaveBill(user, service);
                 billService.withdrawCashToPayForOneBill(bill, user);
@@ -75,11 +82,17 @@ public class ServiceUnitService {
         }
     }
 
+    /**
+     * Unsubscribe User from Service
+     * Delete unpaid Bill of this Service from User in process
+     * Service cannot be unsubscribed if User doesn't have it
+     * @param bill Bill that contains information about User subscribed to Service
+     * @param userId ID of User
+     */
     public void unsubscribeUserFromServiceByBillAndUserId(Bill bill, long userId) {
         User user = userService.getUserById(userId);
-        ServiceUnit service = getServiceById(bill.getId());
+        ServiceUnit service = getServiceById(bill.getServiceUnit().getId());
 
-        // if service exists and it is unpaid - remove also unpaid bill
         if (user.removeService(service)) {
             userService.updateUser(user);
             billService.deleteUnpaidBillByUserIdAndServiceId(userId, service.getId());

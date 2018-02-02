@@ -96,7 +96,11 @@ public class BillService {
         return billsRepository.countAllByPaidForAndUser_Id(UNPAID, userId);
     }
 
-    // payment for EXPIRED PAID BILL
+    /**
+     * Withdraw cash to pay for all services of User with ID userId
+     * Find expired active services and try to renew subscription
+     * @param userId id of User
+     */
     public void withdrawCashToPayForServicesByUserId(long userId) {
         List<ServiceUnit> serviceUnits = userService.getActiveServicesByUserId(userId);
         User user = userService.getUserById(userId);
@@ -108,7 +112,7 @@ public class BillService {
             }
         }
 
-        userService.updateUser(user); // todo: maybe it's not needed
+        userService.updateUser(user);
     }
 
     public void withdrawCashToPayForOneBill(Bill bill, User user) {
