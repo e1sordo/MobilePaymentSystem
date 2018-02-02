@@ -22,10 +22,10 @@ VALUES
          (200, 30, 'Красивый телефонный звонок',
          'Подарите звонящему минутку Шопена.');
 
-INSERT INTO USER_SERVICES (user_id, service_id) VALUES (2, 2), (2, 3);
+INSERT INTO USER_SERVICES (user_id, service_id) VALUES (2, 1), (2, 2), (2, 3);
 
 INSERT INTO BILLS (actual_cost, is_paid, start_date, end_date, service_unit_id, user_id)
 VALUES
         (40, TRUE, '2017-02-01', '2017-02-03', 1, 2),
-        (100, TRUE, '2017-02-01', '2017-02-06', 2, 2),
+        (100, TRUE, '2018-02-01', '2018-02-06', 2, 2),
         (200, FALSE, '2018-01-31', '2018-03-01', 3, 2);

@@ -117,7 +117,7 @@ public class UserController {
     private void addModelAttributes(Model model, long userId) {
         model.addAttribute("currentUserId", userId);
         model.addAttribute("numberOfServices",
-                serviceUnitService.numberOfActiveServicesOfUserByUserId(userId));
+                serviceUnitService.numberOfAllPaidActiveUserServicesByUserId(userId));
         model.addAttribute("numberOfBills",
                 billService.numberOfUnpaidBillsOfUserByUserId(userId));
         model.addAttribute("howMuchToIncrease", new IntegerWrapper());

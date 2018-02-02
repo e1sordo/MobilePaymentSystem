@@ -47,7 +47,7 @@ public class BillController {
 
     @GetMapping("/users/{uid}/services")
     public String getServiceListByUser(@PathVariable final long uid, Model model) {
-        List<Bill> userBills = billService.getAllPaidServiceOfUserByUserId(uid);
+        List<Bill> userBills = billService.getAllNonExpiredActivePaidServiceOfUserByUserId(uid);
         List<Bill> userInactiveBills = billService.getAllExpiredActiveServicesOfUserByUserId(uid);
         model.addAttribute("currentUserId", userService.getCurrentUserId());
         model.addAttribute("empty", userBills.isEmpty());
@@ -70,7 +70,7 @@ public class BillController {
     @GetMapping("/profile/services")
     public String getServiceListByCurrentUser(Model model) {
         final long id = userService.getCurrentUserId();
-        List<Bill> userBills = billService.getAllPaidServiceOfUserByUserId(id);
+        List<Bill> userBills = billService.getAllNonExpiredActivePaidServiceOfUserByUserId(id);
         List<Bill> userInactiveBills = billService.getAllExpiredActiveServicesOfUserByUserId(id);
         model.addAttribute("currentUserId", userService.getCurrentUserId());
         model.addAttribute("empty", userBills.isEmpty());
@@ -107,16 +107,14 @@ public class BillController {
     @PostMapping("/profile/bills/{bid}/unsub")
     public String unsubscribeFromUnpaidBill(@PathVariable("bid") final long bid) {
         long uid = userService.getCurrentUserId();
-        serviceUnitService.unsubscribeUserFromServiceByUserAndServiceId(
-                uid, billService.getById(bid).getServiceUnit().getId());
+        serviceUnitService.unsubscribeUserFromServiceByBillAndUserId(billService.getById(bid), uid);
         return "redirect:/profile/bills";
     }
 
     @PostMapping("/users/{uid}/bills/{bid}/unsub")
     public String unsubscribeFromUnpaidBill(@PathVariable("uid") final long uid,
                                             @PathVariable("bid") final long bid) {
-        serviceUnitService.unsubscribeUserFromServiceByUserAndServiceId(
-                uid, billService.getById(bid).getServiceUnit().getId());
+        serviceUnitService.unsubscribeUserFromServiceByBillAndUserId(billService.getById(bid), uid);
         return "redirect:/users/" + uid + "/bills";
     }
 

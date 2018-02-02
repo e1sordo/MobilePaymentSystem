@@ -1,22 +1,20 @@
 package com.epam.lab.mobilepaymentsystem;
 
+import com.epam.lab.mobilepaymentsystem.controller.ServiceUnitController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-
 @ControllerAdvice
 class GlobalControllerExceptionHandler {
 
     private static final String DEFAULT_ERROR_VIEW = "errorhandler";
-    // TODO: make a pretty page with error stuff and no stack trace
+    private Logger logger = LoggerFactory.getLogger(ServiceUnitController.class);
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(Exception.class)
     public ModelAndView defaultErrorHandler(Exception e) throws Exception {
         ModelAndView mav = new ModelAndView();
@@ -29,10 +27,10 @@ class GlobalControllerExceptionHandler {
             throw e;
         }
 
-        String s = Arrays.deepToString(e.getStackTrace());
         mav.addObject("exception", e.toString());
-        mav.addObject("stackTrace", s);
         mav.addObject("message", e.getMessage());
         mav.setViewName(DEFAULT_ERROR_VIEW);
+        e.printStackTrace();
+        logger.error("There is an error: " + e.toString() + " Default message: " + e.getMessage(), e);
     }
 }

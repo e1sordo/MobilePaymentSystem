@@ -66,11 +66,7 @@ public class BillService {
         billsRepository.deleteByUser_IdAndServiceUnit_IdAndPaidFor(userId, serviceId, UNPAID);
     }
 
-    public List<Bill> getAllPaidBillsOfUserByUserId(long userId) {
-        return billsRepository.findAllByUser_IdAndPaidFor(userId, PAID);
-    }
-
-    public List<Bill> getAllNonExpiredPaidBillsOfUserByUserId(long userId) {
+    private List<Bill> getAllNonExpiredPaidBillsOfUserByUserId(long userId) {
         return billsRepository.
                 findAllByUser_IdAndPaidForAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByActualCostDesc(userId, PAID, getCurrentDate(), getCurrentDate());
     }
@@ -79,7 +75,6 @@ public class BillService {
         return billsRepository.findAllByUser_IdAndPaidFor(userId, UNPAID);
     }
 
-    // Методы для получения всех оплаченных и неоплаченных счетов всех пользователей [Admin]
     public List<Bill> getAllUnpaidBillsOfAllUsersOrderedById() {
         return billsRepository.findAllByPaidForOrderByUser_Id(UNPAID);
     }
@@ -130,7 +125,7 @@ public class BillService {
         return new Date(System.currentTimeMillis());
     }
 
-    public Bill getExpiredPaidBillByUserIdAndServiceId(long userId, long serviceId) {
+    private Bill getExpiredPaidBillByUserIdAndServiceId(long userId, long serviceId) {
         return billsRepository.findBillByUser_IdAndServiceUnit_idAndEndDateBefore(userId, serviceId, getCurrentDate());
     }
 
@@ -141,7 +136,7 @@ public class BillService {
         return false;
     }
 
-    public List<Bill> getAllPaidServiceOfUserByUserId(long userId) {
+    public List<Bill> getAllNonExpiredActivePaidServiceOfUserByUserId(long userId) {
         List<Bill> allServices = getAllNonExpiredPaidBillsOfUserByUserId(userId);
 
         allServices.removeIf(bill -> !bill.getUser().getServiceUnits().contains(bill.getServiceUnit()));

@@ -73,10 +73,6 @@ public class UserService {
                 Role.ROLE_DELETED.getDisplayName());
     }
 
-    public long numberOfUsers() {
-        return userRepository.count();
-    }
-
     public long numberOfUsersByRole(String role) {
         return userRepository.countAllByRole(role);
     }
@@ -105,9 +101,6 @@ public class UserService {
         return new ArrayList<>(user.getServiceUnits());
     }
 
-    // TODO: not sure about working with model in backend
-    // On the other hand validation logic being in frontend is bad
-    // And maybe it is better to autowire SecurityService in UserService instead of passing it as param
     public String validateNewUserAndRegister(User user, BindingResult bindingResult, Model model, SecurityService securityService) {
 
         if((getByUsername(user.getUsername()) != null) && (!user.getPassword().equals(user.getConfirmPassword()))) {

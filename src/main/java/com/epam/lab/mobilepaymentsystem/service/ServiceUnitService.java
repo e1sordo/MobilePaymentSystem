@@ -51,12 +51,13 @@ public class ServiceUnitService {
         return serviceUnitsRepository.findOne(id);
     }
 
-    public long numberOfActiveServicesOfUserByUserId(long userId) {
-        return billService.getAllPaidServiceOfUserByUserId(userId).size();
-    }
-
     public long numberOfAllService() {
         return serviceUnitsRepository.count();
+    }
+
+    public long numberOfAllPaidActiveUserServicesByUserId(long userId) {
+        return billService.getAllNonExpiredActivePaidServiceOfUserByUserId(userId).size()
+                + billService.getAllExpiredActiveServicesOfUserByUserId(userId).size();
     }
 
     public void subscribeUserToServiceByUserAndServiceId(long userId, long serviceId) {
@@ -74,14 +75,14 @@ public class ServiceUnitService {
         }
     }
 
-    public void unsubscribeUserFromServiceByUserAndServiceId(long userId, long serviceId) {
+    public void unsubscribeUserFromServiceByBillAndUserId(Bill bill, long userId) {
         User user = userService.getUserById(userId);
-        ServiceUnit service = getServiceById(serviceId);
+        ServiceUnit service = getServiceById(bill.getId());
 
         // if service exists and it is unpaid - remove also unpaid bill
         if (user.removeService(service)) {
             userService.updateUser(user);
-            billService.deleteUnpaidBillByUserIdAndServiceId(userId, serviceId);
+            billService.deleteUnpaidBillByUserIdAndServiceId(userId, service.getId());
         }
     }
 
@@ -111,7 +112,7 @@ public class ServiceUnitService {
         List<Bill> outOfDateUnpaidBills = billService.getAllUnpaidBillsOfUserByUserId(userId);
 
         for (Bill bill : outOfDateUnpaidBills) {
-            unsubscribeUserFromServiceByUserAndServiceId(userId, bill.getServiceUnit().getId());
+            unsubscribeUserFromServiceByBillAndUserId(bill, userId);
         }
 
         billService.withdrawCashToPayForServicesByUserId(userId);
