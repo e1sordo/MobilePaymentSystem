@@ -41,7 +41,7 @@ public class ServiceTests {
     // todo: for some reason it fails
     @Test
     public void numberOfServices() {
-        assertEquals(count, serviceUnitService.numberOfServices());
+        assertEquals(count, serviceUnitService.numberOfAllService());
     }
 
     @Test

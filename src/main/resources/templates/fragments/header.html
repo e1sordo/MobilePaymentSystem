@@ -2,28 +2,25 @@
 <head>
     <div th:fragment="header-css">
         <!-- Bootstrap Core CSS -->
-        <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
-        <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link th:href="@{/vendor/metisMenu/metisMenu.min.css}" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+        <link th:href="@{/dist/css/sb-admin-2.css}" rel="stylesheet">
 
         <!-- DataTables CSS -->
-        <link href="../vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+        <link th:href="@{/vendor/datatables-plugins/dataTables.bootstrap.css}" rel="stylesheet">
 
         <!-- DataTables Responsive CSS -->
-        <link href="../vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+        <link th:href="@{/vendor/datatables-responsive/dataTables.responsive.css}" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
+        <link th:href="@{/vendor/morrisjs/morris.css}" rel="stylesheet">
 
         <!-- Custom Fonts -->
-        <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-        <link rel="stylesheet" th:href="@{/css/main.css}"
-              href="../../css/main.css" />
+        <link th:href="@{/vendor/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -64,31 +61,15 @@
 
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-alerts">
-                <li>
-                    <a href="#">
-                        <div>
-                            <i class="fa fa-tasks fa-fw"></i> You have an unpaid bill
-                            <span class="pull-right text-muted small">Pay now</span>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <!-- /.dropdown-alerts -->
-        </li>
-        <!-- /.dropdown -->
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
                 <!--[[${#httpServletRequest.remoteUser}]]-->
-                <li><a th:href="@{/profile}"><i class="fa fa-user fa-fw"></i> My profile</a>
+                <li sec:authorize="hasAnyRole('USER', 'SUBSCRIBER', 'ADMIN')">
+                    <a th:href="@{/profile}"><i class="fa fa-user fa-fw"></i> <span th:text="#{app.header.myprofile}"></span> </a>
                 </li>
-                <li class="divider"></li>
-                <li><a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+                <li class="divider" sec:authorize="hasAnyRole('USER', 'SUBSCRIBER', 'ADMIN')"></li>
+                <li><a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw"></i> <span th:text="#{app.header.logout}"></span></a></li>
             </ul>
             <!-- /.dropdown-user -->
         </li>

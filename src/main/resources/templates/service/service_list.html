@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.w3.org/1999/xhtml">
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
 
@@ -11,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="EPAM lab">
 
-    <title th:text="#{title.page.users}"> User list</title>
+    <title th:text="#{title.page.services}"> Service list</title>
 
     <div th:replace="fragments/header :: header-css"></div>
 
@@ -31,7 +32,20 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header" th:text="#{title.page.services}">Service list.</h1>
+                <div style="overflow:hidden;" class="page-header" >
+                    <h1 style="float:left; margin-top:0;" th:text="#{title.page.services}">Service list.</h1>
+
+                    <h1 sec:authorize="hasRole('LOCKED')" th:text="#{title.page.home.locked}"></h1>
+                    <h1 sec:authorize="hasRole('DELETED')" th:text="#{title.page.home.deleted}"></h1>
+
+                    <span style="float: right;" sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/services/add}" class="btn btn-primary">
+                            <i class="fa fa-fw -square -circle fa-plus-square"></i>
+                            <span th:text="#{service.form.button.submit}">Add new</span>
+                        </a>
+                    </span>
+                </div>
+
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -53,29 +67,25 @@
             }
         </style>
 
-        <div class="well">
-            <h4>Краткая информация</h4>
-            <ul>
-                <li>Ниже вы можете ознакомиться со списком предоставляемых услуг.</li>
-                <li>Для того, чтобы добавить нужную услугу, выберете ее название в поле ниже и нажмите кнопку "Добавить".</li>
-                <li>После этого будет сформирован соответствующий счет, который нужно будет оплатить в ближайшее время.</li>
-                <li>Все услуги имеют свою продолжительность, будьте внимательны.</li>
-            </ul>
+        <div class="well" th:if="${userRole != 'ROLE_USER'}">
+            <h4 th:text="#{services.new.brief}">Краткая информация</h4>
+            <ul th:utext="#{services.new.points}"></ul>
 
 
-            <!--TODO: add duration field-->
             <form action="#" th:action="@{/services}" th:object="${selectedService}" method="post">
                 <div>
                     <div class="input-group mb-3">
                         <select th:field="*{id}" id="subscribeToService" class="form-control" title="Select service to subscribe">
-                            <option value="-1">Select new service to subscribe</option>
+                            <option value="-1" th:text="#{services.new.select-text}"></option>
                             <option th:each="serviceUnit : ${inactiveServices}"
                                     th:value="${serviceUnit.id}"
-                                    th:text="${serviceUnit.name}+' - '+${serviceUnit.cost}"
+                                    th:text="${serviceUnit.name}+' - '+${serviceUnit.cost}+'$ - '
+                                    +${serviceUnit.duration}+'d'"
                             ></option>
                         </select>
                         <div class="input-group-append">
-                            <button class="btn btn-primary" style="margin-left:1em;" type="submit">Subscribe</button>
+                            <button class="btn btn-primary" style="margin-left:1em;"
+                                    type="submit" th:text="#{services.new.subscribe}">Subscribe</button>
                         </div>
                     </div>
 
@@ -89,8 +99,7 @@
 
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Service list
+                    <div class="panel-heading" th:text="#{title.page.services}">
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
@@ -165,22 +174,12 @@
                         <ul class="services-list" th:each="service : ${services}">
                             <li>
                                 <div class="services-list-items">
-                                    <a th:href="@{'/services/' + ${service.id}}" th:text="${service.name}"></a>
+                                    <a th:href="@{'/services/' + ${service.id}}"
+                                       th:text="${service.name + ' - ' + service.duration + 'd.'}"></a>
                                     <span th:text="${service.cost} + ' $'"></span>
                                 </div>
                             </li>
                         </ul>
-
-
-
-                        <div class="panel">
-                            <div class="col-md-12 well">
-                                <a th:href="@{/services/add}" class="btn btn-primary">
-                                    <i class="fa fa-fw -square -circle fa-plus-square"></i>
-                                    <span th:text="#{service.form.button.submit}">Add new</span>
-                                </a>
-                            </div>
-                        </div>
                         <!-- /.row -->
 
 

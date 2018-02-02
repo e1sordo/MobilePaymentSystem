@@ -39,9 +39,9 @@
 
 
         <div class="row">
-            <div class="col-lg-7">
+            <div class="col-lg-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading" th:text="#{bills.table.paid.title}"></div>
+                    <div class="panel-heading" th:text="#{bills.table.unpaid.title}"></div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -50,25 +50,28 @@
                                 <tr>
                                     <th th:text="#{bills.table.th.service}">Name</th>
                                     <th th:text="#{bills.table.th.cost}">Cost</th>
-                                    <th th:text="#{bills.table.th.start-date}">Start date</th>
-                                    <th th:text="#{bills.table.th.end-date}">End date</th>
                                     <th th:text="#{bills.table.th.owner}">Owner</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="bill : ${paidBills}">
-                                    <td width="40%">
+                                <tr th:each="bill : ${userBills}" th:if="${empty == false}">
+                                    <td th:if="${currentUserId == bill.user.id}">
+                                        <a th:href="@{'/profile/bills/{bid}' (bid=${bill.id})}"
+                                           th:text="${bill.serviceUnit.name}"></a>
+                                    </td>
+                                    <td th:unless="${currentUserId == bill.user.id}">
                                         <a th:href="@{'/users/{uid}/bills/{bid}' (uid=${bill.user.id}, bid=${bill.id})}"
                                            th:text="${bill.serviceUnit.name}"></a>
                                     </td>
                                     <td th:text="${bill.actualCost}"></td>
-                                    <td th:text="${#dates.format(bill.startDate, 'dd:MM:yyyy')}"></td>
-                                    <td th:text="${#dates.format(bill.endDate, 'dd:MM:yyyy')}"></td>
-                                    <td>
+                                    <td th:if="${currentUserId == bill.user.id}">
+                                        <a th:href="@{/profile}" th:text="${bill.user.username}"></a>
+                                    </td>
+                                    <td th:unless="${currentUserId == bill.user.id}">
                                         <a th:href="@{'/users/' + ${bill.user.id}}" th:text="${bill.user.username}"></a>
                                     </td>
                                 </tr>
-                                </tr>
+                                <tr th:unless="${empty == false}"><td colspan="3" th:text="#{global.isEmpty}"></td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -78,42 +81,7 @@
                 </div>
                 <!-- /.panel -->
             </div>
-            <!-- /.col-lg-6 -->
-            <div class="col-lg-5">
-                <div class="panel panel-default">
-                    <div class="panel-heading" th:text="#{bills.table.unpaid.title}"></div>
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th th:text="#{bills.table.th.service}">Name</th>
-                                    <th th:text="#{bills.table.th.cost}">Cost</th>
-                                    <th th:text="#{bills.table.th.owner}">Owner</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="bill : ${unpaidBills}">
-                                    <td>
-                                        <a th:href="@{'/users/{uid}/bills/{bid}' (uid=${bill.user.id}, bid=${bill.id})}"
-                                           th:text="${bill.serviceUnit.name}"></a>
-                                    </td>
-                                    <td th:text="${bill.actualCost}"></td>
-                                    <td>
-                                        <a th:href="@{'/users/' + ${bill.user.id}}" th:text="${bill.user.username}"></a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.table-responsive -->
-                    </div>
-                    <!-- /.panel-body -->
-                </div>
-                <!-- /.panel -->
-            </div>
-            <!-- /.col-lg-6 -->
+            <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
     </div>

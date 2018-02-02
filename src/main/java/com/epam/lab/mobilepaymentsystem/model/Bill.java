@@ -8,10 +8,10 @@ import java.util.Objects;
 @Table(name = "bills")
 public class Bill extends AbstractEntity {
 
-    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne (cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     private User user;
 
-    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne (cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     private ServiceUnit serviceUnit;
 
     @Column(name = "is_paid")
@@ -77,7 +77,6 @@ public class Bill extends AbstractEntity {
         this.endDate = endDate;
     }
 
-    // TODO: fix when we will change Set to List
     @Override
     public int hashCode() {
         return Objects.hash(user.getId(), serviceUnit.getId(), paidFor, actualCost, startDate, endDate);

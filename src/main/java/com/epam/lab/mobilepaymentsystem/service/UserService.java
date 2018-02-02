@@ -34,9 +34,19 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUserById(Long id) {
+    public void deleteUserById(long id) {
         User user = userRepository.findUserById(id);
         user.setRole(Role.ROLE_DELETED.getDisplayName());
+        userRepository.save(user);
+    }
+
+    public void blockUserById(long id, boolean isAlreadyBlocked) {
+        User user = userRepository.findUserById(id);
+        String role = Role.ROLE_LOCKED.getDisplayName();
+        if (isAlreadyBlocked) {
+            role = Role.ROLE_SUBSCRIBER.getDisplayName();
+        }
+        user.setRole(role);
         userRepository.save(user);
     }
 
@@ -47,7 +57,7 @@ public class UserService {
         }
 
         user.setBankAccount(user.getBankAccount() + tranche);
-        user = updateUser(user);
+        updateUser(user);
     }
 
     public User getByUsername(String username) {
@@ -59,11 +69,16 @@ public class UserService {
     }
 
     public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAllByRoleNot(
+                Role.ROLE_DELETED.getDisplayName());
     }
 
-    public long numberOfUsers() {
-        return userRepository.count();
+    public long numberOfUsersByRole(String role) {
+        return userRepository.countAllByRole(role);
+    }
+
+    public void updateUser(User user) {
+        userRepository.save(user);
     }
 
     public Long getCurrentUserId() {
@@ -81,34 +96,38 @@ public class UserService {
         return userRepository.findByUsername(userSecurity.getUsername());
     }
 
-    public User updateUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public List<ServiceUnit> getActiveServicesByUserId() {
-        User user = getCurrentUser();
+    public List<ServiceUnit> getActiveServicesByUserId(long userId) {
+        User user = getUserById(userId);
         return new ArrayList<>(user.getServiceUnits());
     }
 
-    // TODO: not sure about working with model in backend
-    // On the other hand validation logic being in frontend is bad
-    // And maybe it is better to autowire SecurityService in UserService instead of passing it as param
     public String validateNewUserAndRegister(User user, BindingResult bindingResult, Model model, SecurityService securityService) {
 
-        if(getByUsername(user.getUsername()) != null) {
+        if((getByUsername(user.getUsername()) != null) && (!user.getPassword().equals(user.getConfirmPassword()))) {
             bindingResult.reject("username");
-            model.addAttribute("userWithSameUserName", "There is already a user registered with the username provided");
-            return "user/registration";
-        }
-
-        if(!user.getPassword().equals(user.getConfirmPassword())) {
             bindingResult.reject("password");
+            model.addAttribute("userWithSameUserName", "There is already a user registered with the username provided");
             model.addAttribute("passwordsNotSame", "Passwords don't match");
             return "user/registration";
         }
 
-        if(bindingResult.hasErrors()) {
-            // TODO: info about other errors
+        if(getByUsername(user.getUsername()) != null) {
+            bindingResult.reject("username");
+            model.addAttribute(
+                    "userWithSameUserName",
+                    "There is already a user registered with the username provided");
+            return "user/registration";
+        }
+
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
+            bindingResult.reject("password");
+            model.addAttribute(
+                    "passwordsNotSame",
+                    "Passwords don't match");
+            return "user/registration";
+        }
+
+        if (bindingResult.hasErrors()) {
             return "user/registration";
         }
 

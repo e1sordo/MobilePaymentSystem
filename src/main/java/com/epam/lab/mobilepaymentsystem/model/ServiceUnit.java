@@ -58,7 +58,6 @@ public class ServiceUnit extends AbstractEntity {
         this.duration = duration;
     }
 
-    // todo: fix when we will change Set to List
     @Override
     public int hashCode() {
         return Objects.hash(name, cost, duration);

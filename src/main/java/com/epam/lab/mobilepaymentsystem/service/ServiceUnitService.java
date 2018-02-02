@@ -1,10 +1,12 @@
 package com.epam.lab.mobilepaymentsystem.service;
 
 import com.epam.lab.mobilepaymentsystem.dao.ServiceUnitsRepository;
+import com.epam.lab.mobilepaymentsystem.model.Bill;
 import com.epam.lab.mobilepaymentsystem.model.ServiceUnit;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
@@ -33,9 +35,9 @@ public class ServiceUnitService {
         return serviceUnitsRepository.findAll();
     }
 
-    public List<ServiceUnit> getAllServicesWithoutSubscribe() {
-        List<ServiceUnit> services = (List<ServiceUnit>) serviceUnitsRepository.findAll();
-        User user = userService.getCurrentUser();
+    public List<ServiceUnit> getAllServicesWithoutSubscribeOfUserByUserId(long userId) {
+        List<ServiceUnit> services = serviceUnitsRepository.findAll();
+        User user = userService.getUserById(userId);
         Set<ServiceUnit> userServices = user.getServiceUnits();
         services.removeAll(userServices);
         return services;
@@ -49,37 +51,54 @@ public class ServiceUnitService {
         return serviceUnitsRepository.findOne(id);
     }
 
-    public long numberOfServices() {
+    public long numberOfAllService() {
         return serviceUnitsRepository.count();
     }
 
-    public void subscribeUserToService(long serviceId) {
-        // if we chose actual existing service
+    public long numberOfAllPaidActiveUserServicesByUserId(long userId) {
+        return billService.getAllNonExpiredActivePaidServiceOfUserByUserId(userId).size()
+                + billService.getAllExpiredActiveServicesOfUserByUserId(userId).size();
+    }
+
+    /**
+     * Subscribe User with ID userId to Service with ID serviceID
+     * Withdraw cash at the moment of subscribing
+     * Create paid bill if payment is successful
+     * Create unpaid bill if payment is unsuccessful
+     * Already existing Service cannot be subscribed to User
+     * @param userId ID of User
+     * @param serviceId ID of Service
+     */
+    public void subscribeUserToServiceByUserAndServiceId(long userId, long serviceId) {
         if (serviceId != -1) {
-            User user = userService.getCurrentUser();
+            User user = userService.getUserById(userId);
             ServiceUnit service = getServiceById(serviceId);
 
-            // we create bill only if the service is new
             if (user.addService(service)) {
-                billService.createAndSaveBill(user, service);
+                Bill bill = billService.createAndSaveBill(user, service);
+                billService.withdrawCashToPayForOneBill(bill, user);
                 userService.updateUser(user);
             }
         }
     }
 
-    public void unsubscribeUserFromService(long serviceId) {
-        User user = userService.getCurrentUser();
-        ServiceUnit service = getServiceById(serviceId);
+    /**
+     * Unsubscribe User from Service
+     * Delete unpaid Bill of this Service from User in process
+     * Service cannot be unsubscribed if User doesn't have it
+     * @param bill Bill that contains information about User subscribed to Service
+     * @param userId ID of User
+     */
+    public void unsubscribeUserFromServiceByBillAndUserId(Bill bill, long userId) {
+        User user = userService.getUserById(userId);
+        ServiceUnit service = getServiceById(bill.getServiceUnit().getId());
 
-        // if service exists and it is unpaid - remove also unpaid bill
         if (user.removeService(service)) {
             userService.updateUser(user);
-            billService.deleteUnpaidBill(user.getId(), serviceId);
+            billService.deleteUnpaidBillByUserIdAndServiceId(userId, service.getId());
         }
     }
 
-
-    // TODO: error about problems with cost doesn't appear
     public String validateNewServiceAndAdd(ServiceUnit serviceUnit, BindingResult bindingResult, Model model) {
         if(getByServiceName(serviceUnit.getName()) != null) {
             bindingResult.reject("name");
@@ -87,11 +106,28 @@ public class ServiceUnitService {
         }
 
         if(bindingResult.hasErrors()) {
-            // TODO: info about other errors!
             return "service/service_add";
         }
 
         save(serviceUnit);
         return "redirect:/services";
+    }
+
+    public void globalCheckBill() {
+        Iterable<User> users = userService.getAllUsers();
+        for (User user : users) {
+           localCheckBill(user.getId());
+        }
+    }
+
+    @Transactional
+    public void localCheckBill(long userId) {
+        List<Bill> outOfDateUnpaidBills = billService.getAllUnpaidBillsOfUserByUserId(userId);
+
+        for (Bill bill : outOfDateUnpaidBills) {
+            unsubscribeUserFromServiceByBillAndUserId(bill, userId);
+        }
+
+        billService.withdrawCashToPayForServicesByUserId(userId);
     }
 }

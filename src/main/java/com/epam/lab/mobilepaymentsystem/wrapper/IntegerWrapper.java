@@ -1,8 +1,13 @@
 package com.epam.lab.mobilepaymentsystem.wrapper;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 public class IntegerWrapper {
 
-    private int tranche = 0;
+    @Min(50)
+    @Max(1000)
+    private int tranche;
 
     public int getTranche() {
         return tranche;
