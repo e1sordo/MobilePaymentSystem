@@ -115,7 +115,7 @@
 							<archive>
 								<manifest>
 									<mainClass>
-										org.baeldung.executable.ExecutableMavenJar
+										com.epam.lab.mobilepaymentsystem.MobilePaymentSystemApplication
 									</mainClass>
 								</manifest>
 							</archive>
