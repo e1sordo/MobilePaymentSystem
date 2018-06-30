@@ -30,7 +30,3 @@ logging:
   level:
     root: INFO
     org.springframework.web: INFO
-  file: application.log
-  pattern:
-    file: [%d{yyyy-MM-dd HH:mm:ss}] %level %msg %nopex %n
-    console: [%d{yyyy-MM-dd HH:mm:ss}] %ex{5} %n
