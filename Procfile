@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp target/classes:target/dependency/* com.epam.lab.mobilepaymentsystem.MobilePaymentSystemApplication server
+web: java $JAVA_OPTS -jar target/*.jar
