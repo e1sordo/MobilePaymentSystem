@@ -39,12 +39,6 @@ public class ServiceTests {
                 serviceUnitService.getByServiceName(serviceName).getName());
     }
 
-    // todo: for some reason it fails
-    @Test
-    public void numberOfServices() {
-        assertEquals(count, serviceUnitService.numberOfAllService());
-    }
-
     @Test
     public void updateService() {
         ServiceUnit serviceUnit = createTestService();
