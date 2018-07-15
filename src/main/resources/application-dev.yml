@@ -5,8 +5,6 @@ server:
       enabled: false
 
 spring:
-  profiles:
-    active: dev
   thymeleaf:
     cache: true
     enabled: true
