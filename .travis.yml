@@ -1,8 +1,6 @@
 language: java
 jdk:
   - oraclejdk8
-script:
-  - bash <(curl -s https://codecov.io/bash)
 
 cache:
   directories:
@@ -12,3 +10,6 @@ deploy:
   provider: heroku
   api_key: $HEROKU_API_KEY
   app: mobile-payment-system
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
