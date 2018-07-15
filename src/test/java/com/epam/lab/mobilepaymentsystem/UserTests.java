@@ -1,18 +1,18 @@
 package com.epam.lab.mobilepaymentsystem;
 
-
 import com.epam.lab.mobilepaymentsystem.model.Role;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertEquals;
 
-
+@SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MobilePaymentSystemApplication.class})
 public class UserTests {
@@ -21,6 +21,7 @@ public class UserTests {
     private UserService userService;
 
     private static int count = 0;
+
     // TODO: use @After and @Before
     private User createTestUser() {
         ++count;
