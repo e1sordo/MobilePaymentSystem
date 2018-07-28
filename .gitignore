@@ -8,6 +8,8 @@ target/
 .settings
 .springBeans
 
+**/*.log
+
 ### IntelliJ IDEA ###
 .idea
 *.iml

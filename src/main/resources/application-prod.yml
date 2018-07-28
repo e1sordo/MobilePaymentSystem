@@ -1,0 +1,32 @@
+server:
+  port: ${PORT:8080}
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  thymeleaf:
+    cache: true
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  jpa:
+    show-sql: true
+  datasource:
+    platform: h2
+    url: jdbc:h2:file:~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  queries:
+    users-query: select password, username from USERS where username=?
+    roles-query: select u.username, r.role from user u inner join user_role ur on(u.user_id=ur.user_id) inner join role r on(ur.role_id=r.role_id) where u.email=?
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
