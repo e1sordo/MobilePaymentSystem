@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 public class UserController {
@@ -112,6 +113,12 @@ public class UserController {
     public String unblockUser(@PathVariable final long id) {
         userService.blockUserById(id, true);
         return "redirect:/users";
+    }
+
+    @GetMapping("/api/me")
+    @ResponseBody
+    public Principal user(Principal principal) {
+        return principal;
     }
 
     private void addModelAttributes(Model model, long userId) {
