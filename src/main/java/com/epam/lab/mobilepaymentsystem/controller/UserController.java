@@ -1,11 +1,11 @@
 package com.epam.lab.mobilepaymentsystem.controller;
 
+import com.epam.lab.mobilepaymentsystem.controller.wrapper.IntegerWrapper;
 import com.epam.lab.mobilepaymentsystem.model.User;
 import com.epam.lab.mobilepaymentsystem.service.BillService;
 import com.epam.lab.mobilepaymentsystem.service.SecurityService;
 import com.epam.lab.mobilepaymentsystem.service.ServiceUnitService;
 import com.epam.lab.mobilepaymentsystem.service.UserService;
-import com.epam.lab.mobilepaymentsystem.wrapper.IntegerWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 public class SecurityService {
 
     private final AuthenticationManager authenticationManager;
-
     private final UserDetailsService userDetailsService;
 
     @Autowired
