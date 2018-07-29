@@ -3,7 +3,7 @@ package com.epam.lab.mobilepaymentsystem.model;
 import javax.persistence.*;
 
 @MappedSuperclass
-public class AbstractEntity {
+public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
