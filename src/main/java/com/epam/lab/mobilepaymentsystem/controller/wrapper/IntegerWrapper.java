@@ -1,4 +1,4 @@
-package com.epam.lab.mobilepaymentsystem.wrapper;
+package com.epam.lab.mobilepaymentsystem.controller.wrapper;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

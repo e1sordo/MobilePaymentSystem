@@ -1,6 +1,5 @@
-package com.epam.lab.mobilepaymentsystem;
+package com.epam.lab.mobilepaymentsystem.controller;
 
-import com.epam.lab.mobilepaymentsystem.controller.ServiceUnitController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
-class GlobalControllerExceptionHandler {
+public class GlobalExceptionHandler {
 
     private static final String DEFAULT_ERROR_VIEW = "errorhandler";
     private Logger logger = LoggerFactory.getLogger(ServiceUnitController.class);
